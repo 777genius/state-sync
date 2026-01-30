@@ -34,10 +34,14 @@ jobs:
           cache: pnpm
 
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm docs:build
+        env:
+          VITEPRESS_BASE: '/state-sync/'
 
       - uses: actions/upload-pages-artifact@v3
         with:

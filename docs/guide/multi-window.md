@@ -4,20 +4,20 @@ title: Multi-window patterns
 
 ## Source of truth
 
-Для multi-window приложений важно иметь **один** source of truth на topic:
-- snapshot provider всегда возвращает актуальное состояние
-- invalidation event лишь “триггерит” refresh
+In multi-window applications, it’s important to have **one** source of truth per topic:
+- the snapshot provider always returns the latest state
+- invalidation events only “trigger” refresh
 
-## sourceId и self-echo
+## sourceId and self-echo
 
-Если окно, применившее изменение, тут же получает invalidation обратно — это нормально.
-Но если это вызывает лишние refresh, можно использовать:
-- `sourceId` в event (ID окна/процесса)
-- `shouldRefresh(event)` чтобы игнорировать события от самого себя
+If the window that applied a change receives its own invalidation right away, that’s normal.
+But if it causes unnecessary refreshes, you can use:
+- `sourceId` in the event (window/process ID)
+- `shouldRefresh(event)` to ignore self-originated events
 
-## Выбор топиков
+## Choosing topics
 
-Делайте topic стабильным и “доменным”:
-- хорошо: `auth-state`, `app-config`
-- плохо: `settings-window` (UI-ориентировано)
+Keep topics stable and domain-oriented:
+- good: `auth-state`, `app-config`
+- bad: `settings-window` (UI-oriented)
 

@@ -2,21 +2,21 @@
 title: Quickstart
 ---
 
-## 1) Определи topic
+## 1) Define a topic
 
-Topic — это строковой идентификатор синхронизируемого ресурса, например:
+Topic is a string identifier for the synchronized resource, for example:
 - `app-config`
 - `auth-state`
 - `settings`
 
-Topic сравнивается строго (`===`).
+Topics are compared strictly (`===`).
 
-## 2) Подключи engine
+## 2) Wire the engine
 
-Нужно 3 части:
-- **subscriber** (слушает invalidation events)
-- **provider** (умеет получить snapshot)
-- **applier** (применяет snapshot локально)
+You need 3 parts:
+- **subscriber** (listens for invalidation events)
+- **provider** (fetches snapshots)
+- **applier** (applies snapshots locally)
 
 ```ts
 import { createConsoleLogger, createRevisionSync } from 'state-sync';
@@ -32,12 +32,12 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-## 3) Stop (одноразовый handle)
+## 3) Stop (single-use handle)
 
-После `stop()` handle считается “мёртвым” (защита от утечек подписок).
+After `stop()`, the handle is considered “dead” (to protect against subscription leaks).
 
 ```ts
 handle.stop();
-// если нужно снова — создай новый handle через createRevisionSync(...)
+// if you need it again, create a new handle via createRevisionSync(...)
 ```
 

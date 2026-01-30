@@ -2,17 +2,17 @@
 title: Pinia (state-sync-pinia)
 ---
 
-## Назначение
+## Purpose
 
-`state-sync-pinia` — это **framework adapter**: он умеет применять snapshot в Pinia store.
+`state-sync-pinia` is a **framework adapter**: it knows how to apply snapshots to a Pinia store.
 
 ## API
 
 - `createPiniaSnapshotApplier(store, options?)`
   - `mode: 'patch' | 'replace'`
-  - `pickKeys` / `omitKeys` — защита локальных/эпемерных полей
+  - `pickKeys` / `omitKeys` — protect local/ephemeral fields
 
-## Пример
+## Example
 
 ```ts
 import { createRevisionSync } from 'state-sync';
@@ -33,5 +33,5 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-Подробнее: [Pinia adapter notes](/adapters/pinia).
+See: [Pinia adapter notes](/adapters/pinia).
 

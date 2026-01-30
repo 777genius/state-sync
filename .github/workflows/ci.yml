@@ -21,8 +21,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm -r typecheck
-      - run: pnpm -r test
       - run: pnpm -r build
+      - run: pnpm -r test
       - name: Smoke-import (ESM + CJS)
         run: |
           node -e "import('state-sync').then(m => console.log('ESM OK:', Object.keys(m)))"

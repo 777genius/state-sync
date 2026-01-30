@@ -2,36 +2,36 @@
 title: Protocol (mental model)
 ---
 
-`state-sync` использует простую и надёжную схему:
+`state-sync` uses a simple and reliable pattern:
 
 1. **Invalidation event** сообщает, что “возможно изменилось состояние” и несёт:
    - `topic`
    - `revision`
-2. Получатель делает **pull**: `provider.getSnapshot()`
-3. Engine применяет snapshot только если он **новее** (revision gate).
+2. The receiver does a **pull**: `provider.getSnapshot()`
+3. The engine applies the snapshot only if it is **newer** (revision gate).
 
-Почему так:
-- события могут приходить **в разном порядке**
-- события могут **теряться**
-- снапшот остаётся **source of truth**
+Why:
+- events can arrive **out of order**
+- events can be **lost**
+- the snapshot remains the **source of truth**
 
 ### InvalidationEvent
 
-Минимальный контракт:
+Minimal contract:
 - `topic: string`
-- `revision: Revision` (каноничная decimal u64 string)
+- `revision: Revision` (canonical decimal `u64` string)
 
 ### SnapshotEnvelope
 
-Минимальный контракт:
+Minimal contract:
 - `revision: Revision`
 - `data: T`
 
-### Что считается ошибкой протокола
+### What is a protocol error
 
-Engine репортит `phase='protocol'`, если:
-- `topic` пустой/не строка
-- `revision` не каноническая (`"01"`, `"abc"`, и т.п.)
+The engine reports `phase='protocol'` when:
+- `topic` is empty / not a string
+- `revision` is not canonical (`"01"`, `"abc"`, etc.)
 
-См. [Troubleshooting](/troubleshooting) и [Lifecycle](/lifecycle).
+See [Troubleshooting](/troubleshooting) and [Lifecycle](/lifecycle).
 

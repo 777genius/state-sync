@@ -2,14 +2,14 @@
 title: Tauri (state-sync-tauri)
 ---
 
-## Назначение
+## Purpose
 
 `state-sync-tauri` — это **transport adapter**:
 - `createTauriInvalidationSubscriber()` (events)
 - `createTauriSnapshotProvider()` (invoke)
 
-Плюс DX сахар:
-- `createTauriRevisionSync()` — готовый wiring transport + core engine
+Plus DX sugar:
+- `createTauriRevisionSync()` — ready-made wiring of transport + core engine
 
 ## Пример (DX sugar)
 
@@ -33,5 +33,5 @@ await handle.start();
 
 ## Peer dependency policy
 
-`@tauri-apps/api` объявлен как optional peer dependency (для тестов можно не ставить).
+`@tauri-apps/api` is declared as an optional peer dependency (so tests can run without installing it).
 

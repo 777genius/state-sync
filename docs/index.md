@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: state-sync
-  text: Надёжная синхронизация состояния между окнами/процессами
+  text: Reliable state synchronization between windows/processes
   tagline: Invalidation → Fetch snapshot → Apply (revision gate)
   actions:
     - theme: brand
@@ -16,24 +16,24 @@ hero:
       link: /lifecycle
 features:
   - title: Framework-agnostic
-    details: Работает с Pinia/React/vanilla state через адаптеры applier.
+    details: Works with Pinia/React/vanilla state via applier adapters.
   - title: Transport-agnostic
-    details: Любой IPC/transport (Tauri events+invoke, BroadcastChannel, in-memory) через subscriber/provider.
+    details: Any IPC/transport (Tauri events+invoke, BroadcastChannel, in-memory) via subscriber/provider.
   - title: Deterministic
-    details: Monotonic revision + snapshot source-of-truth защищают от out-of-order событий.
+    details: Monotonic revisions + snapshot source of truth guard against out-of-order events.
   - title: Production-friendly
-    details: Contract tests, строгая валидация протокола и наблюдаемость через phases.
+    details: Contract tests, strict protocol validation, and observability via phases.
 ---
 
-## Установка
+## Install
 
 ```bash
 npm install state-sync
-npm install state-sync-pinia   # если Pinia
-npm install state-sync-tauri   # если Tauri
+npm install state-sync-pinia   # if Pinia
+npm install state-sync-tauri   # if Tauri
 ```
 
-## Быстрый пример
+## Quick example
 
 ```ts
 import { createConsoleLogger, createRevisionSync } from 'state-sync';

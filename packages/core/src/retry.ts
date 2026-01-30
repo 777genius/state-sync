@@ -1,13 +1,13 @@
 import type { Logger, SnapshotEnvelope, SnapshotProvider, SyncErrorContext, Topic } from './types';
 
 export interface RetryPolicy {
-  /** Максимум попыток (включая первую). Default: 3 */
+  /** Max attempts (including the first try). Default: 3 */
   maxAttempts?: number;
-  /** Начальная задержка в мс. Default: 500 */
+  /** Initial delay in ms. Default: 500 */
   initialDelayMs?: number;
-  /** Множитель для exponential backoff. Default: 2 */
+  /** Exponential backoff multiplier. Default: 2 */
   backoffMultiplier?: number;
-  /** Максимальная задержка в мс. Default: 10000 */
+  /** Max delay in ms. Default: 10000 */
   maxDelayMs?: number;
 }
 
@@ -28,10 +28,10 @@ function computeDelay(attempt: number, policy: Required<RetryPolicy>): number {
 }
 
 /**
- * Оборачивает SnapshotProvider в retry логику с exponential backoff.
+ * Wraps a SnapshotProvider with retries using exponential backoff.
  *
- * При каждой неудачной попытке вызывается onRetry (если передан) —
- * можно использовать для логирования или отмены.
+ * On each failed attempt, `onRetry` is called (if provided) — you can use it for
+ * logging or cancellation.
  */
 export function withRetry<T>(
   provider: SnapshotProvider<T>,

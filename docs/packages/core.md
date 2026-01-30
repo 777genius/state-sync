@@ -2,10 +2,10 @@
 title: Core (state-sync)
 ---
 
-## Что внутри
+## What's inside
 
-Core пакет даёт:
-- `createRevisionSync()` — движок синхронизации
+The core package provides:
+- `createRevisionSync()` — synchronization engine
 - `Revision` utils: `isCanonicalRevision`, `compareRevisions`
 - retry wrappers: `withRetry`, `withRetryReporting`
 - logging helpers: `createConsoleLogger`, `tagLogger`, `noopLogger`
@@ -29,5 +29,5 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-См. [Lifecycle](/lifecycle) и [Troubleshooting](/troubleshooting).
+See [Lifecycle](/lifecycle) and [Troubleshooting](/troubleshooting).
 
