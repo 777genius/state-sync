@@ -1,0 +1,50 @@
+{
+  "name": "state-sync-pinia",
+  "version": "1.0.0",
+  "description": "Pinia adapter for state-sync — automatic store synchronization",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "keywords": [
+    "state-sync",
+    "pinia",
+    "vue",
+    "state",
+    "synchronization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/777genius/state-sync.git",
+    "directory": "packages/pinia"
+  },
+  "bugs": "https://github.com/777genius/state-sync/issues",
+  "homepage": "https://github.com/777genius/state-sync#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "state-sync": "*"
+  },
+  "devDependencies": {
+    "state-sync": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

@@ -1,0 +1,47 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm -r typecheck
+      - run: pnpm -r test
+      - run: pnpm -r build
+      - name: Smoke-import (ESM + CJS)
+        run: |
+          node -e "import('state-sync').then(m => console.log('ESM OK:', Object.keys(m)))"
+          node -e "const m = require('state-sync'); console.log('CJS OK:', Object.keys(m))"
+          node -e "import('state-sync-pinia').then(m => console.log('ESM OK:', Object.keys(m)))"
+          node -e "const m = require('state-sync-pinia'); console.log('CJS OK:', Object.keys(m))"
+          node -e "import('state-sync-tauri').then(m => console.log('ESM OK:', Object.keys(m)))"
+          node -e "const m = require('state-sync-tauri'); console.log('CJS OK:', Object.keys(m))"
+
+  rust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crates/state-sync
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test

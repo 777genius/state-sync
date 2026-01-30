@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "state-sync": ["packages/core/src/index.ts"],
+      "state-sync-pinia": ["packages/pinia/src/index.ts"],
+      "state-sync-tauri": ["packages/tauri/src/index.ts"]
+    },
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true
+  }
+}
