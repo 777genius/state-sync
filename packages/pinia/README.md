@@ -1,8 +1,8 @@
 # state-sync-pinia
 
-Pinia-адаптер для state-sync. Применяет snapshot-ы в Pinia store.
+Pinia adapter for state-sync. Applies snapshots to a Pinia store.
 
-## Установка
+## Install
 
 ```bash
 npm install state-sync-pinia state-sync
@@ -28,26 +28,26 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-## Режимы
+## Modes
 
 ### Patch (default)
 
 ```typescript
 const applier = createPiniaSnapshotApplier(store);
-// Вызывает store.$patch(data) — мержит поля
+// Calls store.$patch(data) — merges fields
 ```
 
 ### Replace
 
 ```typescript
 const applier = createPiniaSnapshotApplier(store, { mode: 'replace' });
-// Полная замена: удаляет отсутствующие ключи, назначает новые
+// Full replacement: deletes missing keys, assigns new ones
 ```
 
-## Опции
+## Options
 
-- `toState(data, ctx)` — маппинг snapshot data → state patch
-- `pickKeys` / `omitKeys` — ограничить обновляемые ключи
-- `strict` (default: `true`) — бросить ошибку если `toState` вернёт не объект
+- `toState(data, ctx)` — map snapshot data → state patch
+- `pickKeys` / `omitKeys` — limit which keys are updated
+- `strict` (default: `true`) — throw if `toState` returns a non-object
 
-См. [adapter docs](../../docs/adapters/pinia.md).
+See [adapter docs](../../docs/adapters/pinia.md).

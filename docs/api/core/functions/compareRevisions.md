@@ -1,0 +1,24 @@
+[**state-sync**](../index.md)
+
+***
+
+[state-sync](../index.md) / compareRevisions
+
+# Function: compareRevisions()
+
+```ts
+function compareRevisions(a, b): -1 | 0 | 1;
+```
+
+Defined in: [revision.ts:17](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/revision.ts#L17)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `a` | [`Revision`](../type-aliases/Revision.md) |
+| `b` | [`Revision`](../type-aliases/Revision.md) |
+
+## Returns
+
+`-1` \| `0` \| `1`

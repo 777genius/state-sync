@@ -1,8 +1,8 @@
 # state-sync
 
-Ядро библиотеки синхронизации состояния. Framework- и transport-agnostic.
+Core state synchronization library. Framework- and transport-agnostic.
 
-## Установка
+## Install
 
 ```bash
 npm install state-sync
@@ -30,7 +30,7 @@ const handle = createRevisionSync({
 
 await handle.start();
 
-// Позже:
+// Later:
 handle.stop();
 ```
 
@@ -38,21 +38,21 @@ handle.stop();
 
 ### `createRevisionSync<T>(options): RevisionSyncHandle`
 
-Создаёт sync handle для заданного topic.
+Creates a sync handle for the given topic.
 
 **Options**:
-- `topic` — идентификатор ресурса (`string`)
-- `subscriber` — источник invalidation events
-- `provider` — поставщик snapshot-ов
-- `applier` — применяет snapshot к состоянию
-- `shouldRefresh?` — фильтр: нужно ли обновляться по конкретному event
-- `logger?` — опциональный логгер
-- `onError?` — callback при ошибках
+- `topic` — resource identifier (`string`)
+- `subscriber` — invalidation event source
+- `provider` — snapshot provider
+- `applier` — applies snapshots to local state
+- `shouldRefresh?` — filter: whether to refresh for a specific event
+- `logger?` — optional logger
+- `onError?` — error callback
 
 **Handle**:
-- `start()` — подписаться и загрузить начальный snapshot
-- `stop()` — отписаться и заблокировать дальнейшие apply
-- `refresh()` — одноразовый fetch + apply
-- `getLocalRevision()` — текущая revision
+- `start()` — subscribe and load the initial snapshot
+- `stop()` — unsubscribe and block further apply
+- `refresh()` — one-shot fetch + apply
+- `getLocalRevision()` — current local revision
 
-См. [lifecycle contract](../../docs/lifecycle.md).
+See the [lifecycle contract](../../docs/lifecycle.md).

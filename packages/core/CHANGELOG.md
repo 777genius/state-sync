@@ -4,6 +4,6 @@
 
 ### Minor Changes
 
-- Точные error phases: provider errors → `getSnapshot`, applier errors → `apply`.
-  Non-recursive refresh queue (поведение coalescing сохранено).
+- Precise error phases: provider errors → `getSnapshot`, applier errors → `apply`.
+  Non-recursive refresh queue (coalescing behavior preserved).
 - Initial release: core engine, Pinia adapter, Tauri transport.

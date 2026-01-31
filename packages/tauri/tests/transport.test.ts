@@ -94,7 +94,7 @@ describe('state-sync-tauri transport', () => {
     const received: unknown[] = [];
     const unlisten = await subscriber.subscribe((e) => received.push(e));
 
-    // Транспорт просто пробрасывает payload — валидация на стороне engine
+    // The transport just forwards the payload — validation happens in the engine
     expect(received).toHaveLength(1);
     expect(received[0]).toEqual({ garbage: true });
     unlisten();

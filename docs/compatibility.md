@@ -8,15 +8,15 @@
 
 ## Module formats
 
-Все пакеты собираются в два формата:
+All packages are built in two formats:
 
 - **ESM** (`import`) — `dist/index.js`
 - **CJS** (`require`) — `dist/index.cjs`
 
-Sourcemaps включены для обоих форматов.
+Sourcemaps are enabled for both formats.
 
 ## TypeScript
 
-Декларации типов (`dist/index.d.ts`, `dist/index.d.cts`) генерируются автоматически.
+Type declarations (`dist/index.d.ts`, `dist/index.d.cts`) are generated automatically.
 
-`exports` в package.json настроены с condition `types` → `import` → `require`, что обеспечивает корректное подхватывание типов в любом bundler/runtime.
+`exports` in `package.json` are configured with the `types` → `import` → `require` conditions, which ensures types are resolved correctly in any bundler/runtime.

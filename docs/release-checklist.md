@@ -10,21 +10,21 @@ pnpm -r test
 pnpm -r build
 ```
 
-Все шаги должны пройти без ошибок.
+All steps must pass without errors.
 
-## Версионирование
+## Versioning
 
 ```bash
 pnpm changeset version
 ```
 
-- Проверить сгенерированные CHANGELOG.md в каждом пакете
-- Убедиться что версии корректны
-- Закоммитить изменения
+- Verify generated `CHANGELOG.md` files in each package
+- Ensure versions are correct
+- Commit the changes
 
-## Публикация
+## Publishing
 
-Порядок публикации (зависимости идут первыми):
+Publish order (dependencies first):
 
 1. `state-sync` (core)
 2. `state-sync-pinia`
@@ -34,21 +34,21 @@ pnpm changeset version
 pnpm release
 ```
 
-## CI/CD секреты
+## CI/CD secrets
 
-Для автоматического релиза через GitHub Actions необходимо настроить секреты в репозитории:
+For automated releases via GitHub Actions, configure repository secrets:
 
-- **`NPM_TOKEN`** — токен npm для публикации пакетов.
-  Получить: `npm token create` или через npm web UI (Access Tokens).
-  Scope: automation token с правами на publish.
-- **`GITHUB_TOKEN`** — предоставляется автоматически GitHub Actions.
-  Используется changesets/action для создания Release PR.
+- **`NPM_TOKEN`** — npm token for publishing packages.
+  Get it via `npm token create` or the npm web UI (Access Tokens).
+  Scope: automation token with publish permissions.
+- **`GITHUB_TOKEN`** — provided automatically by GitHub Actions.
+  Used by `changesets/action` to create the Release PR.
 
-Настройка: Settings → Secrets and variables → Actions → New repository secret.
+Setup: Settings → Secrets and variables → Actions → New repository secret.
 
-## Smoke-import проверка (ESM + CJS)
+## Smoke-import check (ESM + CJS)
 
-Перед публикацией убедиться что оба формата работают:
+Before publishing, ensure both formats work:
 
 ```bash
 # ESM
@@ -58,11 +58,16 @@ node -e "import('state-sync').then(m => console.log('ESM OK:', Object.keys(m)))"
 node -e "const m = require('state-sync'); console.log('CJS OK:', Object.keys(m))"
 ```
 
-Повторить для каждого пакета (`state-sync-pinia`, `state-sync-tauri`).
+Repeat for each package (`state-sync-pinia`, `state-sync-tauri`).
 
 ## Post-release
 
-- Smoke test: установить опубликованные пакеты в тестовый проект
-- Проверить ESM и CJS импорты (см. секцию выше)
-- Проверить что TypeScript типы подхватываются
-- Создать git tag если нужно
+- Smoke test: install published packages into a test project
+- Verify ESM and CJS imports (see above)
+- Verify TypeScript types resolve
+- Create a git tag if needed
+
+## Docs deploy (GitHub Pages)
+
+- Ensure repository Pages is enabled with **Source = GitHub Actions**.
+- Push changes under `docs/**` to `main` and verify the **Docs (GitHub Pages)** workflow completes successfully.

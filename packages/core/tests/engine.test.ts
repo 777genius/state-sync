@@ -540,12 +540,12 @@ describe('createRevisionSync', () => {
       await handle.start();
       expect(applied).toHaveLength(1);
 
-      // Отправляем невалидный event — onError должен быть вызван и бросить
+      // Send an invalid event — onError must be called and the event must be ignored
       transport.emit({ topic: '', revision: r('2') });
       await new Promise((res) => setTimeout(res, 50));
       expect(onErrorCallCount).toBe(1);
 
-      // Engine должен продолжать работать
+      // The engine must keep running
       transport.setSnapshot({ revision: r('5'), data: 'v5' as unknown as string });
       transport.emit({ topic: 'test', revision: r('5') });
 
@@ -635,11 +635,11 @@ describe('createRevisionSync', () => {
       expect(appliedA).toHaveLength(1);
       expect(appliedB).toHaveLength(1);
 
-      // Event для topic-a не должен попасть в topic-b
+      // An event for topic A must not reach topic B
       transportA.setSnapshot({ revision: r('5'), data: 'a5' });
       transportA.emit({ topic: 'topic-a', revision: r('5') });
 
-      // Event с чужим topic на transport B — игнорируется
+      // An event with a different topic on transport B must be ignored
       transportB.emit({ topic: 'topic-a', revision: r('5') });
 
       await vi.waitFor(() => {
@@ -752,7 +752,7 @@ describe('createRevisionSync', () => {
 
       transport.setSnapshot({ revision: r('100'), data: 'v100' as unknown as string });
 
-      // Быстрый burst из 10 invalidation
+      // Quick burst of 10 invalidations
       for (let i = 2; i <= 11; i++) {
         transport.emit({ topic: 'test', revision: r(String(i)) });
       }
@@ -767,7 +767,7 @@ describe('createRevisionSync', () => {
       await new Promise((res) => setTimeout(res, 300));
 
       const refreshCalls = getSnapshotSpy.mock.calls.length - callsAfterStart;
-      // Coalescing: максимум 2 — один текущий + один из очереди
+      // Coalescing: at most 2 — one in-flight + one queued
       expect(refreshCalls).toBeLessThanOrEqual(2);
 
       handle.stop();

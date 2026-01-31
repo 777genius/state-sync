@@ -1,365 +1,209 @@
-## Iteration 0002 — `state-sync`: Production Readiness (packaging, CI, release)
+# Iteration 0002 — `state-sync`: Production Readiness (packaging, CI, release)
 
-**Статус**: Draft  
-**Дата**: 2026‑01‑29  
-**Цель итерации**: довести `state-sync` до состояния “можно безопасно отдавать в использование”, с предсказуемым релиз‑процессом и контролем качества.
+**Status**: Draft  
+**Date**: 2026-01-29  
+**Iteration goal**: bring `state-sync` to a state where it is safe to hand to external consumers: predictable packaging, CI gates, and reproducible releases.
 
 ---
 
 ### TL;DR
 
-В `0001` мы зафиксировали протокол и сделали рабочие пакеты (`state-sync` core, `state-sync-pinia`, `state-sync-tauri`).  
-В `0002` мы:
+Iteration `0001` locked the protocol and delivered working packages:
 
-- добавляем **сборку** (dist + types + exports) для каждого пакета;
-- добавляем **релиз‑процесс** (semver policy, changelog, versioning в монорепо);
-- добавляем **CI gates** и минимальные security/quality правила;
-- закрываем **критические баги/несостыковки**, чтобы не “выпустить бомбу” в продукт.
+- `state-sync` (core engine)
+- `state-sync-pinia` (Pinia applier adapter)
+- `state-sync-tauri` (Tauri transport adapters)
+
+Iteration `0002` focuses on production readiness:
+
+- publish-grade build artifacts (`dist/`, typings, `exports`)
+- release process (semver policy, changelog/versioning)
+- CI gates from a clean checkout
+- fixing critical safety issues before broad adoption
 
 ---
 
-### Problem statement (что мешает “дать людям пользоваться”)
+### Problem statement
 
-Сейчас библиотека “работает у нас локально”, но **не соответствует ожиданиям внешнего потребителя**:
-- нет publish‑grade артефактов (`dist/`, `exports`, стабильные entrypoints, декларации типов);
-- нет формализованных совместимостей (Node/Tauri/tooling), нет CI “from clean checkout”;
-- нет стандартизированного релиз‑процесса (semver, changelog, changesets, release checklist);
-- есть рискованные edge‑cases lifecycle/IPC payload, которые могут превратиться в утечки/краши.
+The library “works locally”, but does not yet meet external-consumer expectations:
 
-Цель итерации — закрыть эти разрывы так, чтобы библиотеку можно было:
-- безопасно подключать в разные проекты,
-- проверять качественно в CI,
-- релизить предсказуемо и воспроизводимо.
+- packages are not guaranteed to be publish-grade (stable entrypoints, typings, exports)
+- compatibility expectations (Node/tooling/Tauri) are not explicitly documented/enforced
+- CI may not represent a clean install environment
+- edge-cases in lifecycle and runtime payloads can lead to leaks or crashes
+
+Goal: close these gaps so the library can be installed, tested, and released predictably.
 
 ---
 
 ### Goals
 
 #### Product goals
-- Пакеты можно устанавливать/импортировать без “магии” (правильные `exports`, `types`, `dist/`).
-- Пакеты совместимы с типичными окружениями сборки (Vite, Node ESM/CJS потребители).
-- Релизы воспроизводимы: любой commit можно собрать/протестировать в CI одинаково.
+- Packages can be installed/imported without “workspace magic”.
+- Dual-module support works for typical consumers (Node ESM/CJS, Vite).
+- Releases are reproducible in CI from any commit.
 
 #### Engineering goals
-- Полный набор quality gates (lint/typecheck/test/build) в CI.
-- Ясный semver policy для pre‑1.0 и после.
-- Contract tests для core + transport‑контрактов (минимум для `state-sync-tauri`).
+- CI runs full quality gates: lint/typecheck/test/build (from a clean checkout).
+- Clear semver policy for pre-1.0 and post-1.0.
+- Contract tests cover core + transport safety baseline.
 
 ---
 
 ### Non-goals
 
-- Интеграция в конкретные приложения (это делается в repo приложения‑потребителя отдельным планом).
-- CRDT/OT/conflict‑resolution beyond LWW.
-- Переезд на чужой state management framework.
+- Integration into any specific product (done in the consumer repo).
+- CRDT/OT conflict resolution beyond revision-gate (LWW at source of truth).
+- Migrating apps to a different state framework.
 
 ---
 
-### Current state (факты на сегодня)
+### Current state
 
-Есть workspace с пакетами:
-- `packages/core` → `state-sync` (engine + revision utils + tests)
-- `packages/pinia` → `state-sync-pinia` (framework adapter + tests)
-- `packages/tauri` → `state-sync-tauri` (transport adapter + tests)
+Workspace packages:
+- `packages/core` → `state-sync`
+- `packages/pinia` → `state-sync-pinia`
+- `packages/tauri` → `state-sync-tauri`
 
-Тесты проходят локально (`pnpm -r test`).
-
-#### Status update (уже сделано в репо)
-
-- **P0.1**: `start()` после `stop()` теперь запрещён (reject) + тест.
-- **P0.2**: engine нормализует значения после runtime validation и не падает на “грязном” payload + тест.
-- **P0.6 (частично)**: убраны `as any` в TS адаптерах (перешли на `unknown`/структурные типы).
+Local tests pass under the workspace.
 
 ---
 
 ### Priorities
 
-- **P0 (must-fix)**: блокирует безопасное использование/публикацию.
-- **P1 (should-fix)**: резко повышает качество/DX; желательно сделать до широкой раздачи.
-- **P2 (nice-to-have)**: улучшения после того, как P0/P1 закрыты.
+- **P0 (must-fix)**: blocks safe adoption/publishing.
+- **P1 (should-fix)**: materially improves quality/DX.
+- **P2 (nice-to-have)**: improvements after P0/P1 are closed.
 
 ---
 
-### P0 — Critical issues to fix before adoption (must-fix)
+### P0 — Critical issues (must-fix)
 
-Ниже — потенциально опасные места, которые надо закрыть до передачи в использование.
+#### P0.1) Lifecycle safety: `start()` MUST reject after `stop()`
 
-#### P0.1) Lifecycle safety: `stop()` called before `start()` can cause a subscription leak
+Reason: allowing `stop()` then `start()` can create subscription leaks.  
+Acceptance criteria:
+- `start()` rejects if called after `stop()`.
+- test: “stop-before-start then start → rejects and does not subscribe”.
 
-Сейчас `createRevisionSync()` позволяет:
+#### P0.2) Runtime type safety: never crash on garbage IPC payloads
 
-- вызвать `stop()` (ставит `stopped=true`)
-- потом вызвать `start()`:
-  - `start()` не проверяет `stopped`
-  - происходит `subscriber.subscribe(...)`
-  - `stop()` повторно уже no-op → **unsubscribe не вызовется**
+IPC payloads are runtime-unsafe; TS types are not guarantees.  
+Acceptance criteria:
+- engine operates only on normalized, validated values
+- garbage event payloads do not crash; they are reported as `phase='protocol'` and ignored
+- tests:
+  - invalidation with `revision: 5 as any` does not crash
+  - invalidation with `topic: 123 as any` does not crash
 
-**Acceptance criteria**:
-- `start()` MUST reject if called after `stop()`.
-- Дополнительно: добавить тест “stop-before-start then start → rejects and does not subscribe”.
+#### P0.3) Packaging: publish-grade artifacts and entrypoints
 
-#### P0.2) Runtime type safety: валидируем, но используем “сырые” поля → возможен runtime-crash на грязном payload
-
-IPC payload’ы **не типобезопасны**. Даже если TypeScript типы говорят `Revision`, на runtime может прилететь `number/null/object`.
-
-Опасный паттерн:
-- валидируем `revision/topic` через `unknown`,
-- но дальше используем `event.revision`/`envelope.revision` из типизированного объекта,
-- и получаем `TypeError` (например, `compareRevisions` читает `.length`, а прилетел `number`).
-
-**Acceptance criteria**:
-- engine MUST работать только с **нормализованными** значениями:
-  - `const normalizedRevision = rawRevision as Revision`
-  - `const normalizedTopic = rawTopic as Topic`
-- engine MUST не падать при “грязном” event payload:
-  - вместо crash → `onError(phase='protocol')` и игнор.
-- добавить тесты:
-  - invalidation event с `revision: 5 as any` не должен crash
-  - invalidation event с `topic: 123 as any` не должен crash
-
-#### P0.3) Packaging gap: нет `dist/`, нет `exports`, нет “consumer-grade” entrypoints
-
-Сейчас пакеты “работают в workspace”, но не готовы как publishable artifacts.
-
-**Acceptance criteria**:
-- каждый пакет имеет:
-  - `dist/` (ESM + CJS при необходимости)
-  - `*.d.ts` (declaration output)
-  - `package.json` fields: `exports`, `types`, `main/module` (если используем)
+Acceptance criteria for each publishable package:
+- `dist/` exists (ESM + CJS if provided)
+- `*.d.ts` and (optionally) `*.d.cts` are generated
+- `package.json` defines correct `exports`, `types`, and entrypoints
 
 #### P0.4) CI-from-clean-checkout + lockfile discipline
 
-Если проект нельзя собрать “с чистого” окружения, релизы станут непредсказуемыми.
+Acceptance criteria:
+- CI uses `pnpm install --frozen-lockfile`
+- CI runs: `pnpm lint && pnpm -r typecheck && pnpm -r test && pnpm -r build`
+- no hidden path dependencies / nested lockfiles
 
-**Acceptance criteria**:
-- CI использует `pnpm install --frozen-lockfile`.
-- CI гарантирует: `pnpm lint && pnpm -r typecheck && pnpm -r test && pnpm -r build` проходят “с нуля”.
-- Никаких nested lockfiles/скрытых зависимостей по путям.
+#### P0.5) Public API lifecycle contract is documented and tested
 
-#### P0.5) Public API lifecycle contract: refresh() / start() / stop() / onError
+Acceptance criteria:
+- docs specify behavior of `RevisionSyncHandle`:
+  - `start()` idempotent, `stop()` idempotent
+  - `refresh()` before `start()` is explicitly defined
+  - `refresh()` after `stop()` does not apply results
+  - exceptions thrown by `onError` do not break the engine (caught + logged)
+- tests match the documented contract
 
-Потребителю не очевидно, что можно/нельзя делать:
-- что делает `refresh()` если `start()` ещё не вызывался?
-- что делает `refresh()` после `stop()`?
-- что будет, если `onError` бросает исключение?
+#### P0.6) Transport safety baseline: no unjustified `any` casts
 
-**Acceptance criteria**:
-- В docs явно зафиксировано поведение `RevisionSyncHandle`:
-  - `start()` idempotent, `stop()` idempotent.
-  - `refresh()` до `start()` — выбран и описан контракт (либо throw, либо разрешено).
-  - `refresh()` после `stop()` не должен применять результат.
-  - исключения из `onError` не должны ломать engine (ловим и логируем через `logger?.error`).
-- Добавить тесты для выбранного поведения.
-
-#### P0.6) Transport “safety baseline”: никаких “тихих” any-кастов без причины
-
-Транспорт должен быть тонким, но не должен добавлять “ложной уверенности” типов.
-
-**Acceptance criteria**:
-- В `state-sync-tauri` заменить `as any` на `unknown` там, где возможно.
-- Добавить тесты на “garbage payload” (минимум: subscriber не падает, engine не падает и репортит protocol error).
+Acceptance criteria:
+- replace `as any` with `unknown` where possible in transport/adapters
+- add transport tests for “garbage payload” and ensure engine integration reports protocol error (no crash)
 
 ---
 
-### Packaging & Build (design)
+### Packaging & build design
 
-#### Decision: Build tool
+#### Decision: build tool
 
-Рекомендуемая схема (простая и стандартная для TS libs):
-- `tsup` для сборки (ESM/CJS + sourcemaps + d.ts)
-- `exports` map как single source of truth
-
-Альтернатива: “pure tsc emit” (но тогда сложнее с dual ESM/CJS и exports map).
+Recommended:
+- `tsup` for bundling (ESM + CJS + sourcemaps + d.ts)
+- `exports` map as the single source of truth for entrypoints
 
 #### Required outputs per package
 
-Для каждого publishable пакета:
 - `dist/index.js` (ESM)
-- `dist/index.cjs` (CJS) — опционально, но лучше для совместимости
-- `dist/index.d.ts`
+- `dist/index.cjs` (CJS) (recommended for compatibility)
+- `dist/index.d.ts` and `dist/index.d.cts` (if dual declarations used)
 - sourcemaps
 
-#### `package.json` contract (пример)
+#### `package.json` contract (example)
 
-- `"type": "module"`
-- `"exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" } }`
+```json
+{
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  }
+}
+```
 
 ---
 
-### Versioning & Release process (design)
+### Versioning & release process
 
-#### Decision: Monorepo versioning
+#### Decision: monorepo versioning
 
-Рекомендуем:
-- `changesets` (monorepo, удобно, стандартно)
-- политика:
-  - пока `<1.0.0`: разрешаем minor как breaking (но документируем)
-  - после `1.0.0`: строго semver
+Use `changesets`.
+
+Semver policy:
+- pre-`1.0.0`: minor MAY be breaking (document it clearly)
+- post-`1.0.0`: strict semver
 
 #### Changelog
 
-- auto‑generated per package (changesets)
-- + ADR (минимум) для изменений протокола/публичного API
+Each package publishes its own `CHANGELOG.md`.
+
+#### Release checklist
+
+Maintain a `docs/release-checklist.md` that covers:
+- local gates
+- changeset workflow
+- secrets required for CI release
+- smoke-import checks (ESM + CJS)
+- docs deployment (GitHub Pages)
 
 ---
 
-### CI (design)
+### CI design
 
-Минимальный pipeline для root `state-sync/`:
-- `pnpm install --frozen-lockfile` (lockfile обязателен)
-- `pnpm lint`
-- `pnpm -r typecheck`
-- `pnpm -r test`
-- `pnpm -r build` (после добавления build)
-- Rust: `cargo fmt --check`, `cargo clippy -D warnings` (для crate)
+CI must include:
+- node matrix (18/20/22)
+- lint + typecheck + build + test
+- “smoke import” checks for each package (ESM + CJS)
 
-CI должен запускаться на PR и на main.
-
----
-
-### Testing expansion (contract-level)
-
-#### Core contracts
-- уже есть unit/contract tests (in-memory)
-- ✅ добавлены тесты на lifecycle “stop-before-start”, “start-after-stop”
-- (P0.5) добавить тест “onError throws — engine stays alive”
-- (P0.5) добавить тесты на выбранный контракт `refresh()` до `start()`
-
-#### Transport contracts
-- `state-sync-tauri`:
-  - тест, что subscriber корректно возвращает `unlisten` и что payload прокидывается
-  - тест, что provider вызывает invoke и возвращает envelope
-  - (optional) property-based tests на “payload may be garbage” (engine должен защищаться)
+Rust CI (if crate is present):
+- `cargo fmt --check`
+- `cargo clippy --all-targets -- -D warnings`
+- `cargo test`
 
 ---
 
-### P1 — Quality / DX improvements (should-fix)
+### Acceptance checklist (definition of done)
 
-#### P1.1) Publish metadata completeness
-
-Публикация без метаданных ухудшает доверие/поиск/переиспользование.
-
-**Acceptance criteria** (для каждого publishable пакета):
-- добавить поля: `license`, `repository`, `homepage` (если есть), `bugs`, `author` (или `contributors`), `keywords`.
-- добавить `files` whitelist или `.npmignore`, чтобы в npm попадало только нужное (`dist/`, `README`, `LICENSE` и т.д.).
-- добавить `sideEffects: false` (если соответствует), чтобы улучшить tree-shaking.
-
-#### P1.2) Compatibility matrix & support policy
-
-**Acceptance criteria**:
-- явно зафиксировать поддерживаемые версии:
-  - Node (LTS диапазон, например `>=18` или `>=20`)
-  - TypeScript (например `>=5.3`)
-  - Tauri API surface для `state-sync-tauri` (major range)
-- добавить notes про ESM/CJS (что именно поддерживаем и почему).
-
-#### P1.3) Documentation surface (consumer-grade)
-
-**Acceptance criteria**:
-- `README.md` в корне workspace: что это, какие пакеты входят, когда какой использовать.
-- README per package: минимальный пример (core + pinia + tauri), и “pitfalls”.
-- “Troubleshooting”: non-canonical revision, topic mismatch, multiple windows, race conditions.
-
-#### P1.4) Rust crate policy (if maintained)
-
-В repo есть `crates/state-sync`. Нужно прояснить его роль в 0002.
-
-**Acceptance criteria**:
-- либо: явно сказать “crate экспериментальный / не часть релиза 0002”
-- либо: добавить минимальные gates (fmt/clippy/tests) и semantic versioning strategy для crate отдельно.
-
----
-
-### P2 — Optional / follow-ups (nice-to-have)
-
-#### P2.1) Retry/backoff helpers as opt-in
-
-**Acceptance criteria**:
-- `withRetry(provider, policy)` wrapper + tests, без усложнения core.
-
-#### P2.2) Additional transports
-
-**Acceptance criteria**:
-- BroadcastChannel transport adapter + contract tests.
-
----
-
-### Work breakdown (deliverables)
-
-#### Deliverable A (P0) — Safety hardening (core engine)
-- [x] (P0.1) запретить `start()` после `stop()` (reject) + тесты
-- [x] (P0.2) нормализация значений после runtime validation (не использовать “сырые” поля) + тесты
-- [ ] (P0.5) формализовать lifecycle contract (`refresh/start/stop/onError`) в docs + тесты
-
-#### Deliverable B (P0) — Build system (per package)
-- [ ] добавить build tool (например, `tsup`) и конфиг
-- [ ] добавить `build` script в каждый пакет
-- [ ] добавить корректные `exports`/`types`/entrypoints
-- [ ] убедиться, что `dist/` генерируется и не попадает в репо (но используется при publish)
-
-#### Deliverable C (P0/P1) — Release plumbing
-- [ ] добавить changesets и policy
-- [ ] добавить `CHANGELOG.md` стратегию
-- [ ] описать release checklist (tagging, publish order, smoke tests)
-
-#### Deliverable D (P0) — CI
-- [ ] добавить CI workflow (Node + Rust)
-- [ ] gates: lint/typecheck/test/build + fmt/clippy
-
-#### Deliverable E (P1) — DX, compatibility & documentation upgrades
-- [ ] compatibility matrix (Node LTS, package manager, bundlers, Tauri API surface)
-- [ ] “Quick start” для `state-sync`, `state-sync-pinia`, `state-sync-tauri`
-- [ ] “Troubleshooting” (типовые ошибки: non-canonical revision, topic mismatch, multiple windows)
-
-#### Deliverable F (P1) — Contract tests расширение
-- [ ] `state-sync-tauri`: unsubscribe behavior, invoke args, garbage payload
-- [ ] core: topic isolation across multiple handles, event coalescing under burst load, idempotency around errors
-
-#### Deliverable G (P2) — Optional polish (после publish readiness)
-- [ ] optional: `withRetry` wrapper + tests
-- [ ] optional: BroadcastChannel transport + tests
-
----
-
-### Definition of Done
-
-Итерация считается завершённой, когда:
-- **P0**: core защищён от lifecycle/IPC edge cases и это покрыто тестами
-- **P0**: каждый пакет собирается в `dist/` и импортируется через `exports` (types работают)
-- **P0**: CI проходит “from clean checkout” c `--frozen-lockfile`
-- **P0/P1**: релиз‑процесс описан и автоматизируем (changesets + changelog)
-
----
-
-### Alternatives considered (коротко, чтобы не переизобретать)
-
-- **Build tool**:
-  - `tsup`: быстрый “happy path” для ESM/CJS + d.ts → рекомендуем.
-  - `tsc emit`: проще, но сложнее с dual ESM/CJS и корректным `exports`.
-  - `rollup/tsup+rollup`: гибче, но больше конфигурации (пока не нужно).
-- **Versioning/release**:
-  - `changesets`: стандартный monorepo workflow → рекомендуем.
-  - `lerna`/manual: больше ручной работы, выше риск рассинхронизации.
-
----
-
-### Risks & mitigations
-
-- **Dual ESM/CJS pitfalls**: риск сломать резолв в разных bundlers.
-  - Mitigation: строгий `exports` map + smoke tests импорта (Node ESM + CJS) в CI.
-- **API drift транспорта** (Tauri event payload shape):
-  - Mitigation: transport tests + core runtime validation (already).
-- **Unbounded refresh recursion under burst load**:
-  - Mitigation: заменить рекурсивный “refresh queued → await refresh()” на loop (P1/F или P0, если видим риск на практике).
-
----
-
-### Release checklist (P0)
-
-- `pnpm install --frozen-lockfile`
-- `pnpm lint && pnpm -r typecheck && pnpm -r test && pnpm -r build`
-- smoke-import tests:
-  - `node --input-type=module` ESM import
-  - `node` CJS require (если публикуем CJS)
-- `changeset` → version bump → publish order: `state-sync` → `state-sync-pinia` → `state-sync-tauri`
+- [ ] Packages build cleanly and produce publish-grade artifacts.
+- [ ] CI passes from a clean checkout with `--frozen-lockfile`.
+- [ ] Lifecycle contract is documented and backed by tests.
+- [ ] No runtime crashes on garbage payloads; protocol errors are reported.
+- [ ] Release process is documented and reproducible.
 

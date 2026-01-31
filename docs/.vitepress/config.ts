@@ -4,9 +4,9 @@ const REPO = 'state-sync';
 const IS_GH_ACTIONS = process.env.GITHUB_ACTIONS === 'true';
 
 export default defineConfig({
-  lang: 'ru-RU',
+  lang: 'en-US',
   title: 'state-sync',
-  description: 'Надёжная синхронизация состояния между окнами/процессами через revision + snapshot',
+  description: 'Reliable state synchronization between windows/processes using revision + snapshot',
 
   // For GitHub Pages you typically set base to "/<repo>/".
   // Keep "/" by default; adjust if you deploy under a subpath.
@@ -23,6 +23,7 @@ export default defineConfig({
 
     nav: [
       { text: 'Guide', link: '/guide/quickstart' },
+      { text: 'API', link: '/api/' },
       {
         text: 'Packages',
         items: [
@@ -33,22 +34,22 @@ export default defineConfig({
         ],
       },
       { text: 'Examples', link: '/examples/' },
-      {
-        text: 'Design',
-        items: [
-          { text: 'Iteration 0001', link: '/iterations/0001-bootstrap-and-core-protocol' },
-          { text: 'Iteration 0002', link: '/iterations/0002-production-readiness' },
-          {
-            text: 'Iteration 0003',
-            link: '/iterations/0003-dx-observability-and-contract-hardening',
-          },
-        ],
-      },
       { text: 'Lifecycle', link: '/lifecycle' },
       { text: 'Troubleshooting', link: '/troubleshooting' },
     ],
 
     sidebar: {
+      '/api/': [
+        {
+          text: 'API Reference',
+          items: [
+            { text: 'Overview', link: '/api/' },
+            { text: 'Core (state-sync)', link: '/api/core/' },
+            { text: 'Pinia (state-sync-pinia)', link: '/api/pinia/' },
+            { text: 'Tauri (state-sync-tauri)', link: '/api/tauri/' },
+          ],
+        },
+      ],
       '/guide/': [
         {
           text: 'Guide',
@@ -77,22 +78,6 @@ export default defineConfig({
             { text: 'Overview', link: '/examples/' },
             { text: 'Source of truth (in-memory)', link: '/examples/source-of-truth' },
             { text: 'Structured logging', link: '/examples/structured-logging' },
-          ],
-        },
-      ],
-      '/iterations/': [
-        {
-          text: 'Design docs',
-          items: [
-            {
-              text: '0001 — Bootstrap + Core Protocol',
-              link: '/iterations/0001-bootstrap-and-core-protocol',
-            },
-            { text: '0002 — Production Readiness', link: '/iterations/0002-production-readiness' },
-            {
-              text: '0003 — DX/Observability/Contracts',
-              link: '/iterations/0003-dx-observability-and-contract-hardening',
-            },
           ],
         },
       ],

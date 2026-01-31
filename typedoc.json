@@ -1,0 +1,16 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "./tsconfig.base.json",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "hideGenerator": true,
+  "readme": "none",
+  "githubPages": false,
+  "cleanOutputDir": true,
+  "entryFileName": "index.md",
+  "parametersFormat": "table",
+  "useCodeBlocks": true
+}
+

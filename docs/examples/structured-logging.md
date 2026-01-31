@@ -2,10 +2,10 @@
 title: Structured logging
 ---
 
-Рекомендуемый способ получить “хорошие логи” без лишней инженерии:
+Recommended way to get “good logs” without extra engineering:
 
-- `createConsoleLogger()` — быстрый старт
-- `tagLogger()` — добавляет теги (например, `windowId/sourceId`) в каждый лог
+- `createConsoleLogger()` — quick start
+- `tagLogger()` — adds tags (e.g., `windowId/sourceId`) to every log entry
 
-См. также: `docs/examples/structured-logging.ts`.
+See also: `docs/examples/structured-logging.ts`.
 

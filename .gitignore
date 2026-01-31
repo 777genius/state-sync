@@ -7,3 +7,6 @@ coverage/
 # Rust
 target/
 
+# VitePress
+docs/.vitepress/cache/
+docs/.vitepress/dist/

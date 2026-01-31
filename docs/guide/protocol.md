@@ -4,7 +4,7 @@ title: Protocol (mental model)
 
 `state-sync` uses a simple and reliable pattern:
 
-1. **Invalidation event** сообщает, что “возможно изменилось состояние” и несёт:
+1. **Invalidation event** indicates that the state “may have changed” and carries:
    - `topic`
    - `revision`
 2. The receiver does a **pull**: `provider.getSnapshot()`

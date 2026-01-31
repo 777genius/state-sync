@@ -22,15 +22,16 @@ jobs:
       - run: pnpm lint
       - run: pnpm -r typecheck
       - run: pnpm -r build
+      - run: pnpm docs:api
       - run: pnpm -r test
       - name: Smoke-import (ESM + CJS)
         run: |
-          node -e "import('state-sync').then(m => console.log('ESM OK:', Object.keys(m)))"
-          node -e "const m = require('state-sync'); console.log('CJS OK:', Object.keys(m))"
-          node -e "import('state-sync-pinia').then(m => console.log('ESM OK:', Object.keys(m)))"
-          node -e "const m = require('state-sync-pinia'); console.log('CJS OK:', Object.keys(m))"
-          node -e "import('state-sync-tauri').then(m => console.log('ESM OK:', Object.keys(m)))"
-          node -e "const m = require('state-sync-tauri'); console.log('CJS OK:', Object.keys(m))"
+          node -e "import('./packages/core/dist/index.js').then(m => console.log('core ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/core/dist/index.cjs'); console.log('core CJS OK:', Object.keys(m))"
+          node -e "import('./packages/pinia/dist/index.js').then(m => console.log('pinia ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/pinia/dist/index.cjs'); console.log('pinia CJS OK:', Object.keys(m))"
+          node -e "import('./packages/tauri/dist/index.js').then(m => console.log('tauri ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/tauri/dist/index.cjs'); console.log('tauri CJS OK:', Object.keys(m))"
 
   rust:
     runs-on: ubuntu-latest

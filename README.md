@@ -1,26 +1,26 @@
 # state-sync
 
-Универсальная библиотека для **надёжной синхронизации состояния** между окнами/процессами.
+Universal library for **reliable state synchronization** between windows/processes.
 
-Фокус: **framework-agnostic** (Pinia/React/vanilla state) + **transport-agnostic** (Tauri events+invoke, позже BroadcastChannel и т.п.).
+Focus: **framework-agnostic** (Pinia/React/vanilla state) + **transport-agnostic** (Tauri events+invoke, later BroadcastChannel, etc.).
 
-## Пакеты
+## Packages
 
-| Пакет | Описание |
+| Package | Description |
 |-------|----------|
-| [`state-sync`](packages/core/) | Ядро: engine, revision protocol, types |
-| [`state-sync-pinia`](packages/pinia/) | Pinia-адаптер (applier) |
-| [`state-sync-tauri`](packages/tauri/) | Tauri-транспорт (subscriber + provider) |
+| [`state-sync`](packages/core/) | Core: engine, revision protocol, types |
+| [`state-sync-pinia`](packages/pinia/) | Pinia adapter (applier) |
+| [`state-sync-tauri`](packages/tauri/) | Tauri transport (subscriber + provider) |
 
-## Установка
+## Install
 
 ```bash
 npm install state-sync
-npm install state-sync-pinia   # если Pinia
-npm install state-sync-tauri   # если Tauri
+npm install state-sync-pinia   # if Pinia
+npm install state-sync-tauri   # if Tauri
 ```
 
-## Быстрый старт
+## Quickstart
 
 ```typescript
 import { createRevisionSync } from 'state-sync';
@@ -35,9 +35,9 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-Подробнее: [core README](packages/core/README.md), [pinia README](packages/pinia/README.md), [tauri README](packages/tauri/README.md).
+See: [core README](packages/core/README.md), [pinia README](packages/pinia/README.md), [tauri README](packages/tauri/README.md).
 
-## Разработка
+## Development
 
 ```bash
 pnpm install
@@ -58,16 +58,16 @@ cargo test
 
 ## Rust crate
 
-Директория `crates/state-sync` содержит экспериментальный Rust crate.
-Он **не входит** в npm-релиз и версионируется отдельно.
-CI проверяет `cargo fmt`, `clippy` и `cargo test`, но публикация на crates.io пока не предусмотрена.
+The `crates/state-sync` directory contains an experimental Rust crate.
+It is **not** part of the npm release and is versioned independently.
+CI runs `cargo fmt`, `clippy`, and `cargo test`, but publishing to crates.io is not set up yet.
 
-## Документация
+## Documentation
 
 - [Lifecycle contract](docs/lifecycle.md)
 - [Adapter authoring](docs/adapters/adapter-authoring.md)
 - [Pinia adapter](docs/adapters/pinia.md)
 - [Compatibility](docs/compatibility.md)
 - [Troubleshooting](docs/troubleshooting.md)
-- [Examples](docs/examples/) — platform-agnostic примеры использования
+- [Examples](docs/examples/) — platform-agnostic usage examples
 - [Release checklist](docs/release-checklist.md)

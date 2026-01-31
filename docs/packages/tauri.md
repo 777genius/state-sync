@@ -4,14 +4,14 @@ title: Tauri (state-sync-tauri)
 
 ## Purpose
 
-`state-sync-tauri` — это **transport adapter**:
+`state-sync-tauri` is a **transport adapter**:
 - `createTauriInvalidationSubscriber()` (events)
 - `createTauriSnapshotProvider()` (invoke)
 
 Plus DX sugar:
 - `createTauriRevisionSync()` — ready-made wiring of transport + core engine
 
-## Пример (DX sugar)
+## Example (DX sugar)
 
 ```ts
 import { createTauriRevisionSync } from 'state-sync-tauri';

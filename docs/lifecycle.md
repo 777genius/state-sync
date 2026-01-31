@@ -4,71 +4,71 @@
 
 ### `start()`
 
-- Подписывается на invalidation events и загружает начальный snapshot.
-- **Идемпотентен**: повторный вызов — no-op (не дублирует подписку).
-- **Throws** если вызван после `stop()` — защита от утечек подписок.
-- При ошибке подписки или первого refresh — откатывает состояние (unsubscribe, started = false).
+- Subscribes to invalidation events and loads the initial snapshot.
+- **Idempotent**: repeated calls are a no-op (does not duplicate the subscription).
+- **Throws** if called after `stop()` — protects against subscription leaks.
+- On subscription or initial refresh failure, rolls back internal state (unsubscribe, `started = false`).
 
 ### `stop()`
 
-- Отписывается от invalidation events и блокирует дальнейший apply.
-- **Идемпотентен**: повторный вызов — no-op.
-- После `stop()` handle считается "мёртвым" — `start()` бросит ошибку.
+- Unsubscribes from invalidation events and blocks further apply.
+- **Idempotent**: repeated calls are a no-op.
+- After `stop()`, the handle is considered "dead" — `start()` will throw.
 
 ### `refresh()`
 
-- One-shot: запросить snapshot у provider и применить через applier.
-- **Разрешён до `start()`** — полезно для eager prefetch без подписки.
-- **No-op после `stop()`** — не бросает, просто пропускает.
-- Поддерживает coalescing: если refresh уже в процессе, следующий вызов ставится в очередь (максимум 1 в очереди).
+- One-shot: fetch a snapshot from the provider and apply it via the applier.
+- **Allowed before `start()`** — useful for eager prefetch without a subscription.
+- **No-op after `stop()`** — does not throw, it simply skips.
+- Supports coalescing: if a refresh is already in flight, the next call is queued (at most 1 queued).
 
 ### `getLocalRevision()`
 
-- Возвращает текущую локальную revision (последнюю успешно применённую).
-- `"0"` до первого применения.
+- Returns the current local revision (the last successfully applied revision).
+- `"0"` until the first successful apply.
 
 ## Error Phases
 
-Каждая ошибка, переданная в `onError`, содержит поле `phase`, определяющее где именно произошёл сбой:
+Every error passed to `onError` includes a `phase` field that indicates where it happened:
 
-| Phase | Что произошло | Applier вызван? |
+| Phase | What happened | Was the applier called? |
 |-------|---------------|-----------------|
-| `subscribe` | Ошибка подписки на invalidation events | Нет |
-| `getSnapshot` | Provider не смог вернуть snapshot | Нет |
-| `protocol` | Revision не прошла валидацию (non-canonical, пустой topic) | Нет |
-| `apply` | Applier бросил ошибку при применении snapshot | Да (apply завершился ошибкой) |
-| `refresh` | Неклассифицированная ошибка внутри refresh цикла | Зависит |
+| `subscribe` | Failed to subscribe to invalidation events | No |
+| `getSnapshot` | Provider failed to return a snapshot | No |
+| `protocol` | Revision validation failed (non-canonical, empty topic) | No |
+| `apply` | Applier threw while applying a snapshot | Yes (apply failed) |
+| `refresh` | Unclassified error inside the refresh loop | Depends |
 
 ## Observability fields (best-effort)
 
-В `SyncErrorContext` дополнительно могут присутствовать (опционально) поля для triage/метрик:
-- `localRevision?` — локальная revision на момент ошибки
-- `eventRevision?` — revision из invalidation event (если применимо)
-- `snapshotRevision?` — revision из snapshot (если применимо)
-- `sourceId?` — инициатор изменения (если транспорт/источник присылает `sourceId`)
+`SyncErrorContext` may additionally include (optionally) fields useful for triage/metrics:
+- `localRevision?` — local revision at the time of the error
+- `eventRevision?` — revision from the invalidation event (if applicable)
+- `snapshotRevision?` — revision from the snapshot (if applicable)
+- `sourceId?` — change originator (if the transport/source provides `sourceId`)
 
-Эти поля **best-effort**: engine заполнит их, когда информация доступна в текущей фазе.
+These fields are **best-effort**: the engine fills them when the information is available in the current phase.
 
-**Поведение при ошибке `apply`:**
-- Во время `start()` — промис `start()` reject'ится, подписка откатывается (unsubscribe, started = false).
-- Во время invalidation-refresh — `onError` эмитится, подписка продолжает работать (следующая invalidation снова запустит refresh).
-- Во время ручного `refresh()` — ошибка propagates к caller'у.
+**Behavior on `apply` error:**
+- During `start()` — the `start()` promise rejects; the subscription is rolled back (unsubscribe, `started = false`).
+- During invalidation-triggered refresh — `onError` is emitted; the subscription continues (the next invalidation can trigger refresh again).
+- During manual `refresh()` — the error propagates to the caller.
 
-**Порядок проверки при ошибке в `refresh()`:**
-1. `getSnapshot` — provider не смог вернуть данные
-2. `protocol` — revision не прошла валидацию
-3. `apply` — applier не смог применить snapshot
-4. `refresh` — fallback для непредвиденных ошибок
+**Classification order within `refresh()` errors:**
+1. `getSnapshot` — provider failed to return data
+2. `protocol` — revision validation failed
+3. `apply` — applier failed to apply the snapshot
+4. `refresh` — fallback for unexpected errors
 
-Каждая фаза эмитится ровно один раз за ошибку (deduplicated через `alreadyEmitted` флаг).
+Each phase is emitted at most once per error (deduplicated via the `alreadyEmitted` flag).
 
 ## onError callback
 
-- Вызывается при ошибках во всех фазах: `subscribe`, `refresh`, `protocol`, и т.д.
-- **Если `onError` бросает исключение** — engine ловит его и логирует, продолжает работу.
-- Engine никогда не падает из-за пользовательского onError callback.
+- Called for errors in all phases: `subscribe`, `refresh`, `protocol`, etc.
+- **If `onError` throws** — the engine catches and logs it, and continues running.
+- The engine never crashes due to a user-provided `onError` callback.
 
-## Порядок вызовов
+## Call order
 
 ```
 createRevisionSync(options)  →  handle (inactive)

@@ -2,77 +2,77 @@
 
 ## Non-canonical revision
 
-**Ошибка**: `Non-canonical snapshot revision: "01"`
+**Error**: `Non-canonical snapshot revision: "01"`
 
-Revision должна быть canonical decimal u64 string:
+Revision must be a canonical decimal `u64` string:
 - `"0"` — OK
 - `"123"` — OK
-- `"01"` — не ОК (leading zero)
-- `"abc"` — не ОК (не число)
-- `""` — не ОК (пустая строка)
+- `"01"` — NOT OK (leading zero)
+- `"abc"` — NOT OK (not a number)
+- `""` — NOT OK (empty string)
 
-**Решение**: убедиться что backend отдаёт revision без leading zeros. Revision — строковое представление беззнакового 64-bit числа.
+**Fix**: make sure the backend returns revision without leading zeros. Revision is the string representation of an unsigned 64-bit integer.
 
 ## Topic mismatch
 
-**Симптом**: invalidation events приходят, но snapshot не обновляется.
+**Symptom**: invalidation events arrive, but the snapshot is not updated.
 
-**Причина**: topic в invalidation event не совпадает с topic в `createRevisionSync()`.
+**Cause**: the topic in the invalidation event does not match the topic passed to `createRevisionSync()`.
 
-**Решение**: проверить что backend и frontend используют одинаковый topic string. Topic сравнивается строго (`===`).
+**Fix**: ensure backend and frontend use the same topic string. Topic comparison is strict (`===`).
 
 ## Multiple windows / race conditions
 
-**Симптом**: несколько окон конкурируют за обновления, данные "прыгают".
+**Symptom**: multiple windows compete for updates; data “jumps”.
 
-Engine обеспечивает:
-- Coalescing: множественные invalidation-ы сжимаются в один refresh
-- Revision monotonicity: snapshot применяется только если его revision строго выше текущей
+The engine provides:
+- Coalescing: multiple invalidations are collapsed into a single refresh
+- Revision monotonicity: snapshots are applied only if their revision is strictly greater than the current local revision
 
-Если проблема сохраняется — проверить что snapshot provider возвращает актуальные данные, а не кешированные.
+If the issue persists, verify that your snapshot provider returns fresh data (not cached).
 
 ## start() after stop()
 
-**Ошибка**: `[state-sync] start() called after stop()`
+**Error**: `[state-sync] start() called after stop()`
 
-Handle одноразовый: после `stop()` нельзя вызвать `start()`. Это защита от утечек подписок.
+The handle is single-use: after `stop()` you cannot call `start()` again. This protects against subscription leaks.
 
-**Решение**: создать новый handle через `createRevisionSync()`.
+**Fix**: create a new handle via `createRevisionSync()`.
 
 ## Interpreting error phases
 
-Поле `phase` в `SyncErrorContext` помогает быстро определить источник проблемы:
+The `phase` field in `SyncErrorContext` helps you quickly identify the source of the problem:
 
 ### `getSnapshot`
-**Причина**: Provider не смог вернуть snapshot (сеть, таймаут, backend упал).
-**Действие**: Проверить доступность backend. Если используется Tauri `invoke` — проверить что Rust command зарегистрирован и возвращает данные.
+**Cause**: the provider failed to return a snapshot (network, timeout, backend down).
+**Action**: check backend availability. If you use Tauri `invoke`, ensure the Rust command is registered and returns data.
 
 ### `apply`
-**Причина**: Applier бросил ошибку при обработке snapshot (ошибка десериализации, невалидные данные, Pinia store reject).
-**Действие**: Проверить формат данных в snapshot. Убедиться что applier корректно обрабатывает все возможные формы `data`.
+**Cause**: the applier threw while processing the snapshot (deserialization error, invalid data, Pinia store rejection).
+**Action**: validate the snapshot data shape. Ensure the applier handles all expected forms of `data`.
 
 ### `protocol`
-**Причина**: Нарушение контракта — revision не каноническая, topic пустой, или payload не соответствует ожидаемой форме.
-**Действие**: Проверить что backend генерирует canonical revision (decimal u64 без leading zeros). Проверить payload invalidation events.
+**Cause**: contract violation — non-canonical revision, empty topic, or payload does not match the expected shape.
+**Action**: ensure backend generates a canonical revision (decimal `u64` without leading zeros). Verify invalidation payloads.
 
 ### `subscribe`
-**Причина**: Не удалось подписаться на events (transport не доступен, Tauri listener ошибка).
-**Действие**: Проверить что transport корректно настроен и event name совпадает.
+**Cause**: failed to subscribe to events (transport unavailable, Tauri listener error).
+**Action**: ensure transport is configured correctly and the event name matches.
 
 ### `refresh`
-**Причина**: Fallback — ошибка внутри refresh, не классифицированная как getSnapshot/apply/protocol.
-**Действие**: Проверить логи для полной stack trace.
+**Cause**: fallback — an error inside refresh that isn’t classified as getSnapshot/apply/protocol.
+**Action**: check logs for the full stack trace.
 
 ## Useful context fields
 
-Кроме `phase`, engine может (best-effort) заполнять поля:
-- `localRevision` — локальная revision на момент ошибки
-- `eventRevision` — revision из invalidation event (если применимо)
-- `snapshotRevision` — revision snapshot (если применимо)
-- `sourceId` — инициатор изменения (если транспорт это передаёт)
+Besides `phase`, the engine may (best-effort) populate:
+- `localRevision` — local revision at the time of the error
+- `eventRevision` — revision from the invalidation event (if applicable)
+- `snapshotRevision` — snapshot revision (if applicable)
+- `sourceId` — change originator (if the transport provides it)
 
-Это удобно для метрик/алертов (например: “apply errors by topic”).
+This is useful for metrics/alerts (e.g., “apply errors by topic”).
 
 ## onError throws
 
-Если `onError` callback бросает исключение, engine ловит его и логирует. Engine продолжает работать — пользовательский callback не может уронить sync loop.
+If the `onError` callback throws, the engine catches and logs it. The engine keeps running — a user callback cannot bring down the sync loop.

@@ -1,16 +1,16 @@
 /**
  * Structured logging + error metrics recipe.
  *
- * Демонстрирует:
- * - Custom Logger для structured output
+ * Demonstrates:
+ * - Custom Logger for structured output
  * - Error metrics (count by phase/topic)
- * - Integration с onError для observability
+ * - Integration with onError for observability
  *
- * Ключи, передаваемые engine в extra объект logger:
+ * Keys the engine passes into the logger `extra` object:
  *
- * | Вызов              | Ключи extra                                  |
+ * | Call               | Extra keys                                   |
  * |--------------------|----------------------------------------------|
- * | Все вызовы         | `topic`                                      |
+ * | All calls          | `topic`                                      |
  * | error (emitError)  | `topic`, `phase`, `error`                    |
  * | applied snapshot   | `topic`, `revision`                          |
  * | snapshot skipped   | `topic`, `snapshotRevision`, `localRevision` |

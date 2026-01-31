@@ -1,8 +1,8 @@
 # state-sync-tauri
 
-Tauri-транспорт для state-sync. Использует Tauri events для invalidation и invoke для snapshot.
+Tauri transport for state-sync. Uses Tauri events for invalidation and `invoke` for snapshots.
 
-## Установка
+## Install
 
 ```bash
 npm install state-sync-tauri state-sync
@@ -46,27 +46,27 @@ await handleB.start();
 
 ### `createTauriInvalidationSubscriber(options)`
 
-Оборачивает Tauri `listen` в `InvalidationSubscriber`.
+Wraps Tauri `listen` into an `InvalidationSubscriber`.
 
 ### `createTauriSnapshotProvider<T>(options)`
 
-Оборачивает Tauri `invoke` в `SnapshotProvider<T>`.
+Wraps Tauri `invoke` into a `SnapshotProvider<T>`.
 
-Оба адаптера принимают structural types — можно передать свои mock-функции для тестирования без Tauri runtime.
+Both adapters accept structural types — you can pass your own mocks for testing without a Tauri runtime.
 
 ## Peer dependency policy
 
-`@tauri-apps/api` объявлен как **optional** peer dependency:
+`@tauri-apps/api` is declared as an **optional** peer dependency:
 
-- **В production Tauri app**: установить `@tauri-apps/api >=2` — `listen` и `invoke` передаются напрямую.
-- **В тестах**: устанавливать `@tauri-apps/api` **не нужно**. Используйте structural mocks:
+- **In a production Tauri app**: install `@tauri-apps/api >=2` — you pass `listen` and `invoke` directly.
+- **In tests**: you **don’t need** to install `@tauri-apps/api`. Use structural mocks:
 
 ```typescript
 import { createRevisionSync } from 'state-sync';
 import { createTauriInvalidationSubscriber, createTauriSnapshotProvider } from 'state-sync-tauri';
 
 const mockListen = async (eventName, handler) => {
-  // эмулируем events
+  // emulate events
   return () => {};
 };
 
@@ -78,4 +78,4 @@ const subscriber = createTauriInvalidationSubscriber({ listen: mockListen, event
 const provider = createTauriSnapshotProvider({ invoke: mockInvoke, commandName: 'cmd' });
 ```
 
-Адаптеры типизированы через structural types (`TauriListen`, `TauriInvoke`), поэтому любая функция с совместимой сигнатурой будет принята TypeScript компилятором.
+The adapters are typed via structural types (`TauriListen`, `TauriInvoke`), so any function with a compatible signature will be accepted by the TypeScript compiler.

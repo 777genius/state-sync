@@ -2,12 +2,12 @@
 title: Examples
 ---
 
-Здесь — небольшие примеры, которые показывают “правильный паттерн”:
+Small examples that demonstrate the “recommended pattern”:
 - invalidation → refresh → apply
 - revision gate
-- наблюдаемость (phases + structured context)
+- observability (phases + structured context)
 
-## Список
+## List
 
 - [Source of truth (in-memory)](/examples/source-of-truth)
 - [Structured logging](/examples/structured-logging)

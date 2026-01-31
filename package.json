@@ -13,6 +13,7 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "build": "pnpm -r build",
+    "docs:api": "typedoc --options typedoc.json --entryPoints packages/core/src/index.ts --out docs/api/core && typedoc --options typedoc.json --entryPoints packages/pinia/src/index.ts --out docs/api/pinia && typedoc --options typedoc.json --entryPoints packages/tauri/src/index.ts --out docs/api/tauri",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
@@ -27,6 +28,8 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitepress": "^1.6.4",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "typedoc": "^0.28.0",
+    "typedoc-plugin-markdown": "^4.9.0"
   }
 }

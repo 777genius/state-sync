@@ -39,6 +39,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - run: pnpm docs:api
+
       - run: pnpm docs:build
         env:
           VITEPRESS_BASE: '/state-sync/'

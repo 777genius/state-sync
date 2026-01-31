@@ -1,11 +1,11 @@
 /**
  * Platform-agnostic example: in-memory transport + engine lifecycle.
  *
- * Демонстрирует:
- * - Revision gate (старые revision игнорируются)
- * - Invalidation → refresh → apply цикл
+ * Demonstrates:
+ * - Revision gate (old revisions are ignored)
+ * - Invalidation → refresh → apply cycle
  * - Coalescing (burst invalidations → max 2 getSnapshot)
- * - Error handling через onError callback
+ * - Error handling via the onError callback
  */
 import type {
   InvalidationEvent,
