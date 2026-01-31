@@ -510,7 +510,7 @@ describe('E2E multi-window sync', () => {
       await tick(20);
 
       b.handle.stop();
-      resolveSlowSnapshot?.();
+      (resolveSlowSnapshot as (() => void) | null)?.();
       await tick(50);
 
       expect(bApplied.length).toBe(appliedBefore);
@@ -1277,7 +1277,7 @@ describe('E2E multi-window sync', () => {
 
       // B is stuck — but new mutation + resolving the hang should recover
       bus.mutateFrom('A', 'after-hang');
-      resolveHang?.();
+      (resolveHang as (() => void) | null)?.();
 
       await bus.waitForConvergence();
 
