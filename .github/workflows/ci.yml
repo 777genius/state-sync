@@ -24,6 +24,8 @@ jobs:
       - run: pnpm -r build
       - run: pnpm docs:api
       - run: pnpm -r test
+      - name: E2E multi-window sync tests
+        run: pnpm --filter state-sync test -- e2e-multi-window
       - name: Smoke-import (ESM + CJS)
         run: |
           node -e "import('./packages/core/dist/index.js').then(m => console.log('core ESM OK:', Object.keys(m)))"
