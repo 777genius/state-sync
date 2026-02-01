@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { createRevisionSync } from '../src/engine';
 import type { InvalidationEvent, Revision, SnapshotEnvelope } from '../src/types';
 import { MultiWindowBus } from './helpers/multi-window-bus';
 
@@ -819,7 +818,6 @@ describe('E2E multi-window sync', () => {
       const a = bus.createWindow('A');
 
       let callCount = 0;
-      const bErrors: Array<any> = [];
       const b = bus.createCustomWindow('B', {
         providerOverride: {
           getSnapshot: async () => {
@@ -832,8 +830,6 @@ describe('E2E multi-window sync', () => {
           },
         },
       });
-      // Capture errors from the custom window
-      const origOnError = b.errors;
 
       await a.handle.start();
       await b.handle.start();
@@ -1344,11 +1340,6 @@ describe('E2E multi-window sync', () => {
       await a.handle.start();
       await b.handle.start();
 
-      // With async broadcast, handler isn't called synchronously after mutate
-      let handlerCalledSync = false;
-      const bHandlers = bus.getHandlerSet('B');
-      const origSize = bHandlers.size;
-
       bus.mutateFrom('A', 'async-test');
 
       // The event hasn't been delivered yet (it's in setTimeout(0))
@@ -1411,11 +1402,11 @@ describe('E2E multi-window sync', () => {
               getSnapshot: async () => {
                 // Goes through bus mutex — concurrent calls are serialized
                 const start = Date.now();
-                const delay = bus['busConfig'].ipcDelayMs;
+                const delay = bus.busConfig.ipcDelayMs;
                 if (delay > 0) await tick(delay);
 
                 // Mutex serializes access, so timestamps should be spaced
-                const contentionMs = bus['busConfig'].mutexContentionMs;
+                const contentionMs = bus.busConfig.mutexContentionMs;
                 if (contentionMs > 0) await tick(contentionMs);
 
                 snapshotTimestamps.push(Date.now() - start);

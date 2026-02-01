@@ -71,7 +71,7 @@ export class MultiWindowBus<T> {
   private windows = new Map<string, WindowHandle<T>>();
   private configs = new Map<string, WindowConfig>();
   private failCounters = new Map<string, number>();
-  private busConfig: Required<BusConfig>;
+  readonly busConfig: Required<BusConfig>;
   private mutexQueue: Promise<void> = Promise.resolve();
   readonly topic: string;
 
