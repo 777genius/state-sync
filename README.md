@@ -8,22 +8,22 @@ Focus: **framework-agnostic** (Pinia/React/vanilla state) + **transport-agnostic
 
 | Package | Description |
 |-------|----------|
-| [`state-sync`](packages/core/) | Core: engine, revision protocol, types |
-| [`state-sync-pinia`](packages/pinia/) | Pinia adapter (applier) |
-| [`state-sync-tauri`](packages/tauri/) | Tauri transport (subscriber + provider) |
+| [`@statesync/core`](packages/core/) | Core: engine, revision protocol, types |
+| [`@statesync/pinia`](packages/pinia/) | Pinia adapter (applier) |
+| [`@statesync/tauri`](packages/tauri/) | Tauri transport (subscriber + provider) |
 
 ## Install
 
 ```bash
-npm install state-sync
-npm install state-sync-pinia   # if Pinia
-npm install state-sync-tauri   # if Tauri
+npm install @statesync/core
+npm install @statesync/pinia   # if Pinia
+npm install @statesync/tauri   # if Tauri
 ```
 
 ## Quickstart
 
 ```typescript
-import { createRevisionSync } from 'state-sync';
+import { createRevisionSync } from '@statesync/core';
 
 const handle = createRevisionSync({
   topic: 'settings',

@@ -1,10 +1,10 @@
 ---
-title: Tauri (state-sync-tauri)
+title: Tauri (@statesync/tauri)
 ---
 
 ## Purpose
 
-`state-sync-tauri` is a **transport adapter**:
+`@statesync/tauri` is a **transport adapter**:
 - `createTauriInvalidationSubscriber()` (events)
 - `createTauriSnapshotProvider()` (invoke)
 
@@ -14,7 +14,7 @@ Plus DX sugar:
 ## Example (DX sugar)
 
 ```ts
-import { createTauriRevisionSync } from 'state-sync-tauri';
+import { createTauriRevisionSync } from '@statesync/tauri';
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 

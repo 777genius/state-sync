@@ -1,5 +1,5 @@
 {
-  "name": "state-sync",
+  "name": "@statesync/core",
   "version": "0.1.0",
   "description": "Framework-agnostic state synchronization engine with revision protocol",
   "type": "module",

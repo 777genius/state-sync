@@ -1,8 +1,8 @@
-[**state-sync-pinia**](../index.md)
+[**@statesync/pinia**](../index.md)
 
 ***
 
-[state-sync-pinia](../index.md) / PiniaStoreLike
+[@statesync/pinia](../index.md) / PiniaStoreLike
 
 # Interface: PiniaStoreLike\<State\>
 

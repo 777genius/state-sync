@@ -16,8 +16,8 @@
  * | snapshot skipped   | `topic`, `snapshotRevision`, `localRevision` |
  * | invalidation skip  | `topic`, `eventRevision` / `event`           |
  */
-import type { Logger, SyncErrorContext, SyncPhase } from 'state-sync';
-import { createRevisionSync } from 'state-sync';
+import type { Logger, SyncErrorContext, SyncPhase } from '@statesync/core';
+import { createRevisionSync } from '@statesync/core';
 
 // --- Structured Logger ---
 

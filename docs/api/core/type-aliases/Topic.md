@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / Topic
+[@statesync/core](../index.md) / Topic
 
 # Type Alias: Topic
 

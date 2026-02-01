@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / Revision
+[@statesync/core](../index.md) / Revision
 
 # Type Alias: Revision
 

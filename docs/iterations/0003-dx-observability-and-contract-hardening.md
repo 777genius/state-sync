@@ -33,9 +33,9 @@ Key idea: **do not invent new protocol features**. Make the current protocol eas
 ### Current state (baseline)
 
 Packages:
-- `state-sync` (core): engine + revision utilities + types + retry wrapper(s)
-- `state-sync-pinia`: framework adapter (applier) for Pinia-like stores
-- `state-sync-tauri`: transport adapters over Tauri events + invoke
+- `@statesync/core` (core): engine + revision utilities + types + retry wrapper(s)
+- `@statesync/pinia`: framework adapter (applier) for Pinia-like stores
+- `@statesync/tauri`: transport adapters over Tauri events + invoke
 
 Quality:
 - unit/contract tests exist for core and adapters

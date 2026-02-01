@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / createTauriInvalidationSubscriber
+[@statesync/tauri](../index.md) / createTauriInvalidationSubscriber
 
 # Function: createTauriInvalidationSubscriber()
 

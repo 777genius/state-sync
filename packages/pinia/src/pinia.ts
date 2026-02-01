@@ -1,4 +1,4 @@
-import type { SnapshotApplier, SnapshotEnvelope } from 'state-sync';
+import type { SnapshotApplier, SnapshotEnvelope } from '@statesync/core';
 
 /**
  * Minimal structural interface a Pinia store satisfies.
@@ -132,7 +132,7 @@ export function createPiniaSnapshotApplier<State extends Record<string, unknown>
 
       if (!isPlainObject(mapped)) {
         const message =
-          'state-sync-pinia: toState(data) must return a plain object (top-level state)';
+          '@statesync/pinia: toState(data) must return a plain object (top-level state)';
         if (strict) throw new Error(message);
         return;
       }

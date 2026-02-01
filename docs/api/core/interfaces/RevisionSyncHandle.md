@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / RevisionSyncHandle
+[@statesync/core](../index.md) / RevisionSyncHandle
 
 # Interface: RevisionSyncHandle
 

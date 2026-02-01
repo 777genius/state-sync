@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / SnapshotEnvelope
+[@statesync/core](../index.md) / SnapshotEnvelope
 
 # Interface: SnapshotEnvelope\<T\>
 

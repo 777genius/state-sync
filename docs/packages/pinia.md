@@ -1,10 +1,10 @@
 ---
-title: Pinia (state-sync-pinia)
+title: Pinia (@statesync/pinia)
 ---
 
 ## Purpose
 
-`state-sync-pinia` is a **framework adapter**: it knows how to apply snapshots to a Pinia store.
+`@statesync/pinia` is a **framework adapter**: it knows how to apply snapshots to a Pinia store.
 
 ## API
 
@@ -15,8 +15,8 @@ title: Pinia (state-sync-pinia)
 ## Example
 
 ```ts
-import { createRevisionSync } from 'state-sync';
-import { createPiniaSnapshotApplier } from 'state-sync-pinia';
+import { createRevisionSync } from '@statesync/core';
+import { createPiniaSnapshotApplier } from '@statesync/pinia';
 
 const applier = createPiniaSnapshotApplier(myStore, {
   mode: 'patch',

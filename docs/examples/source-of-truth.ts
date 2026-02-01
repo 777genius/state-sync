@@ -15,8 +15,8 @@ import type {
   SnapshotEnvelope,
   SnapshotProvider,
   Unsubscribe,
-} from 'state-sync';
-import { createRevisionSync } from 'state-sync';
+} from '@statesync/core';
+import { createRevisionSync } from '@statesync/core';
 
 // --- In-memory mock transport ---
 

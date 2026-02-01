@@ -1,8 +1,8 @@
-**state-sync**
+**@statesync/core**
 
 ***
 
-# state-sync
+# @statesync/core
 
 ## Interfaces
 

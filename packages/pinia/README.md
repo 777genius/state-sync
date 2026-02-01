@@ -1,18 +1,18 @@
-# state-sync-pinia
+# @statesync/pinia
 
 Pinia adapter for state-sync. Applies snapshots to a Pinia store.
 
 ## Install
 
 ```bash
-npm install state-sync-pinia state-sync
+npm install @statesync/pinia @statesync/core
 ```
 
 ## Quick Start
 
 ```typescript
-import { createRevisionSync } from 'state-sync';
-import { createPiniaSnapshotApplier } from 'state-sync-pinia';
+import { createRevisionSync } from '@statesync/core';
+import { createPiniaSnapshotApplier } from '@statesync/pinia';
 
 const store = useMyStore();
 

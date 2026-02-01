@@ -1,8 +1,8 @@
-[**state-sync-pinia**](../index.md)
+[**@statesync/pinia**](../index.md)
 
 ***
 
-[state-sync-pinia](../index.md) / PiniaApplyMode
+[@statesync/pinia](../index.md) / PiniaApplyMode
 
 # Type Alias: PiniaApplyMode
 

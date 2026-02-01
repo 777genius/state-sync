@@ -1,4 +1,4 @@
-# state-sync-pinia
+# @statesync/pinia
 
 ## 1.0.0
 
@@ -10,4 +10,4 @@
 
 - Updated dependencies
 - Updated dependencies
-  - state-sync@0.1.0
+  - @statesync/core@0.1.0

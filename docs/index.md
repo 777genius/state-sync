@@ -28,15 +28,15 @@ features:
 ## Install
 
 ```bash
-npm install state-sync
-npm install state-sync-pinia   # if Pinia
-npm install state-sync-tauri   # if Tauri
+npm install @statesync/core
+npm install @statesync/pinia   # if Pinia
+npm install @statesync/tauri   # if Tauri
 ```
 
 ## Quick example
 
 ```ts
-import { createConsoleLogger, createRevisionSync } from 'state-sync';
+import { createConsoleLogger, createRevisionSync } from '@statesync/core';
 
 const handle = createRevisionSync({
   topic: 'app-config',

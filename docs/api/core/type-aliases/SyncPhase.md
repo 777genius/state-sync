@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / SyncPhase
+[@statesync/core](../index.md) / SyncPhase
 
 # Type Alias: SyncPhase
 

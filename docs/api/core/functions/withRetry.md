@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / withRetry
+[@statesync/core](../index.md) / withRetry
 
 # Function: withRetry()
 

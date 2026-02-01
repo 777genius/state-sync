@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / InvalidationEvent
+[@statesync/core](../index.md) / InvalidationEvent
 
 # Interface: InvalidationEvent
 

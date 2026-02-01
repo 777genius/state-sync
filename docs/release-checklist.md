@@ -26,9 +26,9 @@ pnpm changeset version
 
 Publish order (dependencies first):
 
-1. `state-sync` (core)
-2. `state-sync-pinia`
-3. `state-sync-tauri`
+1. `@statesync/core` (core)
+2. `@statesync/pinia`
+3. `@statesync/tauri`
 
 ```bash
 pnpm release
@@ -52,13 +52,13 @@ Before publishing, ensure both formats work:
 
 ```bash
 # ESM
-node -e "import('state-sync').then(m => console.log('ESM OK:', Object.keys(m)))"
+node -e "import('@statesync/core').then(m => console.log('ESM OK:', Object.keys(m)))"
 
 # CJS
-node -e "const m = require('state-sync'); console.log('CJS OK:', Object.keys(m))"
+node -e "const m = require('@statesync/core'); console.log('CJS OK:', Object.keys(m))"
 ```
 
-Repeat for each package (`state-sync-pinia`, `state-sync-tauri`).
+Repeat for each package (`@statesync/pinia`, `@statesync/tauri`).
 
 ## Post-release
 

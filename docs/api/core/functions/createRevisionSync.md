@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / createRevisionSync
+[@statesync/core](../index.md) / createRevisionSync
 
 # Function: createRevisionSync()
 

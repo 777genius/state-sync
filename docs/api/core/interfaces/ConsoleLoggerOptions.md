@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / ConsoleLoggerOptions
+[@statesync/core](../index.md) / ConsoleLoggerOptions
 
 # Interface: ConsoleLoggerOptions
 

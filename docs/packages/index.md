@@ -6,9 +6,9 @@ title: Packages
 
 ## Packages
 
-- **Core**: [`state-sync`](/packages/core) — engine + protocol + helpers.
-- **Pinia**: [`state-sync-pinia`](/packages/pinia) — an applier for Pinia stores.
-- **Tauri**: [`state-sync-tauri`](/packages/tauri) — transport adapters (events+invoke) + DX factory.
+- **Core**: [`@statesync/core`](/packages/core) — engine + protocol + helpers.
+- **Pinia**: [`@statesync/pinia`](/packages/pinia) — an applier for Pinia stores.
+- **Tauri**: [`@statesync/tauri`](/packages/tauri) — transport adapters (events+invoke) + DX factory.
 
 Extensibility idea: transport adapters and framework adapters are independent axes.
 

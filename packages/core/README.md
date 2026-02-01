@@ -1,17 +1,17 @@
-# state-sync
+# @statesync/core
 
 Core state synchronization library. Framework- and transport-agnostic.
 
 ## Install
 
 ```bash
-npm install state-sync
+npm install @statesync/core
 ```
 
 ## Quick Start
 
 ```typescript
-import { createConsoleLogger, createRevisionSync } from 'state-sync';
+import { createConsoleLogger, createRevisionSync } from '@statesync/core';
 
 const handle = createRevisionSync({
   topic: 'settings',

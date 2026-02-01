@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / SnapshotApplier
+[@statesync/core](../index.md) / SnapshotApplier
 
 # Interface: SnapshotApplier\<T\>
 

@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / tagLogger
+[@statesync/core](../index.md) / tagLogger
 
 # Function: tagLogger()
 

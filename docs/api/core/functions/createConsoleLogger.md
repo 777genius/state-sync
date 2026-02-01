@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / createConsoleLogger
+[@statesync/core](../index.md) / createConsoleLogger
 
 # Function: createConsoleLogger()
 

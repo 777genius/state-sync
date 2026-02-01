@@ -1,8 +1,8 @@
-**state-sync-tauri**
+**@statesync/tauri**
 
 ***
 
-# state-sync-tauri
+# @statesync/tauri
 
 ## Interfaces
 

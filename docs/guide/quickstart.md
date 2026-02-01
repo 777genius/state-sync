@@ -19,7 +19,7 @@ You need 3 parts:
 - **applier** (applies snapshots locally)
 
 ```ts
-import { createConsoleLogger, createRevisionSync } from 'state-sync';
+import { createConsoleLogger, createRevisionSync } from '@statesync/core';
 
 const handle = createRevisionSync({
   topic: 'settings',

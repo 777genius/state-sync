@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / SnapshotProvider
+[@statesync/core](../index.md) / SnapshotProvider
 
 # Interface: SnapshotProvider\<T\>
 

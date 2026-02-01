@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / TauriInvoke
+[@statesync/tauri](../index.md) / TauriInvoke
 
 # Type Alias: TauriInvoke()
 

@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / CreateTauriRevisionSyncOptions
+[@statesync/tauri](../index.md) / CreateTauriRevisionSyncOptions
 
 # Interface: CreateTauriRevisionSyncOptions\<T\>
 

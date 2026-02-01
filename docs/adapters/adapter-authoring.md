@@ -41,8 +41,7 @@ Recommended package structure:
 
 - Create a separate workspace package under `packages/<framework>/`
 - Package name recommendation:
-  - `state-sync-<framework>` (example: `state-sync-pinia`)
-  - or a scoped variant if desired (future)
+  - `@statesync/<framework>` (example: `@statesync/pinia`)
 
 Recommended exports:
 

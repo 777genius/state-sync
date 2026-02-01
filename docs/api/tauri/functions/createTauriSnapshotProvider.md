@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / createTauriSnapshotProvider
+[@statesync/tauri](../index.md) / createTauriSnapshotProvider
 
 # Function: createTauriSnapshotProvider()
 

@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / RetryReportingOptions
+[@statesync/core](../index.md) / RetryReportingOptions
 
 # Interface: RetryReportingOptions
 

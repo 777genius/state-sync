@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / noopLogger
+[@statesync/core](../index.md) / noopLogger
 
 # Variable: noopLogger
 

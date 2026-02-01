@@ -7,7 +7,7 @@ import {
   type TauriListen,
 } from '../src/transport';
 
-describe('state-sync-tauri transport', () => {
+describe('@statesync/tauri transport', () => {
   it('createTauriInvalidationSubscriber: forwards event payloads', async () => {
     const listen: TauriListen = vi.fn(async (_eventName, handler) => {
       handler({ payload: { topic: 't', revision: '1' } });

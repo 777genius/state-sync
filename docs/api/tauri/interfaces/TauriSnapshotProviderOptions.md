@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / TauriSnapshotProviderOptions
+[@statesync/tauri](../index.md) / TauriSnapshotProviderOptions
 
 # Interface: TauriSnapshotProviderOptions
 

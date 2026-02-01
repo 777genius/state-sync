@@ -1,8 +1,8 @@
-[**state-sync-tauri**](../index.md)
+[**@statesync/tauri**](../index.md)
 
 ***
 
-[state-sync-tauri](../index.md) / TauriListen
+[@statesync/tauri](../index.md) / TauriListen
 
 # Type Alias: TauriListen()
 

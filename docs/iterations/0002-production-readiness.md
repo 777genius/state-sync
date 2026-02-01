@@ -10,9 +10,9 @@
 
 Iteration `0001` locked the protocol and delivered working packages:
 
-- `state-sync` (core engine)
-- `state-sync-pinia` (Pinia applier adapter)
-- `state-sync-tauri` (Tauri transport adapters)
+- `@statesync/core` (core engine)
+- `@statesync/pinia` (Pinia applier adapter)
+- `@statesync/tauri` (Tauri transport adapters)
 
 Iteration `0002` focuses on production readiness:
 
@@ -61,9 +61,9 @@ Goal: close these gaps so the library can be installed, tested, and released pre
 ### Current state
 
 Workspace packages:
-- `packages/core` → `state-sync`
-- `packages/pinia` → `state-sync-pinia`
-- `packages/tauri` → `state-sync-tauri`
+- `packages/core` → `@statesync/core`
+- `packages/pinia` → `@statesync/pinia`
+- `packages/tauri` → `@statesync/tauri`
 
 Local tests pass under the workspace.
 

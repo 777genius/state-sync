@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / isCanonicalRevision
+[@statesync/core](../index.md) / isCanonicalRevision
 
 # Function: isCanonicalRevision()
 

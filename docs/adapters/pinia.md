@@ -4,7 +4,7 @@ This adapter provides a `SnapshotApplier` implementation for Pinia stores.
 
 ### Package
 
-- `state-sync-pinia`
+- `@statesync/pinia`
 
 ### Design goals
 

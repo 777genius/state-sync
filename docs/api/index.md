@@ -8,7 +8,7 @@ If you don’t see a function here, it is likely not part of the public API (not
 
 ## Packages
 
-- [Core (state-sync)](/api/core/)
-- [Pinia (state-sync-pinia)](/api/pinia/)
-- [Tauri (state-sync-tauri)](/api/tauri/)
+- [Core (@statesync/core)](/api/core/)
+- [Pinia (@statesync/pinia)](/api/pinia/)
+- [Tauri (@statesync/tauri)](/api/tauri/)
 

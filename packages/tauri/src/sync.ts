@@ -1,5 +1,5 @@
-import type { SnapshotApplier } from 'state-sync';
-import { createRevisionSync, type RevisionSyncHandle, type RevisionSyncOptions } from 'state-sync';
+import type { SnapshotApplier } from '@statesync/core';
+import { createRevisionSync, type RevisionSyncHandle, type RevisionSyncOptions } from '@statesync/core';
 
 import {
   createTauriInvalidationSubscriber,

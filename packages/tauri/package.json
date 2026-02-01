@@ -1,5 +1,5 @@
 {
-  "name": "state-sync-tauri",
+  "name": "@statesync/tauri",
   "version": "1.0.0",
   "description": "Tauri transport layer for state-sync — event-based subscriber and provider",
   "type": "module",
@@ -37,7 +37,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "state-sync": "*",
+    "@statesync/core": "*",
     "@tauri-apps/api": ">=2"
   },
   "peerDependenciesMeta": {
@@ -46,7 +46,7 @@
     }
   },
   "devDependencies": {
-    "state-sync": "workspace:*"
+    "@statesync/core": "workspace:*"
   },
   "scripts": {
     "build": "tsup",

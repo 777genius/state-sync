@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / Unsubscribe
+[@statesync/core](../index.md) / Unsubscribe
 
 # Type Alias: Unsubscribe()
 

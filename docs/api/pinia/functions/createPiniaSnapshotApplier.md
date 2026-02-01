@@ -1,8 +1,8 @@
-[**state-sync-pinia**](../index.md)
+[**@statesync/pinia**](../index.md)
 
 ***
 
-[state-sync-pinia](../index.md) / createPiniaSnapshotApplier
+[@statesync/pinia](../index.md) / createPiniaSnapshotApplier
 
 # Function: createPiniaSnapshotApplier()
 

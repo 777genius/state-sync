@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / SyncErrorContext
+[@statesync/core](../index.md) / SyncErrorContext
 
 # Interface: SyncErrorContext
 

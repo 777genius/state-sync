@@ -1,5 +1,5 @@
 ---
-title: Core (state-sync)
+title: Core (@statesync/core)
 ---
 
 ## What's inside
@@ -13,7 +13,7 @@ The core package provides:
 ## Quick wiring
 
 ```ts
-import { createConsoleLogger, createRevisionSync, tagLogger } from 'state-sync';
+import { createConsoleLogger, createRevisionSync, tagLogger } from '@statesync/core';
 
 const base = createConsoleLogger({ debug: true });
 const logger = tagLogger(base, { windowId: 'main' });

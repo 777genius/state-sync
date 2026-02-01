@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / ZERO\_REVISION
+[@statesync/core](../index.md) / ZERO\_REVISION
 
 # Variable: ZERO\_REVISION
 

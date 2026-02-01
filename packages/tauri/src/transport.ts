@@ -4,7 +4,7 @@ import type {
   SnapshotEnvelope,
   SnapshotProvider,
   Unsubscribe,
-} from 'state-sync';
+} from '@statesync/core';
 
 /**
  * Minimal structural type for Tauri `listen`.

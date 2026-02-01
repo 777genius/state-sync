@@ -1,5 +1,5 @@
-import type { Revision, SnapshotEnvelope, SyncErrorContext } from 'state-sync';
-import { createRevisionSync } from 'state-sync';
+import type { Revision, SnapshotEnvelope, SyncErrorContext } from '@statesync/core';
+import { createRevisionSync } from '@statesync/core';
 import { describe, expect, it, vi } from 'vitest';
 import {
   createTauriInvalidationSubscriber,

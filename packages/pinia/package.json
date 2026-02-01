@@ -1,5 +1,5 @@
 {
-  "name": "state-sync-pinia",
+  "name": "@statesync/pinia",
   "version": "1.0.0",
   "description": "Pinia adapter for state-sync — automatic store synchronization",
   "type": "module",
@@ -37,10 +37,10 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "state-sync": "*"
+    "@statesync/core": "*"
   },
   "devDependencies": {
-    "state-sync": "workspace:*"
+    "@statesync/core": "workspace:*"
   },
   "scripts": {
     "build": "tsup",

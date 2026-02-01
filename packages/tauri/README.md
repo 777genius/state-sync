@@ -1,11 +1,11 @@
-# state-sync-tauri
+# @statesync/tauri
 
 Tauri transport for state-sync. Uses Tauri events for invalidation and `invoke` for snapshots.
 
 ## Install
 
 ```bash
-npm install state-sync-tauri state-sync
+npm install @statesync/tauri @statesync/core
 ```
 
 ## Quick Start
@@ -15,7 +15,7 @@ import {
   createTauriInvalidationSubscriber,
   createTauriSnapshotProvider,
   createTauriRevisionSync,
-} from 'state-sync-tauri';
+} from '@statesync/tauri';
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 
@@ -62,8 +62,8 @@ Both adapters accept structural types — you can pass your own mocks for testin
 - **In tests**: you **don’t need** to install `@tauri-apps/api`. Use structural mocks:
 
 ```typescript
-import { createRevisionSync } from 'state-sync';
-import { createTauriInvalidationSubscriber, createTauriSnapshotProvider } from 'state-sync-tauri';
+import { createRevisionSync } from '@statesync/core';
+import { createTauriInvalidationSubscriber, createTauriSnapshotProvider } from '@statesync/tauri';
 
 const mockListen = async (eventName, handler) => {
   // emulate events

@@ -1,8 +1,8 @@
-[**state-sync**](../index.md)
+[**@statesync/core**](../index.md)
 
 ***
 
-[state-sync](../index.md) / Logger
+[@statesync/core](../index.md) / Logger
 
 # Interface: Logger
 

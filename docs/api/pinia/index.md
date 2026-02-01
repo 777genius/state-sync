@@ -1,8 +1,8 @@
-**state-sync-pinia**
+**@statesync/pinia**
 
 ***
 
-# state-sync-pinia
+# @statesync/pinia
 
 ## Interfaces
 

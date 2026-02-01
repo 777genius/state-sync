@@ -1,4 +1,4 @@
-import type { Revision, SnapshotEnvelope } from 'state-sync';
+import type { Revision, SnapshotEnvelope } from '@statesync/core';
 import { describe, expect, it } from 'vitest';
 import { createPiniaSnapshotApplier, type PiniaStoreLike } from '../src/pinia';
 
@@ -22,7 +22,7 @@ function snapshot<T>(data: T, revision: string): SnapshotEnvelope<T> {
   return { data, revision: revision as Revision };
 }
 
-describe('state-sync-pinia: createPiniaSnapshotApplier', () => {
+describe('@statesync/pinia: createPiniaSnapshotApplier', () => {
   it('patch mode (default): merges into $state via $patch', () => {
     const store = makeStore({ a: 1, b: 2 });
     const applier = createPiniaSnapshotApplier<State, Partial<State>>(store);

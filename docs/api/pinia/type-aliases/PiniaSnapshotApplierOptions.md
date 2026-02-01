@@ -1,8 +1,8 @@
-[**state-sync-pinia**](../index.md)
+[**@statesync/pinia**](../index.md)
 
 ***
 
-[state-sync-pinia](../index.md) / PiniaSnapshotApplierOptions
+[@statesync/pinia](../index.md) / PiniaSnapshotApplierOptions
 
 # Type Alias: PiniaSnapshotApplierOptions\<State, Data\>
 
