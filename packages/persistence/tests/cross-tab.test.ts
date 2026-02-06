@@ -48,8 +48,7 @@ describe('cross-tab sync', () => {
     it('returns false when BroadcastChannel is not defined', () => {
       // In Node.js, BroadcastChannel is not defined by default
       const original = globalThis.BroadcastChannel;
-      // @ts-expect-error - testing undefined
-      globalThis.BroadcastChannel = undefined;
+      globalThis.BroadcastChannel = undefined as unknown as typeof BroadcastChannel;
 
       expect(isBroadcastChannelSupported()).toBe(false);
 
@@ -240,7 +239,6 @@ describe('cross-tab sync', () => {
 
   describe('createCrossTabSync (no-op fallback)', () => {
     beforeEach(() => {
-      // @ts-expect-error - testing undefined
       vi.stubGlobal('BroadcastChannel', undefined);
     });
 
