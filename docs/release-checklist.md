@@ -28,7 +28,11 @@ Publish order (dependencies first):
 
 1. `@statesync/core` (core)
 2. `@statesync/pinia`
-3. `@statesync/tauri`
+3. `@statesync/zustand`
+4. `@statesync/valtio`
+5. `@statesync/svelte`
+6. `@statesync/vue`
+7. `@statesync/tauri`
 
 ```bash
 pnpm release
@@ -58,7 +62,7 @@ node -e "import('@statesync/core').then(m => console.log('ESM OK:', Object.keys(
 node -e "const m = require('@statesync/core'); console.log('CJS OK:', Object.keys(m))"
 ```
 
-Repeat for each package (`@statesync/pinia`, `@statesync/tauri`).
+Repeat for each package (`@statesync/pinia`, `@statesync/zustand`, `@statesync/valtio`, `@statesync/svelte`, `@statesync/vue`, `@statesync/tauri`).
 
 ## Post-release
 

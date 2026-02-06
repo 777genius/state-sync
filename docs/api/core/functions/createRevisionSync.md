@@ -10,7 +10,7 @@
 function createRevisionSync<T>(options): RevisionSyncHandle;
 ```
 
-Defined in: [engine.ts:32](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/engine.ts#L32)
+Defined in: [engine.ts:43](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/core/src/engine.ts#L43)
 
 ## Type Parameters
 

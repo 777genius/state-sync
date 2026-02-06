@@ -1,4 +1,4 @@
-import type { SnapshotApplier } from '@statesync/core';
+import type { InvalidationThrottlingOptions, SnapshotApplier } from '@statesync/core';
 import {
   createRevisionSync,
   type RevisionSyncHandle,
@@ -41,6 +41,11 @@ export interface CreateTauriRevisionSyncOptions<T> {
   shouldRefresh?: RevisionSyncOptions<T>['shouldRefresh'];
   logger?: RevisionSyncOptions<T>['logger'];
   onError?: RevisionSyncOptions<T>['onError'];
+
+  /**
+   * Optional throttling configuration to control refresh rate.
+   */
+  throttling?: InvalidationThrottlingOptions;
 }
 
 /**
@@ -62,6 +67,7 @@ export function createTauriRevisionSync<T>(
     shouldRefresh,
     logger,
     onError,
+    throttling,
   } = options;
 
   return createRevisionSync<T>({
@@ -72,5 +78,6 @@ export function createTauriRevisionSync<T>(
     shouldRefresh,
     logger,
     onError,
+    throttling,
   });
 }

@@ -15,4 +15,9 @@ export {
   isCanonicalRevision,
   ZERO_REVISION,
 } from './revision';
+export {
+  createThrottledHandler,
+  type InvalidationThrottlingOptions,
+  type ThrottledHandler,
+} from './throttle';
 export * from './types';

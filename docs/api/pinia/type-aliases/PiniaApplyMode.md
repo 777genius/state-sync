@@ -10,4 +10,4 @@
 type PiniaApplyMode = "patch" | "replace";
 ```
 
-Defined in: [pinia.ts:23](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/pinia/src/pinia.ts#L23)
+Defined in: [pinia.ts:23](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/pinia/src/pinia.ts#L23)

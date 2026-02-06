@@ -9,6 +9,7 @@
 - [ConsoleLoggerOptions](interfaces/ConsoleLoggerOptions.md)
 - [InvalidationEvent](interfaces/InvalidationEvent.md)
 - [InvalidationSubscriber](interfaces/InvalidationSubscriber.md)
+- [InvalidationThrottlingOptions](interfaces/InvalidationThrottlingOptions.md)
 - [Logger](interfaces/Logger.md)
 - [RetryPolicy](interfaces/RetryPolicy.md)
 - [RetryReportingOptions](interfaces/RetryReportingOptions.md)
@@ -18,6 +19,7 @@
 - [SnapshotEnvelope](interfaces/SnapshotEnvelope.md)
 - [SnapshotProvider](interfaces/SnapshotProvider.md)
 - [SyncErrorContext](interfaces/SyncErrorContext.md)
+- [ThrottledHandler](interfaces/ThrottledHandler.md)
 
 ## Type Aliases
 
@@ -36,6 +38,7 @@
 - [compareRevisions](functions/compareRevisions.md)
 - [createConsoleLogger](functions/createConsoleLogger.md)
 - [createRevisionSync](functions/createRevisionSync.md)
+- [createThrottledHandler](functions/createThrottledHandler.md)
 - [isCanonicalRevision](functions/isCanonicalRevision.md)
 - [tagLogger](functions/tagLogger.md)
 - [withRetry](functions/withRetry.md)

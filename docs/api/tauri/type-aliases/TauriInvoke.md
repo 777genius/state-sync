@@ -10,7 +10,7 @@
 type TauriInvoke = <T>(commandName, args?) => Promise<T>;
 ```
 
-Defined in: [transport.ts:28](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/transport.ts#L28)
+Defined in: [transport.ts:28](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/transport.ts#L28)
 
 Minimal structural type for Tauri `invoke`.
 

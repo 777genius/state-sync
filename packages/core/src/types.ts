@@ -69,7 +69,8 @@ export type SyncPhase =
   | 'refresh'
   | 'getSnapshot'
   | 'apply'
-  | 'protocol';
+  | 'protocol'
+  | 'throttle';
 
 export interface SyncErrorContext {
   phase: SyncPhase;

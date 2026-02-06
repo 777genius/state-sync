@@ -6,7 +6,7 @@
 
 # Interface: CreateTauriRevisionSyncOptions\<T\>
 
-Defined in: [sync.ts:11](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L11)
+Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L15)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: [sync.ts:11](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: [sync.ts:32](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L32)
+Defined in: [sync.ts:36](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L36)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [sync.ts:32](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [sync.ts:30](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L30)
+Defined in: [sync.ts:34](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L34)
 
 Optional invoke args passed to the snapshot command.
 
@@ -44,7 +44,7 @@ Optional invoke args passed to the snapshot command.
 commandName: string;
 ```
 
-Defined in: [sync.ts:25](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L25)
+Defined in: [sync.ts:29](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L29)
 
 Tauri command name used to fetch a snapshot.
 
@@ -56,7 +56,7 @@ Tauri command name used to fetch a snapshot.
 eventName: string;
 ```
 
-Defined in: [sync.ts:20](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L20)
+Defined in: [sync.ts:24](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L24)
 
 Event name used for invalidation events.
 
@@ -68,7 +68,7 @@ Event name used for invalidation events.
 invoke: TauriInvoke;
 ```
 
-Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L15)
+Defined in: [sync.ts:19](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L19)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 listen: TauriListen;
 ```
 
-Defined in: [sync.ts:14](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L14)
+Defined in: [sync.ts:18](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L18)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [sync.ts:14](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 optional logger: Logger;
 ```
 
-Defined in: [sync.ts:38](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L38)
+Defined in: [sync.ts:42](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L42)
 
 ***
 
@@ -98,7 +98,7 @@ Defined in: [sync.ts:38](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 optional onError: (ctx) => void;
 ```
 
-Defined in: [sync.ts:39](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L39)
+Defined in: [sync.ts:43](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L43)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: [sync.ts:39](https://github.com/777genius/state-sync/blob/d48d2fb1fe
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: [sync.ts:37](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L37)
+Defined in: [sync.ts:41](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L41)
 
 Optional pass-through options to core.
 
@@ -134,10 +134,22 @@ Optional pass-through options to core.
 
 ***
 
+### throttling?
+
+```ts
+optional throttling: InvalidationThrottlingOptions;
+```
+
+Defined in: [sync.ts:48](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L48)
+
+Optional throttling configuration to control refresh rate.
+
+***
+
 ### topic
 
 ```ts
 topic: string;
 ```
 
-Defined in: [sync.ts:12](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/sync.ts#L12)
+Defined in: [sync.ts:16](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/sync.ts#L16)

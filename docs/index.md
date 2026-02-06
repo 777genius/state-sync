@@ -15,8 +15,8 @@ hero:
       text: Lifecycle
       link: /lifecycle
 features:
-  - title: Framework-agnostic
-    details: Works with Pinia/React/vanilla state via applier adapters.
+  - title: Multi-framework
+    details: Official adapters for Pinia, Zustand, Valtio, Svelte, and Vue (reactive/ref).
   - title: Transport-agnostic
     details: Any IPC/transport (Tauri events+invoke, BroadcastChannel, in-memory) via subscriber/provider.
   - title: Deterministic
@@ -29,8 +29,16 @@ features:
 
 ```bash
 npm install @statesync/core
-npm install @statesync/pinia   # if Pinia
-npm install @statesync/tauri   # if Tauri
+
+# Framework adapters (pick one)
+npm install @statesync/pinia    # Pinia
+npm install @statesync/zustand  # Zustand
+npm install @statesync/valtio   # Valtio
+npm install @statesync/svelte   # Svelte
+npm install @statesync/vue      # Vue (reactive / ref)
+
+# Transport adapter
+npm install @statesync/tauri    # Tauri v2
 ```
 
 ## Quick example

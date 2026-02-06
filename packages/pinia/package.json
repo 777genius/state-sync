@@ -1,6 +1,6 @@
 {
   "name": "@statesync/pinia",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Pinia adapter for state-sync — automatic store synchronization",
   "type": "module",
   "exports": {

@@ -1,4 +1,9 @@
 import { compareRevisions, isCanonicalRevision, ZERO_REVISION } from './revision';
+import {
+  createThrottledHandler,
+  type InvalidationThrottlingOptions,
+  type ThrottledHandler,
+} from './throttle';
 import type {
   InvalidationEvent,
   InvalidationSubscriber,
@@ -20,6 +25,12 @@ export interface RevisionSyncOptions<T> {
   shouldRefresh?: (event: InvalidationEvent) => boolean;
   logger?: Logger;
   onError?: (ctx: SyncErrorContext) => void;
+  /**
+   * Optional throttling configuration to control refresh rate.
+   * Use debounceMs to wait for "silence" before refreshing.
+   * Use throttleMs to limit refresh frequency.
+   */
+  throttling?: InvalidationThrottlingOptions;
 }
 
 export interface RevisionSyncHandle {
@@ -30,7 +41,8 @@ export interface RevisionSyncHandle {
 }
 
 export function createRevisionSync<T>(options: RevisionSyncOptions<T>): RevisionSyncHandle {
-  const { topic, subscriber, provider, applier, shouldRefresh, logger, onError } = options;
+  const { topic, subscriber, provider, applier, shouldRefresh, logger, onError, throttling } =
+    options;
 
   if (typeof topic !== 'string' || topic.trim() === '') {
     throw new Error('[state-sync] topic must be a non-empty string');
@@ -43,6 +55,7 @@ export function createRevisionSync<T>(options: RevisionSyncOptions<T>): Revision
   let stopped = false;
   let refreshInFlight = false;
   let refreshQueued = false;
+  let throttledHandler: ThrottledHandler | null = null;
 
   function emitError(phase: SyncPhase, error: unknown, extra?: Partial<SyncErrorContext>) {
     const logExtra: SyncErrorContext = {
@@ -201,7 +214,12 @@ export function createRevisionSync<T>(options: RevisionSyncOptions<T>): Revision
       topic,
       eventRevision: normalizedEvent.revision,
     });
-    refresh().catch(() => {});
+
+    if (throttledHandler) {
+      throttledHandler.trigger();
+    } else {
+      refresh().catch(() => {});
+    }
   }
 
   const handle: RevisionSyncHandle = {
@@ -213,11 +231,17 @@ export function createRevisionSync<T>(options: RevisionSyncOptions<T>): Revision
       started = true;
       logger?.debug('[state-sync] starting', { topic });
 
+      throttledHandler = createThrottledHandler(() => {
+        refresh().catch(() => {});
+      }, throttling);
+
       try {
         unsubscribe = await subscriber.subscribe(handleInvalidation);
         logger?.debug('[state-sync] subscribed', { topic });
       } catch (err) {
         started = false;
+        throttledHandler?.dispose();
+        throttledHandler = null;
         emitError('subscribe', err);
         throw err;
       }
@@ -230,6 +254,8 @@ export function createRevisionSync<T>(options: RevisionSyncOptions<T>): Revision
           unsubscribe();
           unsubscribe = null;
         }
+        throttledHandler?.dispose();
+        throttledHandler = null;
         started = false;
         throw err;
       }
@@ -239,6 +265,10 @@ export function createRevisionSync<T>(options: RevisionSyncOptions<T>): Revision
       if (stopped) return;
       stopped = true;
       logger?.debug('[state-sync] stopped', { topic });
+      if (throttledHandler) {
+        throttledHandler.dispose();
+        throttledHandler = null;
+      }
       if (unsubscribe) {
         unsubscribe();
         unsubscribe = null;

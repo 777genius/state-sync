@@ -1,0 +1,50 @@
+{
+  "name": "@statesync/valtio",
+  "version": "1.0.0",
+  "description": "Valtio adapter for state-sync — automatic proxy synchronization",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "keywords": [
+    "state-sync",
+    "valtio",
+    "proxy",
+    "state",
+    "synchronization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/777genius/state-sync.git",
+    "directory": "packages/valtio"
+  },
+  "bugs": "https://github.com/777genius/state-sync/issues",
+  "homepage": "https://github.com/777genius/state-sync#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@statesync/core": "*"
+  },
+  "devDependencies": {
+    "@statesync/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

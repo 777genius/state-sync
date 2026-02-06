@@ -38,7 +38,22 @@ importers:
 
   packages/core: {}
 
+  packages/persistence:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+      fake-indexeddb:
+        specifier: ^6.0.0
+        version: 6.2.5
+
   packages/pinia:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/svelte:
     devDependencies:
       '@statesync/core':
         specifier: workspace:*
@@ -49,6 +64,24 @@ importers:
       '@tauri-apps/api':
         specifier: '>=2'
         version: 2.9.1
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/valtio:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/vue:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/zustand:
     devDependencies:
       '@statesync/core':
         specifier: workspace:*
@@ -2018,6 +2051,11 @@ packages:
 
   /extendable-error@0.1.7:
     resolution: {integrity: sha512-UOiS2in6/Q0FK0R0q6UY9vYpQ21mr/Qn1KOnte7vsACuNJf514WvCCUHSRCPcgjPT2bAhNIJdlE6bVap1GKmeg==}
+    dev: true
+
+  /fake-indexeddb@6.2.5:
+    resolution: {integrity: sha512-CGnyrvbhPlWYMngksqrSSUT1BAVP49dZocrHuK0SvtR0D5TMs5wP0o3j7jexDJW01KSadjBp1M/71o/KR3nD1w==}
+    engines: {node: '>=18'}
     dev: true
 
   /fast-glob@3.3.3:

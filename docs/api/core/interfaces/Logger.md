@@ -6,7 +6,7 @@
 
 # Interface: Logger
 
-Defined in: [types.ts:59](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/types.ts#L59)
+Defined in: [types.ts:59](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/core/src/types.ts#L59)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:59](https://github.com/777genius/state-sync/blob/d48d2fb1f
 debug(msg, extra?): void;
 ```
 
-Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/types.ts#L60)
+Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/core/src/types.ts#L60)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/d48d2fb1f
 error(msg, extra?): void;
 ```
 
-Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/types.ts#L62)
+Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/core/src/types.ts#L62)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/d48d2fb1f
 warn(msg, extra?): void;
 ```
 
-Defined in: [types.ts:61](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/core/src/types.ts#L61)
+Defined in: [types.ts:61](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/core/src/types.ts#L61)
 
 #### Parameters
 

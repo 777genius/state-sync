@@ -6,7 +6,7 @@
 
 # Interface: TauriInvalidationSubscriberOptions
 
-Defined in: [transport.ts:30](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/transport.ts#L30)
+Defined in: [transport.ts:30](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/transport.ts#L30)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [transport.ts:30](https://github.com/777genius/state-sync/blob/d48d2
 eventName: string;
 ```
 
-Defined in: [transport.ts:32](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/transport.ts#L32)
+Defined in: [transport.ts:32](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/transport.ts#L32)
 
 ***
 
@@ -26,4 +26,4 @@ Defined in: [transport.ts:32](https://github.com/777genius/state-sync/blob/d48d2
 listen: TauriListen;
 ```
 
-Defined in: [transport.ts:31](https://github.com/777genius/state-sync/blob/d48d2fb1fe2fdd22693b17e1120600989add63ac/packages/tauri/src/transport.ts#L31)
+Defined in: [transport.ts:31](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/tauri/src/transport.ts#L31)

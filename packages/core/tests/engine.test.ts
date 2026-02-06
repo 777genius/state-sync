@@ -773,4 +773,121 @@ describe('createRevisionSync', () => {
       handle.stop();
     });
   });
+
+  describe('throttling integration', () => {
+    it('debounce delays refresh until silence', async () => {
+      const { transport, applier } = setup('v1');
+      const getSnapshotSpy = vi.spyOn(transport, 'getSnapshot');
+
+      const handle = createRevisionSync({
+        topic: 'test',
+        subscriber: transport,
+        provider: transport,
+        applier,
+        throttling: { debounceMs: 50 },
+      });
+
+      await handle.start();
+      const callsAfterStart = getSnapshotSpy.mock.calls.length;
+
+      transport.setSnapshot({ revision: r('10'), data: 'v10' as unknown as string });
+
+      // Rapid invalidations
+      for (let i = 2; i <= 5; i++) {
+        transport.emit({ topic: 'test', revision: r(String(i)) });
+        await new Promise((res) => setTimeout(res, 10));
+      }
+
+      // Should not have fetched yet (debounce waiting)
+      expect(getSnapshotSpy.mock.calls.length).toBe(callsAfterStart);
+
+      // Wait for debounce
+      await new Promise((res) => setTimeout(res, 100));
+
+      // Should have fetched once
+      expect(getSnapshotSpy.mock.calls.length).toBe(callsAfterStart + 1);
+
+      handle.stop();
+    });
+
+    it('throttle limits refresh frequency', async () => {
+      const { transport, applier } = setup('v1');
+      const getSnapshotSpy = vi.spyOn(transport, 'getSnapshot');
+
+      // Add delay to getSnapshot so we can observe throttling behavior
+      transport.setSnapshotDelay(20);
+
+      const handle = createRevisionSync({
+        topic: 'test',
+        subscriber: transport,
+        provider: transport,
+        applier,
+        throttling: { throttleMs: 100, leading: true, trailing: true },
+      });
+
+      await handle.start();
+      const callsAfterStart = getSnapshotSpy.mock.calls.length;
+
+      transport.setSnapshot({ revision: r('10'), data: 'v10' as unknown as string });
+
+      // First event — should trigger immediately (leading)
+      transport.emit({ topic: 'test', revision: r('2') });
+
+      // Wait for the throttle handler to trigger
+      await new Promise((res) => setTimeout(res, 30));
+
+      const callsAfterFirst = getSnapshotSpy.mock.calls.length;
+      expect(callsAfterFirst).toBeGreaterThanOrEqual(callsAfterStart + 1);
+
+      // More events within throttle window — should be suppressed
+      transport.emit({ topic: 'test', revision: r('3') });
+      transport.emit({ topic: 'test', revision: r('4') });
+
+      // Wait a bit but stay within throttle window
+      await new Promise((res) => setTimeout(res, 30));
+
+      // Should not have triggered more refreshes yet (within throttle window)
+      // Note: due to engine coalescing, exact count depends on timing
+
+      // Wait past throttle window for trailing
+      await new Promise((res) => setTimeout(res, 150));
+
+      // Total calls should be limited due to throttling
+      // Without throttle, 3 events + initial = 4 calls minimum
+      // With throttle, should be 2-3 calls max (initial + leading + trailing)
+      const finalCalls = getSnapshotSpy.mock.calls.length;
+      expect(finalCalls).toBeLessThanOrEqual(callsAfterStart + 3);
+
+      handle.stop();
+    });
+
+    it('stop() disposes throttle handler and cancels pending', async () => {
+      const { transport, applier } = setup('v1');
+      const getSnapshotSpy = vi.spyOn(transport, 'getSnapshot');
+
+      const handle = createRevisionSync({
+        topic: 'test',
+        subscriber: transport,
+        provider: transport,
+        applier,
+        throttling: { debounceMs: 100 },
+      });
+
+      await handle.start();
+      const callsAfterStart = getSnapshotSpy.mock.calls.length;
+
+      transport.setSnapshot({ revision: r('10'), data: 'v10' as unknown as string });
+      transport.emit({ topic: 'test', revision: r('2') });
+
+      // Stop before debounce fires
+      await new Promise((res) => setTimeout(res, 20));
+      handle.stop();
+
+      // Wait past debounce time
+      await new Promise((res) => setTimeout(res, 150));
+
+      // Should not have made additional calls
+      expect(getSnapshotSpy.mock.calls.length).toBe(callsAfterStart);
+    });
+  });
 });

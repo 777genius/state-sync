@@ -1,9 +1,17 @@
 # state-sync
 
+[![npm @statesync/core](https://img.shields.io/npm/v/@statesync/core?label=%40statesync%2Fcore)](https://www.npmjs.com/package/@statesync/core)
+[![npm @statesync/pinia](https://img.shields.io/npm/v/@statesync/pinia?label=%40statesync%2Fpinia)](https://www.npmjs.com/package/@statesync/pinia)
+[![npm @statesync/zustand](https://img.shields.io/npm/v/@statesync/zustand?label=%40statesync%2Fzustand)](https://www.npmjs.com/package/@statesync/zustand)
+[![npm @statesync/valtio](https://img.shields.io/npm/v/@statesync/valtio?label=%40statesync%2Fvaltio)](https://www.npmjs.com/package/@statesync/valtio)
+[![npm @statesync/svelte](https://img.shields.io/npm/v/@statesync/svelte?label=%40statesync%2Fsvelte)](https://www.npmjs.com/package/@statesync/svelte)
+[![npm @statesync/vue](https://img.shields.io/npm/v/@statesync/vue?label=%40statesync%2Fvue)](https://www.npmjs.com/package/@statesync/vue)
+[![npm @statesync/tauri](https://img.shields.io/npm/v/@statesync/tauri?label=%40statesync%2Ftauri)](https://www.npmjs.com/package/@statesync/tauri)
+
 Reliable **state synchronization** between multiple windows/processes (e.g. Tauri multi-window).
 
 **You provide**:
-- a **subscriber** (an invalidation signal: “something changed, refresh!”)
+- a **subscriber** (an invalidation signal: "something changed, refresh!")
 - a **provider** (fetches a snapshot: `{ revision, data }`)
 - an **applier** (applies the snapshot to your local state)
 
@@ -18,7 +26,7 @@ Reliable **state synchronization** between multiple windows/processes (e.g. Taur
 - [Install](#install)
 - [Quickstart (core)](#quickstart-core)
 - [Quickstart (Tauri)](#quickstart-tauri)
-- [Quickstart (Pinia)](#quickstart-pinia)
+- [Framework adapters](#framework-adapters)
 - [Docs & examples](#docs--examples)
 - [Development](#development)
 - [Rust crate](#rust-crate)
@@ -34,13 +42,13 @@ Typical use cases:
 - Any IPC where you can emit an invalidation + fetch a snapshot
 
 Non-goals:
-- Realtime CRDT merging or fine-grained patches. The model here is **“invalidate → fetch canonical snapshot → apply”**.
+- Realtime CRDT merging or fine-grained patches. The model here is **"invalidate → fetch canonical snapshot → apply"**.
 
 ## How it works (concepts)
 
 - **Topic**: string identifier for a resource (`'settings'`, `'profile'`, `'cache:user:123'`)
 - **Revision**: monotonic-ish version identifier for ordering (string)
-- **Invalidation event**: “your snapshot may be stale” (subscriber emits these)
+- **Invalidation event**: "your snapshot may be stale" (subscriber emits these)
 - **Snapshot provider**: returns an envelope `{ revision, data }`
 - **Applier**: takes the snapshot and mutates your local state
 
@@ -55,15 +63,26 @@ If invalidations come in fast (or the transport drops/duplicates), the engine ai
 |---|---|
 | [`@statesync/core`](packages/core/) | Engine + revision protocol + types |
 | [`@statesync/pinia`](packages/pinia/) | Pinia snapshot applier adapter |
+| [`@statesync/zustand`](packages/zustand/) | Zustand snapshot applier adapter |
+| [`@statesync/valtio`](packages/valtio/) | Valtio snapshot applier adapter |
+| [`@statesync/svelte`](packages/svelte/) | Svelte snapshot applier adapter |
+| [`@statesync/vue`](packages/vue/) | Vue (reactive/ref) snapshot applier adapter |
 | [`@statesync/tauri`](packages/tauri/) | Tauri transport adapters (subscriber + provider) |
 
 ## Install
 
 ```bash
 npm install @statesync/core
-# optional adapters:
-npm install @statesync/pinia
-npm install @statesync/tauri
+
+# Framework adapters (pick one):
+npm install @statesync/pinia    # Pinia
+npm install @statesync/zustand  # Zustand
+npm install @statesync/valtio   # Valtio
+npm install @statesync/svelte   # Svelte
+npm install @statesync/vue      # Vue (reactive / ref)
+
+# Transport adapter:
+npm install @statesync/tauri    # Tauri v2
 ```
 
 ## Quickstart (core)
@@ -73,7 +92,7 @@ import { createConsoleLogger, createRevisionSync } from '@statesync/core';
 
 const handle = createRevisionSync({
   topic: 'settings',
-  subscriber: myInvalidationSubscriber, // emits “changed” events
+  subscriber: myInvalidationSubscriber, // emits "changed" events
   provider: mySnapshotProvider, // returns { revision, data }
   applier: {
     apply(snapshot) {
@@ -115,32 +134,90 @@ const handle = createRevisionSync({
     commandName: 'get_snapshot',
     args: { topic: 'settings' },
   }),
-  applier: myApplier,
+  applier: myApplier, // use any framework adapter below
 });
 
 await handle.start();
 ```
 
-## Quickstart (Pinia)
+## Framework adapters
 
-Apply snapshots directly into a Pinia store.
+Each adapter creates a `SnapshotApplier` for a specific state management library. All adapters share the same options pattern: `mode` (`'patch'` | `'replace'`), `pickKeys`/`omitKeys`, `toState` mapping, and `strict` mode.
+
+### Pinia
 
 ```ts
-import { createRevisionSync } from '@statesync/core';
 import { createPiniaSnapshotApplier } from '@statesync/pinia';
 
-const handle = createRevisionSync({
-  topic: 'settings',
-  subscriber: mySubscriber,
-  provider: myProvider,
-  applier: createPiniaSnapshotApplier({
-    store: myPiniaStore,
-    // mode: 'replace' | 'merge' (see docs)
-  }),
+const applier = createPiniaSnapshotApplier(myPiniaStore, {
+  mode: 'patch',
+  omitKeys: ['localUiFlag'],
 });
-
-await handle.start();
 ```
+
+### Zustand
+
+```ts
+import { createZustandSnapshotApplier } from '@statesync/zustand';
+
+const applier = createZustandSnapshotApplier(useMyStore, {
+  mode: 'patch',
+  omitKeys: ['localUiFlag'],
+});
+```
+
+### Valtio
+
+```ts
+import { proxy } from 'valtio';
+import { createValtioSnapshotApplier } from '@statesync/valtio';
+
+const state = proxy({ count: 0, name: 'world' });
+const applier = createValtioSnapshotApplier(state, {
+  mode: 'patch',
+});
+```
+
+### Svelte
+
+```ts
+import { writable } from 'svelte/store';
+import { createSvelteSnapshotApplier } from '@statesync/svelte';
+
+const store = writable({ count: 0, name: 'world' });
+const applier = createSvelteSnapshotApplier(store, {
+  mode: 'patch',
+});
+```
+
+### Vue
+
+```ts
+import { reactive } from 'vue';
+import { createVueSnapshotApplier } from '@statesync/vue';
+
+// With reactive()
+const state = reactive({ count: 0, name: 'world' });
+const applier = createVueSnapshotApplier(state, { mode: 'patch' });
+
+// Or with ref()
+import { ref } from 'vue';
+const stateRef = ref({ count: 0, name: 'world' });
+const applier = createVueSnapshotApplier(stateRef, {
+  target: 'ref',
+  mode: 'patch',
+});
+```
+
+### Adapter options (shared across all adapters)
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `mode` | `'patch' \| 'replace'` | `'patch'` | Merge vs full replacement |
+| `pickKeys` | `string[]` | — | Only sync these keys |
+| `omitKeys` | `string[]` | — | Never sync these keys |
+| `toState` | `(data, ctx) => State` | identity | Map snapshot data to state shape |
+| `strict` | `boolean` | `true` | Throw if `toState` returns non-object |
 
 ## Docs & examples
 
@@ -152,11 +229,6 @@ await handle.start();
 - **Troubleshooting**: `docs/troubleshooting.md`
 - **Examples**: `docs/examples/`
 - **Release checklist**: `docs/release-checklist.md`
-
-Also see package-specific READMEs:
-- `packages/core/README.md`
-- `packages/pinia/README.md`
-- `packages/tauri/README.md`
 
 ## Development
 

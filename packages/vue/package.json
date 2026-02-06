@@ -1,0 +1,51 @@
+{
+  "name": "@statesync/vue",
+  "version": "1.0.0",
+  "description": "Vue adapter for state-sync — automatic ref/reactive synchronization",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "keywords": [
+    "state-sync",
+    "vue",
+    "ref",
+    "reactive",
+    "state",
+    "synchronization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/777genius/state-sync.git",
+    "directory": "packages/vue"
+  },
+  "bugs": "https://github.com/777genius/state-sync/issues",
+  "homepage": "https://github.com/777genius/state-sync#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@statesync/core": "*"
+  },
+  "devDependencies": {
+    "@statesync/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

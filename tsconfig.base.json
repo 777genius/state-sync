@@ -4,7 +4,11 @@
     "paths": {
       "@statesync/core": ["packages/core/src/index.ts"],
       "@statesync/pinia": ["packages/pinia/src/index.ts"],
-      "@statesync/tauri": ["packages/tauri/src/index.ts"]
+      "@statesync/tauri": ["packages/tauri/src/index.ts"],
+      "@statesync/zustand": ["packages/zustand/src/index.ts"],
+      "@statesync/valtio": ["packages/valtio/src/index.ts"],
+      "@statesync/svelte": ["packages/svelte/src/index.ts"],
+      "@statesync/vue": ["packages/vue/src/index.ts"]
     },
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
