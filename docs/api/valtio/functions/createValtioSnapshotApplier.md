@@ -10,7 +10,7 @@
 function createValtioSnapshotApplier<State, Data>(proxy, options): SnapshotApplier<Data>;
 ```
 
-Defined in: valtio.ts:100
+Defined in: [valtio.ts:100](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/valtio/src/valtio.ts#L100)
 
 Creates a SnapshotApplier that applies snapshots into a Valtio proxy.
 

@@ -10,7 +10,7 @@
 function createSvelteSnapshotApplier<State, Data>(store, options): SnapshotApplier<Data>;
 ```
 
-Defined in: svelte.ts:111
+Defined in: [svelte.ts:111](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/svelte/src/svelte.ts#L111)
 
 Creates a SnapshotApplier that applies snapshots into a Svelte writable store.
 

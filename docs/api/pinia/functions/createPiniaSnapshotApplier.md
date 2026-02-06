@@ -10,7 +10,7 @@
 function createPiniaSnapshotApplier<State, Data>(store, options): SnapshotApplier<Data>;
 ```
 
-Defined in: [pinia.ts:119](https://github.com/777genius/state-sync/blob/bb3d0421376fc001c246959375069b16c35e1e84/packages/pinia/src/pinia.ts#L119)
+Defined in: [pinia.ts:119](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/pinia/src/pinia.ts#L119)
 
 Creates a SnapshotApplier that applies snapshots into a Pinia store.
 

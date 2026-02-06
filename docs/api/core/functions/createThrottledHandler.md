@@ -10,7 +10,7 @@
 function createThrottledHandler(onRefresh, options?): ThrottledHandler;
 ```
 
-Defined in: throttle.ts:63
+Defined in: [throttle.ts:63](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/throttle.ts#L63)
 
 Creates a throttled handler that controls refresh rate.
 
