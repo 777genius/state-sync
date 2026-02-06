@@ -86,11 +86,20 @@ export default defineConfig({
       ],
       '/examples/': [
         {
-          text: 'Examples',
+          text: 'Framework Examples',
           items: [
             { text: 'Overview', link: '/examples/' },
-            { text: 'Source of truth (in-memory)', link: '/examples/source-of-truth' },
+            { text: 'React + Zustand', link: '/examples/react-zustand' },
+            { text: 'Vue + Pinia + Tauri', link: '/examples/vue-pinia-tauri' },
+          ],
+        },
+        {
+          text: 'Core Patterns',
+          items: [
+            { text: 'Source of truth', link: '/examples/source-of-truth' },
             { text: 'Structured logging', link: '/examples/structured-logging' },
+            { text: 'Error handling & retry', link: '/examples/error-handling' },
+            { text: 'Persistence with migrations', link: '/examples/persistence-migration' },
           ],
         },
       ],
