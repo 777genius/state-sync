@@ -191,7 +191,7 @@ export interface MigrationHandler<T> {
    * Migration functions keyed by source version.
    * Example: { 1: (v1Data) => v2Data, 2: (v2Data) => v3Data }
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: migrations need to accept any version
   migrations: Record<number, MigrationFn<any, unknown>>;
 
   /**

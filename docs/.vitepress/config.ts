@@ -97,9 +97,7 @@ export default defineConfig({
       '/': [
         {
           text: 'Introduction',
-          items: [
-            { text: 'Comparison', link: '/comparison' },
-          ],
+          items: [{ text: 'Comparison', link: '/comparison' }],
         },
         {
           text: 'Reference',

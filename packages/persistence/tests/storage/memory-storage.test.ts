@@ -28,7 +28,7 @@ describe('createMemoryStorageBackend', () => {
     const storage = createMemoryStorageBackend<string>();
 
     await storage.save({ revision: r('1'), data: 'test' });
-    await storage.clear!();
+    await storage.clear?.();
 
     expect(await storage.load()).toBeNull();
   });
@@ -158,15 +158,15 @@ describe('createMemoryStorageBackend', () => {
   it('reports storage usage', async () => {
     const storage = createMemoryStorageBackend<string>({ maxSizeBytes: 1000 });
 
-    const usageBefore = await storage.getUsage!();
-    expect(usageBefore.used).toBe(0);
-    expect(usageBefore.quota).toBe(1000);
+    const usageBefore = await storage.getUsage?.();
+    expect(usageBefore?.used).toBe(0);
+    expect(usageBefore?.quota).toBe(1000);
 
     await storage.save({ revision: r('1'), data: 'test data' });
 
-    const usageAfter = await storage.getUsage!();
-    expect(usageAfter.used).toBeGreaterThan(0);
-    expect(usageAfter.percentage).toBeDefined();
+    const usageAfter = await storage.getUsage?.();
+    expect(usageAfter?.used).toBeGreaterThan(0);
+    expect(usageAfter?.percentage).toBeDefined();
   });
 });
 
