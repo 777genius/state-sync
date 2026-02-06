@@ -2,6 +2,13 @@
 
 ## 2.0.0
 
+### Patch Changes
+
+- Updated dependencies [f3b8c97]
+  - @statesync/core@1.1.0
+
+## 2.0.0
+
 ### Minor Changes
 
 - Add framework adapters for Zustand, Valtio, Svelte, and Vue

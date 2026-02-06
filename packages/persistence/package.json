@@ -1,6 +1,6 @@
 {
   "name": "@statesync/persistence",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Persistence layer for state-sync — save and restore state snapshots",
   "type": "module",
   "exports": {
@@ -38,7 +38,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@statesync/core": "^1.0.0"
+    "@statesync/core": "^1.1.0"
   },
   "devDependencies": {
     "@statesync/core": "workspace:*",

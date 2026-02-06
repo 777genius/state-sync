@@ -1,6 +1,6 @@
 {
   "name": "@statesync/vue",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Vue adapter for state-sync — automatic ref/reactive synchronization",
   "type": "module",
   "exports": {
@@ -39,7 +39,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@statesync/core": "^1.0.0"
+    "@statesync/core": "^1.1.0"
   },
   "devDependencies": {
     "@statesync/core": "workspace:*"

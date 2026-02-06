@@ -1,6 +1,6 @@
 {
   "name": "@statesync/valtio",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Valtio adapter for state-sync — automatic proxy synchronization",
   "type": "module",
   "exports": {
@@ -38,7 +38,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@statesync/core": "^1.0.0"
+    "@statesync/core": "^1.1.0"
   },
   "devDependencies": {
     "@statesync/core": "workspace:*"
