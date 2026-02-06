@@ -1,5 +1,17 @@
 # Troubleshooting
 
+::: tip Enable debug logging first
+```typescript
+import { createConsoleLogger } from '@statesync/core';
+
+const sync = createRevisionSync({
+  ...options,
+  logger: createConsoleLogger({ debug: true }),
+});
+```
+This will show: subscribed, invalidation received, snapshot applied, revision skips.
+:::
+
 ## Non-canonical revision
 
 **Error**: `Non-canonical snapshot revision: "01"`
@@ -20,6 +32,43 @@ Revision must be a canonical decimal `u64` string:
 **Cause**: the topic in the invalidation event does not match the topic passed to `createRevisionSync()`.
 
 **Fix**: ensure backend and frontend use the same topic string. Topic comparison is strict (`===`).
+
+## Events arrive but state doesn't update
+
+**Symptoms**: Console shows "invalidation received" but UI doesn't change, or `getSnapshot` is never called.
+
+**Checklist**:
+
+| Check | How to verify |
+|-------|---------------|
+| Revision not increasing | Backend must increment revision on EACH change |
+| Stale revision | If local revision >= event revision, skip is expected (not a bug) |
+| Provider returns cached data | Ensure `getSnapshot()` fetches fresh data, not HTTP cache |
+| Applier silently fails | Add `console.log` inside your `applier.apply()` function |
+| Field in `omitKeys` | Check if the field you expect is excluded by `omitKeys` option |
+
+**Debug snippet**:
+```typescript
+const sync = createRevisionSync({
+  topic: 'my-topic',
+  subscriber,
+  provider: {
+    async getSnapshot() {
+      console.log('getSnapshot called');
+      const data = await fetchData();
+      console.log('returning', data);
+      return data;
+    }
+  },
+  applier: {
+    apply(snapshot) {
+      console.log('apply called with', snapshot);
+      // your apply logic
+    }
+  },
+  logger: createConsoleLogger({ debug: true }),
+});
+```
 
 ## Multiple windows / race conditions
 
@@ -59,20 +108,42 @@ The `phase` field in `SyncErrorContext` helps you quickly identify the source of
 **Cause**: failed to subscribe to events (transport unavailable, Tauri listener error).
 **Action**: ensure transport is configured correctly and the event name matches.
 
+### `start`
+**Cause**: failed during `handle.start()` setup.
+**Action**: check that subscriber and provider are properly configured.
+
+### `invalidation`
+**Cause**: error processing an invalidation event.
+**Action**: verify event payload shape matches expected `{ topic, revision }`.
+
 ### `refresh`
-**Cause**: fallback — an error inside refresh that isn’t classified as getSnapshot/apply/protocol.
+**Cause**: fallback — an error inside refresh that isn't classified as getSnapshot/apply/protocol.
 **Action**: check logs for the full stack trace.
+
+### `throttle`
+**Cause**: error in the throttle/coalescing layer.
+**Action**: check throttling configuration values.
 
 ## Useful context fields
 
-Besides `phase`, the engine may (best-effort) populate:
+Besides `phase`, the engine may populate (best-effort):
 - `localRevision` — local revision at the time of the error
-- `eventRevision` — revision from the invalidation event (if applicable)
-- `snapshotRevision` — snapshot revision (if applicable)
-- `sourceId` — change originator (if the transport provides it)
+- `eventRevision` — revision from the invalidation event
+- `snapshotRevision` — snapshot revision
+- `sourceId` — change originator (if transport provides it)
+- `sourceEvent` — raw event payload (transport-specific)
+- `attempt` — current retry attempt number
+- `willRetry` — whether the engine will retry
+- `nextDelayMs` — delay before next retry
 
-This is useful for metrics/alerts (e.g., “apply errors by topic”).
+See [Lifecycle contract](/lifecycle#observability-fields-best-effort) for the full table.
 
 ## onError throws
 
 If the `onError` callback throws, the engine catches and logs it. The engine keeps running — a user callback cannot bring down the sync loop.
+
+## See also
+
+- [Lifecycle contract](/lifecycle) — full method/phase reference
+- [Error handling example](/examples/error-handling) — retry, fallback, UI indicators
+- [Multi-window patterns](/guide/multi-window) — debugging multi-window issues

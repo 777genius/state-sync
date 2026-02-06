@@ -44,58 +44,13 @@ await sync.start();
 
 ## Full example
 
-### Rust backend
+### Rust backend (minimal)
+
+Your Rust backend needs two things: a `get_*` command returning `{ revision, data }` and an `emit()` call on state change.
 
 ```rust
-// src-tauri/src/lib.rs
-use std::sync::Mutex;
-use tauri::{AppHandle, Emitter, Manager, State};
-
-#[derive(Clone, serde::Serialize, serde::Deserialize)]
-pub struct Settings {
-    pub theme: String,
-    pub language: String,
-    pub notifications_enabled: bool,
-}
-
-impl Default for Settings {
-    fn default() -> Self {
-        Self {
-            theme: "light".to_string(),
-            language: "en".to_string(),
-            notifications_enabled: true,
-        }
-    }
-}
-
-#[derive(Clone, serde::Serialize)]
-pub struct SnapshotEnvelope {
-    pub revision: String,
-    pub data: Settings,
-}
-
-#[derive(Clone, serde::Serialize)]
-pub struct InvalidationEvent {
-    pub topic: String,
-    pub revision: String,
-}
-
-pub struct AppState {
-    pub settings: Settings,
-    pub revision: u64,
-}
-
-impl Default for AppState {
-    fn default() -> Self {
-        Self {
-            settings: Settings::default(),
-            revision: 1,
-        }
-    }
-}
-
 #[tauri::command]
-pub fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
+fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
     let state = state.lock().unwrap();
     SnapshotEnvelope {
         revision: state.revision.to_string(),
@@ -104,41 +59,22 @@ pub fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
 }
 
 #[tauri::command]
-pub fn update_settings(
-    app: AppHandle,
-    state: State<'_, Mutex<AppState>>,
-    settings: Settings,
-) -> Result<SnapshotEnvelope, String> {
+fn update_settings(app: AppHandle, state: State<'_, Mutex<AppState>>, settings: Settings) -> Result<SnapshotEnvelope, String> {
     let mut state = state.lock().unwrap();
     state.settings = settings;
     state.revision += 1;
-
-    let envelope = SnapshotEnvelope {
-        revision: state.revision.to_string(),
-        data: state.settings.clone(),
-    };
-
-    // Emit invalidation event to all windows
+    // Emit invalidation → state-sync picks it up
     app.emit("settings:invalidated", InvalidationEvent {
         topic: "settings".to_string(),
         revision: state.revision.to_string(),
     }).map_err(|e| e.to_string())?;
-
-    Ok(envelope)
-}
-
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
-    tauri::Builder::default()
-        .manage(Mutex::new(AppState::default()))
-        .invoke_handler(tauri::generate_handler![
-            get_settings,
-            update_settings,
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+    Ok(SnapshotEnvelope { revision: state.revision.to_string(), data: state.settings.clone() })
 }
 ```
+
+::: tip Complete Rust + Vue + Pinia example
+For the full working app with types, Default impls, and Vue components, see [Vue + Pinia + Tauri](/examples/vue-pinia-tauri).
+:::
 
 ### TypeScript frontend
 

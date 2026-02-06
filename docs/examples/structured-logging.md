@@ -4,7 +4,7 @@ title: Structured logging
 
 # Structured logging
 
-Production-ready logging and error metrics pattern for observability.
+Logging and error metrics pattern for observability.
 
 **What it demonstrates:**
 - Custom `Logger` implementation for JSON output
@@ -132,7 +132,7 @@ const handle = createRevisionSync({
   subscriber,
   provider,
   applier,
-  logger: createConsoleLogger({ level: 'debug' }),
+  logger: createConsoleLogger({ debug: true }),
 });
 ```
 
@@ -143,8 +143,14 @@ Add context (window ID, user ID) to all log entries:
 ```typescript
 import { createConsoleLogger, tagLogger } from '@statesync/core';
 
-const baseLogger = createConsoleLogger({ level: 'debug' });
+const baseLogger = createConsoleLogger({ debug: true });
 const logger = tagLogger(baseLogger, { windowId: 'main', userId: '123' });
 
 // All logs will include: { windowId: 'main', userId: '123', ... }
 ```
+
+## See also
+
+- [Troubleshooting](/troubleshooting) — debug sync issues using phases
+- [Lifecycle contract](/lifecycle) — full error phases reference
+- [Error handling example](/examples/error-handling) — retry and graceful degradation

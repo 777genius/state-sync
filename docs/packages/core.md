@@ -2,6 +2,12 @@
 title: Core (@statesync/core)
 ---
 
+## Installation
+
+```bash
+npm install @statesync/core
+```
+
 ## What's inside
 
 The core package provides:
@@ -29,5 +35,10 @@ const handle = createRevisionSync({
 await handle.start();
 ```
 
-See [Lifecycle](/lifecycle) and [Troubleshooting](/troubleshooting).
+## See also
+
+- [Quickstart](/guide/quickstart) — full wiring example with a framework adapter
+- [How state-sync works](/guide/protocol) — the invalidation-pull protocol
+- [Lifecycle contract](/lifecycle) — method semantics, error phases
+- [Troubleshooting](/troubleshooting) — common issues and fixes
 

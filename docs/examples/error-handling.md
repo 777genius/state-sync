@@ -4,7 +4,7 @@ title: Error handling & retry
 
 # Error handling & retry
 
-Production-ready error handling with automatic retry and graceful degradation.
+Error handling with automatic retry and graceful degradation.
 
 ::: tip
 Proper error handling is crucial for multi-window apps where network/IPC can fail.
@@ -64,32 +64,31 @@ const sync = createRevisionSync({
 
 ```typescript
 import { createRevisionSync, withRetry, withRetryReporting } from '@statesync/core';
+import type { SyncErrorContext } from '@statesync/core';
 
 // Wrap provider with retry logic
-const providerWithRetry = withRetry(provider, {
-  maxAttempts: 3,
-  baseDelayMs: 100,
-  maxDelayMs: 5000,
-  // Only retry network errors, not data errors
-  shouldRetry: (error) => {
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      return true; // Network error
-    }
-    if (error.name === 'TimeoutError') {
-      return true;
-    }
-    return false; // Don't retry data errors
+const providerWithRetry = withRetry(
+  provider,
+  {
+    maxAttempts: 3,
+    initialDelayMs: 100,
+    maxDelayMs: 5000,
   },
-});
+  ({ attempt, error, nextDelayMs }) => {
+    console.warn(`Retry attempt ${attempt} in ${nextDelayMs}ms:`, error);
+  },
+);
 
-// Add retry reporting
-const providerWithReporting = withRetryReporting(providerWithRetry, {
-  onRetry(attempt, error, delayMs) {
-    console.warn(`Retry attempt ${attempt} after ${delayMs}ms:`, error.message);
+// Or use withRetryReporting for structured logging via onError
+const providerWithReporting = withRetryReporting(provider, {
+  topic: 'settings',
+  policy: {
+    maxAttempts: 5,
+    initialDelayMs: 200,
+    maxDelayMs: 10_000,
   },
-  onExhausted(attempts, lastError) {
-    console.error(`All ${attempts} retry attempts failed:`, lastError);
-    showConnectionError();
+  onError(ctx: SyncErrorContext) {
+    console.warn(`Retry [${ctx.phase}] attempt ${ctx.attempt}`, ctx.error);
   },
 });
 
@@ -104,8 +103,9 @@ const sync = createRevisionSync({
 ## Graceful degradation
 
 ```typescript
-import { createRevisionSync, createConsoleLogger } from '@statesync/core';
-import { loadPersistedSnapshot, createLocalStorageBackend } from '@statesync/persistence';
+import { createRevisionSync } from '@statesync/core';
+import type { SyncErrorContext } from '@statesync/core';
+import { createLocalStorageBackend } from '@statesync/persistence';
 
 interface AppState {
   settings: Settings;
@@ -162,7 +162,7 @@ async function initWithGracefulDegradation() {
     // Sync failed to start, but we have cached data
     console.warn('Sync failed to start, using cached data');
     state.syncStatus = state.lastSyncAt ? 'stale' : 'offline';
-    state.error = e.message;
+    state.error = (e as Error).message;
 
     // Retry connection periodically
     scheduleReconnect(sync);
@@ -195,7 +195,7 @@ function scheduleReconnect(sync: ReturnType<typeof createRevisionSync>) {
   const maxAttempts = 10;
   const baseDelay = 5000;
 
-  const tryReconnect = async () => {
+  const tryReconnect = () => {
     if (attempts >= maxAttempts) {
       console.error('Max reconnection attempts reached');
       return;
@@ -206,207 +206,20 @@ function scheduleReconnect(sync: ReturnType<typeof createRevisionSync>) {
 
     console.log(`Reconnection attempt ${attempts} in ${delay}ms`);
 
-    setTimeout(async () => {
-      try {
-        await sync.refresh();
+    setTimeout(() => {
+      sync.refresh().then(() => {
         state.syncStatus = 'synced';
         state.error = null;
         attempts = 0;
         console.log('Reconnected successfully');
-      } catch (e) {
+      }).catch(() => {
         tryReconnect();
-      }
+      });
     }, delay);
   };
 
   tryReconnect();
 }
-```
-
-## UI indicators
-
-```vue
-<!-- SyncStatus.vue -->
-<script setup lang="ts">
-import { computed } from 'vue';
-import { useSyncStore } from '../stores/sync';
-
-const store = useSyncStore();
-
-const statusText = computed(() => {
-  switch (store.syncStatus) {
-    case 'synced':
-      return 'All changes saved';
-    case 'stale':
-      return `Last synced ${formatTime(store.lastSyncAt)}`;
-    case 'offline':
-      return 'Offline - changes will sync when connected';
-    case 'error':
-      return store.error || 'Sync error';
-  }
-});
-
-const statusClass = computed(() => ({
-  synced: store.syncStatus === 'synced',
-  stale: store.syncStatus === 'stale',
-  offline: store.syncStatus === 'offline',
-  error: store.syncStatus === 'error',
-}));
-
-function formatTime(timestamp: number | null) {
-  if (!timestamp) return 'never';
-  const diff = Date.now() - timestamp;
-  if (diff < 60000) return 'just now';
-  if (diff < 3600000) return `${Math.floor(diff / 60000)} min ago`;
-  return new Date(timestamp).toLocaleTimeString();
-}
-</script>
-
-<template>
-  <div class="sync-status" :class="statusClass">
-    <span class="icon">
-      <span v-if="syncStatus === 'synced'">✓</span>
-      <span v-else-if="syncStatus === 'stale'">⏱</span>
-      <span v-else-if="syncStatus === 'offline'">⚡</span>
-      <span v-else>⚠</span>
-    </span>
-    <span class="text">{{ statusText }}</span>
-  </div>
-</template>
-
-<style scoped>
-.sync-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-}
-
-.synced {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.stale {
-  background: #fff3e0;
-  color: #ef6c00;
-}
-
-.offline {
-  background: #e3f2fd;
-  color: #1565c0;
-}
-
-.error {
-  background: #ffebee;
-  color: #c62828;
-}
-</style>
-```
-
-## Error boundaries (React)
-
-```tsx
-// ErrorBoundary.tsx
-import { Component, ReactNode } from 'react';
-
-interface Props {
-  children: ReactNode;
-  fallback: ReactNode;
-}
-
-interface State {
-  hasError: boolean;
-  error: Error | null;
-}
-
-export class SyncErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
-
-  static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Sync error boundary caught:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback;
-    }
-
-    return this.props.children;
-  }
-}
-
-// Usage
-function App() {
-  return (
-    <SyncErrorBoundary
-      fallback={
-        <div className="error-state">
-          <h2>Unable to sync</h2>
-          <p>Please check your connection and try again.</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
-        </div>
-      }
-    >
-      <CartProvider>
-        <ShopPage />
-      </CartProvider>
-    </SyncErrorBoundary>
-  );
-}
-```
-
-## Monitoring & alerting
-
-```typescript
-import { createRevisionSync } from '@statesync/core';
-
-// Error tracking
-const errorCounts: Record<string, number> = {};
-const ERROR_THRESHOLD = 5;
-const ERROR_WINDOW_MS = 60000;
-const errorTimestamps: number[] = [];
-
-function trackError(ctx: SyncErrorContext) {
-  const key = `${ctx.topic}:${ctx.phase}`;
-  errorCounts[key] = (errorCounts[key] || 0) + 1;
-  errorTimestamps.push(Date.now());
-
-  // Clean old timestamps
-  const cutoff = Date.now() - ERROR_WINDOW_MS;
-  while (errorTimestamps.length && errorTimestamps[0] < cutoff) {
-    errorTimestamps.shift();
-  }
-
-  // Alert if too many errors
-  if (errorTimestamps.length >= ERROR_THRESHOLD) {
-    alertOps({
-      message: `High sync error rate: ${errorTimestamps.length} errors in last minute`,
-      context: { errorCounts, topic: ctx.topic },
-    });
-  }
-
-  // Send to monitoring
-  sendToDatadog({
-    metric: 'state_sync.error',
-    tags: [`topic:${ctx.topic}`, `phase:${ctx.phase}`],
-    value: 1,
-  });
-}
-
-const sync = createRevisionSync({
-  topic: 'settings',
-  subscriber,
-  provider,
-  applier,
-  onError: trackError,
-});
 ```
 
 ## Key points
@@ -415,10 +228,14 @@ const sync = createRevisionSync({
 
 2. **Categorize by phase**: Different phases need different handling
 
-3. **Retry intelligently**: Only retry transient errors, not data errors
+3. **Retry intelligently**: Use `withRetry` or `withRetryReporting` for transient errors
 
 4. **Degrade gracefully**: Show cached/stale data rather than nothing
 
 5. **Inform users**: Show sync status so users know what's happening
 
-6. **Monitor in production**: Track error rates to catch issues early
+## See also
+
+- [Lifecycle contract](/lifecycle) — error phases reference
+- [Troubleshooting](/troubleshooting) — debug common issues
+- [Structured logging example](/examples/structured-logging) — JSON logging and metrics

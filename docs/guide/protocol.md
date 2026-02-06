@@ -2,36 +2,52 @@
 title: Protocol (mental model)
 ---
 
-`state-sync` uses a simple and reliable pattern:
+# How state-sync works
 
-1. **Invalidation event** indicates that the state “may have changed” and carries:
-   - `topic`
-   - `revision`
+This page explains the invalidation-pull protocol that keeps state consistent across windows.
+
+## The pattern
+
+1. **Invalidation event** — a lightweight signal meaning "this state may have changed". It carries only a `topic` and `revision`, not the full data.
 2. The receiver does a **pull**: `provider.getSnapshot()`
 3. The engine applies the snapshot only if it is **newer** (revision gate).
 
-Why:
-- events can arrive **out of order**
-- events can be **lost**
-- the snapshot remains the **source of truth**
+Why this works:
+- Events can arrive **out of order** — the revision gate rejects stale ones
+- Events can be **lost** — the pull always fetches the latest
+- The snapshot remains the **source of truth**
 
-### InvalidationEvent
+## Key terms
+
+| Term | Meaning |
+|------|---------|
+| **Topic** | Unique string identifier for a piece of state (e.g., `'settings'`, `'cart'`) |
+| **Revision** | Monotonic counter (canonical decimal `u64` string: `"0"`, `"42"`, no leading zeros) |
+| **Invalidation** | Signal that says "state may have changed" — carries topic + revision only |
+| **Coalescing** | If multiple invalidation events arrive while a refresh is in progress, only one additional refresh is queued — not one per event |
+| **Snapshot** | Full state fetched from the provider (`{ revision, data }`) |
+
+## InvalidationEvent
 
 Minimal contract:
 - `topic: string`
-- `revision: Revision` (canonical decimal `u64` string)
+- `revision: Revision` (canonical decimal `u64` string, e.g. `"0"`, `"42"`, `"18446744073709551615"`)
 
-### SnapshotEnvelope
+## SnapshotEnvelope
 
 Minimal contract:
 - `revision: Revision`
 - `data: T`
 
-### What is a protocol error
+## What is a protocol error
 
 The engine reports `phase='protocol'` when:
 - `topic` is empty / not a string
 - `revision` is not canonical (`"01"`, `"abc"`, etc.)
 
-See [Troubleshooting](/troubleshooting) and [Lifecycle](/lifecycle).
+## See also
 
+- [Quickstart](/guide/quickstart) — wire subscriber, provider, applier
+- [Lifecycle contract](/lifecycle) — method semantics, error phases
+- [Troubleshooting](/troubleshooting) — debug common issues
+- [Custom transports](/guide/custom-transports) — build your own subscriber/provider

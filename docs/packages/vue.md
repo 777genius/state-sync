@@ -2,9 +2,15 @@
 title: Vue (@statesync/vue)
 ---
 
+## Installation
+
+```bash
+npm install @statesync/vue @statesync/core
+```
+
 ## Purpose
 
-`@statesync/vue` is a **framework adapter**: it knows how to apply snapshots to Vue `reactive()` objects and `ref()` values.
+`@statesync/vue` applies snapshots to Vue `reactive()` objects and `ref()` values.
 
 ## API
 
@@ -59,14 +65,14 @@ const applier = createVueSnapshotApplier(state, {
   omitKeys: ['localUiFlag'],
 });
 
-const handle = createRevisionSync({
+const sync = createRevisionSync({
   topic: 'app-config',
   subscriber,
   provider,
   applier,
 });
 
-await handle.start();
+await sync.start();
 ```
 
 ## Example (ref)
@@ -83,4 +89,12 @@ const applier = createVueSnapshotApplier(state, {
 });
 ```
 
-See: [Vue adapter notes](/adapters/vue).
+::: tip Can be used alongside @statesync/pinia
+Pinia stores use `reactive()` internally — the Vue adapter works with both standalone Vue state and Pinia stores.
+:::
+
+## See also
+
+- [Quickstart](/guide/quickstart) — full wiring example
+- [Vue + Pinia + Tauri example](/examples/vue-pinia-tauri) — complete Tauri app
+- [@statesync/pinia](/packages/pinia) — dedicated Pinia adapter

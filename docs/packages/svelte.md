@@ -2,9 +2,15 @@
 title: Svelte (@statesync/svelte)
 ---
 
+## Installation
+
+```bash
+npm install @statesync/svelte @statesync/core
+```
+
 ## Purpose
 
-`@statesync/svelte` is a **framework adapter**: it knows how to apply snapshots to a Svelte writable store.
+`@statesync/svelte` applies snapshots to a Svelte `writable()` store. Both modes always produce a **new object reference**, required for Svelte's reactivity.
 
 ## API
 
@@ -50,14 +56,23 @@ const applier = createSvelteSnapshotApplier(store, {
   omitKeys: ['localUiFlag'],
 });
 
-const handle = createRevisionSync({
+const sync = createRevisionSync({
   topic: 'app-config',
   subscriber,
   provider,
   applier,
 });
 
-await handle.start();
+await sync.start();
 ```
 
-See: [Svelte adapter notes](/adapters/svelte).
+## See also
+
+- [Quickstart](/guide/quickstart) — full wiring example
+- [Multi-window patterns](/guide/multi-window) — cross-tab architecture
+- [Custom transports](/guide/custom-transports) — build your own subscriber/provider
+```
+
+::: tip Svelte 5 runes
+Current adapter targets `writable()` stores (Svelte 4 API). For Svelte 5 runes (`$state`), wrap in a `writable()`-compatible interface or use a custom applier.
+:::

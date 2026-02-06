@@ -20,3 +20,8 @@ Sourcemaps are enabled for both formats.
 Type declarations (`dist/index.d.ts`, `dist/index.d.cts`) are generated automatically.
 
 `exports` in `package.json` are configured with the `types` → `import` → `require` conditions, which ensures types are resolved correctly in any bundler/runtime.
+
+## See also
+
+- [Quickstart](/guide/quickstart) — get started
+- [Troubleshooting](/troubleshooting) — common issues

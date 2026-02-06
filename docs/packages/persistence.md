@@ -140,4 +140,6 @@ const stats = applier.getStats();
 
 ## API Reference
 
-See the [full README](https://github.com/777genius/state-sync/blob/main/packages/persistence/README.md) for complete API documentation.
+See the [API docs](/api/persistence/) for full TypeDoc reference.
+
+See the [Persistence with migrations](/examples/persistence-migration) example for schema versioning patterns.

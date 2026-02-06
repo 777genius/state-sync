@@ -1,11 +1,11 @@
 ---
 title: Comparison
-description: Honest comparison of state-sync vs alternatives for multi-window state synchronization
+description: Comparison of state-sync vs alternatives for multi-window state synchronization
 ---
 
 # state-sync vs Alternatives
 
-Honest comparison for multi-window state synchronization.
+Comparison for multi-window state synchronization.
 
 ## The Problem
 
@@ -159,7 +159,7 @@ onError: (ctx) => {
   // ctx.phase: 'subscribe' | 'getSnapshot' | 'apply'
   console.error(`${ctx.phase} failed:`, ctx.error)
 },
-retry: { maxAttempts: 3, baseDelayMs: 100 }
+retry: { maxAttempts: 3, initialDelayMs: 100 }
 ```
 
 ### Persistence (separate package)
@@ -199,3 +199,8 @@ Core is larger because it includes ordering, throttling, retry, and structured e
 - [tauri-plugin-store](https://v2.tauri.app/plugin/store/) — Tauri KV storage
 - [Yjs](https://github.com/yjs/yjs) — CRDT for collaborative editing
 - [TinyBase](https://tinybase.org/) — Reactive store with CRDT
+
+## See also
+
+- [Quickstart](/guide/quickstart) — get started with state-sync
+- [How state-sync works](/guide/protocol) — the invalidation-pull protocol

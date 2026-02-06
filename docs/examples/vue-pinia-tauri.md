@@ -331,7 +331,7 @@ export async function initSettingsSync() {
 
   // Logger with window context
   const logger = tagLogger(
-    createConsoleLogger({ level: 'debug' }),
+    createConsoleLogger({ debug: true }),
     { window: windowLabel }
   );
 
@@ -663,3 +663,10 @@ Main Window: receives event, skips (already has revision 2)
 4. **UI state excluded**: `isSaving`, `lastSyncedAt` not synced between windows
 
 5. **TypeScript types match Rust**: `Settings` interface matches Rust struct (camelCase via serde)
+
+## See also
+
+- [@statesync/tauri](/packages/tauri) — Tauri transport API
+- [@statesync/pinia](/packages/pinia) — Pinia adapter API
+- [Multi-window patterns](/guide/multi-window) — cross-window architecture
+- [Writing state](/guide/writing-state) — UI → backend patterns

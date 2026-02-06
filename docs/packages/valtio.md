@@ -2,9 +2,15 @@
 title: Valtio (@statesync/valtio)
 ---
 
+## Installation
+
+```bash
+npm install @statesync/valtio @statesync/core
+```
+
 ## Purpose
 
-`@statesync/valtio` is a **framework adapter**: it knows how to apply snapshots to a Valtio proxy.
+`@statesync/valtio` applies snapshots to a Valtio proxy. Mutates the proxy **in place** — the reference never changes, so `useSnapshot()` and `subscribe()` keep working.
 
 ## API
 
@@ -45,14 +51,23 @@ const applier = createValtioSnapshotApplier(state, {
   omitKeys: ['localUiFlag'],
 });
 
-const handle = createRevisionSync({
+const sync = createRevisionSync({
   topic: 'app-config',
   subscriber,
   provider,
   applier,
 });
 
-await handle.start();
+await sync.start();
 ```
 
-See: [Valtio adapter notes](/adapters/valtio).
+## See also
+
+- [Quickstart](/guide/quickstart) — full wiring example
+- [Multi-window patterns](/guide/multi-window) — cross-tab architecture
+- [Writing state](/guide/writing-state) — patterns for the write path
+```
+
+::: tip Why not replace the proxy?
+Valtio's reactivity relies on the original proxy reference. Replacing it would break all `useSnapshot()` hooks. The adapter always mutates in place.
+:::

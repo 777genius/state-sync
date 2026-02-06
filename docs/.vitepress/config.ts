@@ -23,25 +23,31 @@ export default defineConfig({
 
     nav: [
       { text: 'Guide', link: '/guide/quickstart' },
-      { text: 'Comparison', link: '/comparison' },
-      { text: 'API', link: '/api/' },
       {
         text: 'Packages',
         items: [
           { text: 'Overview', link: '/packages/' },
-          { text: 'Core (@statesync/core)', link: '/packages/core' },
-          { text: 'Persistence (@statesync/persistence)', link: '/packages/persistence' },
-          { text: 'Pinia (@statesync/pinia)', link: '/packages/pinia' },
-          { text: 'Zustand (@statesync/zustand)', link: '/packages/zustand' },
-          { text: 'Valtio (@statesync/valtio)', link: '/packages/valtio' },
-          { text: 'Svelte (@statesync/svelte)', link: '/packages/svelte' },
-          { text: 'Vue (@statesync/vue)', link: '/packages/vue' },
-          { text: 'Tauri (@statesync/tauri)', link: '/packages/tauri' },
+          { text: '@statesync/core', link: '/packages/core' },
+          { text: '@statesync/persistence', link: '/packages/persistence' },
+          { text: '@statesync/pinia', link: '/packages/pinia' },
+          { text: '@statesync/zustand', link: '/packages/zustand' },
+          { text: '@statesync/valtio', link: '/packages/valtio' },
+          { text: '@statesync/svelte', link: '/packages/svelte' },
+          { text: '@statesync/vue', link: '/packages/vue' },
+          { text: '@statesync/tauri', link: '/packages/tauri' },
         ],
       },
       { text: 'Examples', link: '/examples/' },
-      { text: 'Lifecycle', link: '/lifecycle' },
-      { text: 'Troubleshooting', link: '/troubleshooting' },
+      { text: 'API', link: '/api/' },
+      {
+        text: 'Reference',
+        items: [
+          { text: 'Comparison', link: '/comparison' },
+          { text: 'Lifecycle', link: '/lifecycle' },
+          { text: 'Troubleshooting', link: '/troubleshooting' },
+          { text: 'Compatibility', link: '/compatibility' },
+        ],
+      },
     ],
 
     sidebar: {
@@ -63,10 +69,17 @@ export default defineConfig({
       ],
       '/guide/': [
         {
-          text: 'Guide',
+          text: 'Getting Started',
           items: [
             { text: 'Quickstart', link: '/guide/quickstart' },
             { text: 'Protocol (mental model)', link: '/guide/protocol' },
+          ],
+        },
+        {
+          text: 'Guides',
+          items: [
+            { text: 'Writing state', link: '/guide/writing-state' },
+            { text: 'Custom transports', link: '/guide/custom-transports' },
             { text: 'Multi-window patterns', link: '/guide/multi-window' },
           ],
         },
@@ -116,22 +129,18 @@ export default defineConfig({
       ],
       '/': [
         {
-          text: 'Introduction',
-          items: [{ text: 'Comparison', link: '/comparison' }],
+          text: 'Start Here',
+          items: [
+            { text: 'Quickstart', link: '/guide/quickstart' },
+            { text: 'Comparison', link: '/comparison' },
+          ],
         },
         {
           text: 'Reference',
           items: [
-            { text: 'Compatibility', link: '/compatibility' },
             { text: 'Lifecycle', link: '/lifecycle' },
             { text: 'Troubleshooting', link: '/troubleshooting' },
-            { text: 'Release checklist', link: '/release-checklist' },
-            { text: 'Adapter authoring', link: '/adapters/adapter-authoring' },
-            { text: 'Pinia adapter notes', link: '/adapters/pinia' },
-            { text: 'Zustand adapter notes', link: '/adapters/zustand' },
-            { text: 'Valtio adapter notes', link: '/adapters/valtio' },
-            { text: 'Svelte adapter notes', link: '/adapters/svelte' },
-            { text: 'Vue adapter notes', link: '/adapters/vue' },
+            { text: 'Compatibility', link: '/compatibility' },
           ],
         },
       ],

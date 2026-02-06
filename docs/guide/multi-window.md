@@ -93,61 +93,7 @@ Keep topics **domain-oriented**, not UI-oriented:
 
 ## Example: Tauri multi-window
 
-### Rust backend (source of truth)
-
-```rust
-use std::sync::Mutex;
-use tauri::{AppHandle, Emitter, State};
-
-#[derive(Clone, serde::Serialize, serde::Deserialize)]
-struct Settings {
-    theme: String,
-    language: String,
-}
-
-#[derive(Clone, serde::Serialize)]
-struct SnapshotEnvelope {
-    revision: String,
-    data: Settings,
-}
-
-struct AppState {
-    settings: Settings,
-    revision: u64,
-}
-
-#[tauri::command]
-fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
-    let state = state.lock().unwrap();
-    SnapshotEnvelope {
-        revision: state.revision.to_string(),
-        data: state.settings.clone(),
-    }
-}
-
-#[tauri::command]
-fn update_settings(
-    app: AppHandle,
-    state: State<'_, Mutex<AppState>>,
-    settings: Settings,
-) -> SnapshotEnvelope {
-    let mut state = state.lock().unwrap();
-    state.settings = settings;
-    state.revision += 1;
-
-    let envelope = SnapshotEnvelope {
-        revision: state.revision.to_string(),
-        data: state.settings.clone(),
-    };
-
-    // Notify all windows
-    app.emit("settings:invalidated", &envelope).unwrap();
-
-    envelope
-}
-```
-
-### TypeScript frontend (each window)
+Each window runs its own sync handle. The Rust backend is the source of truth.
 
 ```typescript
 import { createTauriRevisionSync } from '@statesync/tauri';
@@ -165,17 +111,17 @@ export function setupSettingsSync() {
     invoke,
     eventName: 'settings:invalidated',
     commandName: 'get_settings',
-    applier: createPiniaSnapshotApplier(store, {
-      mode: 'patch',
-    }),
+    applier: createPiniaSnapshotApplier(store, { mode: 'patch' }),
   });
 
   sync.start();
-
-  // Return cleanup function for component unmount
   return () => sync.stop();
 }
 ```
+
+::: tip Full Tauri app
+For the complete Rust backend + multi-window setup, see [Vue + Pinia + Tauri example](/examples/vue-pinia-tauri).
+:::
 
 ## Example: Browser tabs (BroadcastChannel)
 
@@ -188,13 +134,16 @@ import { useSettingsStore } from './stores/settings';
 let currentRevision = 0;
 let currentSettings = { theme: 'light', language: 'en' };
 
-function createBrowserTabSync() {
-  const channel = new BroadcastChannel('settings-sync');
+// Single channel instance for the tab lifetime
+const channel = new BroadcastChannel('settings-sync');
 
+function createBrowserTabSync() {
   const subscriber = {
     async subscribe(handler) {
-      channel.onmessage = (e) => handler(e.data);
-      return () => channel.close();
+      const listener = (e: MessageEvent) => handler(e.data);
+      channel.addEventListener('message', listener);
+      // Return cleanup that removes listener (not closes channel)
+      return () => channel.removeEventListener('message', listener);
     }
   };
 
@@ -223,11 +172,15 @@ function broadcastChange(settings) {
   currentRevision++;
   currentSettings = settings;
 
-  const channel = new BroadcastChannel('settings-sync');
+  // Reuse existing channel
   channel.postMessage({
     topic: 'settings',
     revision: currentRevision.toString(),
   });
+}
+
+// Call on app unmount
+function cleanup() {
   channel.close();
 }
 ```
@@ -268,7 +221,7 @@ import { createConsoleLogger, tagLogger } from '@statesync/core';
 const windowId = new URLSearchParams(location.search).get('window') || 'main';
 
 const logger = tagLogger(
-  createConsoleLogger({ level: 'debug' }),
+  createConsoleLogger({ debug: true }),
   { windowId }
 );
 
@@ -288,3 +241,9 @@ Output:
 [debug] [windowId=settings] subscribed
 [debug] [windowId=settings] snapshot applied { revision: "5" }
 ```
+
+## See also
+
+- [Writing state](/guide/writing-state) — UI → backend write patterns
+- [Custom transports](/guide/custom-transports) — build your own subscriber/provider
+- [Vue + Pinia + Tauri example](/examples/vue-pinia-tauri) — full multi-window app

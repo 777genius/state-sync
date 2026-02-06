@@ -162,7 +162,7 @@ export const cartSync = createRevisionSync({
   subscriber,
   provider,
   applier,
-  logger: createConsoleLogger({ level: 'debug' }),
+  logger: createConsoleLogger({ debug: true }),
   onError(ctx) {
     console.error(`Cart sync error [${ctx.phase}]:`, ctx.error);
     useCartStore.setState({ error: `Sync failed: ${ctx.phase}` });
@@ -380,3 +380,9 @@ Tab 1: Cart restored from localStorage (Widget x1, Gadget x1)
 4. **Revision tracking**: Prevents stale updates from overwriting newer data
 
 5. **Instant UI**: Cache loads before sync starts for immediate feedback
+
+## See also
+
+- [@statesync/zustand](/packages/zustand) — adapter API reference
+- [@statesync/persistence](/packages/persistence) — caching and cross-tab sync
+- [Writing state](/guide/writing-state) — write path patterns

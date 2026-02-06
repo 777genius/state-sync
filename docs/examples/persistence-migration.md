@@ -227,17 +227,9 @@ User has V3 data: { theme: 'dark', language: 'es', fontSize: 16 }
 
 ```typescript
 const migration = createMigrationBuilder<Settings>()
-  .addMigration<SettingsV2, SettingsV3>(2, (v2, context) => {
-    // Access metadata during migration
-    const savedAt = context?.metadata?.savedAt;
-
+  .addMigration<SettingsV2, SettingsV3>(2, (v2) => {
     // Complex migration logic
-    let theme: Settings['theme'] = v2.darkMode ? 'dark' : 'light';
-
-    // If data is old, default to system theme
-    if (savedAt && Date.now() - savedAt > 30 * 24 * 60 * 60 * 1000) {
-      theme = 'system';
-    }
+    const theme: Settings['theme'] = v2.darkMode ? 'dark' : 'light';
 
     return {
       theme,
@@ -265,7 +257,7 @@ if (!result) {
 }
 
 // Or listen for migration events
-applier.on('migrated', (result) => {
+applier.on('migrated', async (result) => {
   if (!result.success) {
     // Log error, show notification, or use defaults
     console.error('Migration failed:', result.error);
@@ -286,7 +278,7 @@ applier.on('migrated', (result) => {
 
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { createMigrationBuilder } from '@statesync/persistence';
+import { createMigrationBuilder, migrateData } from '@statesync/persistence';
 
 describe('settings migrations', () => {
   const migration = createMigrationBuilder<SettingsV3>()
@@ -357,3 +349,9 @@ const applier = createPersistenceApplier({
   ttlMs: 365 * 24 * 60 * 60 * 1000, // 1 year
 });
 ```
+
+## See also
+
+- [@statesync/persistence](/packages/persistence) — full persistence API
+- [Error handling example](/examples/error-handling) — retry and graceful degradation
+- [Quickstart](/guide/quickstart) — basic sync setup

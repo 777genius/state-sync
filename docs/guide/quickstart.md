@@ -25,6 +25,12 @@ npm install @statesync/tauri    # Tauri v2
 
 ## Core concepts
 
+### Topic
+
+A **topic** is a unique string identifier for a piece of state you want to sync (e.g., `'settings'`, `'cart'`, `'user-preferences'`). Each topic has its own revision counter and can be synced independently.
+
+### The three parts
+
 You need 3 parts to sync state:
 
 | Part | Role | Example |
@@ -77,7 +83,7 @@ const sync = createRevisionSync({
   subscriber,
   provider,
   applier,
-  logger: createConsoleLogger({ level: 'debug' }),
+  logger: createConsoleLogger({ debug: true }),
 });
 
 // 6. Start sync
@@ -144,6 +150,10 @@ const sync = createTauriRevisionSync({
 
 await sync.start();
 ```
+
+::: tip Complete Tauri setup
+This is frontend-only. For the full Rust backend + TypeScript frontend example, see [Vue + Pinia + Tauri](/examples/vue-pinia-tauri).
+:::
 
 ## Stopping sync
 

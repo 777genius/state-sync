@@ -23,7 +23,7 @@ features:
     details: localStorage, IndexedDB, schema migrations, compression, TTL. Cross-tab sync via BroadcastChannel.
   - title: Transport-agnostic
     details: Tauri events, BroadcastChannel, WebSocket, or custom. Subscriber/provider pattern fits any transport.
-  - title: Production-ready
+  - title: Resilient
     details: Throttling, retry with backoff, structured error handling by phase, comprehensive logging.
   - title: Tiny footprint
     details: Core is 3.1KB gzipped. Framework adapters are ~0.8KB each. No bloat.
@@ -49,44 +49,24 @@ npm install @statesync/vue      # Vue (reactive/ref)
 npm install @statesync/tauri    # Tauri v2
 ```
 
-## Quick example
+## Do you need state-sync?
 
-```typescript
-import { createRevisionSync } from '@statesync/core';
-import { createZustandSnapshotApplier } from '@statesync/zustand';
-import { createPersistenceApplier, createLocalStorageBackend } from '@statesync/persistence';
+**Yes, if you have:**
 
-// Storage with cross-tab sync
-const storage = createLocalStorageBackend({ key: 'my-state' });
+| Scenario | Problem state-sync solves |
+|----------|---------------------------|
+| Multi-window app (Tauri, Electron) | State diverges between windows |
+| Multiple browser tabs | User edits in tab A, tab B shows stale data |
+| Backend pushes state updates | Events arrive out of order, UI flickers |
+| State must survive reload | Need persistence with proper invalidation |
 
-// Applier with persistence
-const applier = createPersistenceApplier({
-  storage,
-  applier: createZustandSnapshotApplier(useMyStore),
-  throttling: { debounceMs: 300 },
-  crossTabSync: { channelName: 'my-sync' },
-});
+**No, if you have:**
 
-// Sync engine
-const sync = createRevisionSync({
-  topic: 'my-topic',
-  subscriber,
-  provider,
-  applier,
-});
+- Single-window app with no persistence needs
+- Simple localStorage that never syncs with backend
+- Already using a solution like TanStack Query for server state
 
-await sync.start();
-```
-
-## Why state-sync?
-
-Most state sync libraries broadcast full state on every change. This breaks when:
-
-- Events arrive **out of order** (common in multi-window apps)
-- Multiple windows make **concurrent updates**
-- You need **persistence** with cache invalidation
-
-state-sync solves this with a simple pattern:
+## How it works
 
 ```
 Backend: state changed → emit { topic, revision }
@@ -94,6 +74,42 @@ Backend: state changed → emit { topic, revision }
 Window: receive event → fetch snapshot → revision > local? → apply
 ```
 
-Stale updates are rejected. Rapid events are coalesced. State stays consistent.
+Stale updates are rejected. Rapid events are merged. State stays consistent. [Learn more →](/guide/protocol)
 
-[Learn more →](/guide/protocol)
+## Quick example
+
+Sync a Zustand store across browser tabs with persistence:
+
+```typescript
+import { createRevisionSync } from '@statesync/core';
+import { createZustandSnapshotApplier } from '@statesync/zustand';
+
+// 1. Listen for "state changed" events from other tabs
+const channel = new BroadcastChannel('my-sync');
+const subscriber = {
+  async subscribe(handler) {
+    channel.onmessage = (e) => handler(e.data);
+    return () => channel.close();
+  },
+};
+
+// 2. Fetch current state
+const provider = {
+  async getSnapshot() {
+    const raw = localStorage.getItem('my-state');
+    return raw ? JSON.parse(raw) : { revision: '0', data: {} };
+  },
+};
+
+// 3. Wire it together
+const sync = createRevisionSync({
+  topic: 'my-state',
+  subscriber,
+  provider,
+  applier: createZustandSnapshotApplier(useMyStore),
+});
+
+await sync.start();
+```
+
+[Full Quickstart →](/guide/quickstart)

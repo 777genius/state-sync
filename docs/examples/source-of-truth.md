@@ -129,3 +129,9 @@ main().catch(console.error);
 2. **Invalidation pattern**: Backend doesn't push full state — only `{ topic, revision }`. Consumer pulls snapshot only when needed.
 
 3. **Decoupled architecture**: `subscriber`, `provider`, and `applier` are separate concerns that can be swapped independently.
+
+## See also
+
+- [How state-sync works](/guide/protocol) — the invalidation-pull protocol
+- [Custom transports](/guide/custom-transports) — real transport implementations (WebSocket, SSE, Tauri)
+- [Quickstart](/guide/quickstart) — wiring with a framework adapter
