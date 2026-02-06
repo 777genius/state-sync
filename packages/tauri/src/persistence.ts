@@ -22,13 +22,13 @@ export interface TauriFileBackendOptions {
 
   /**
    * Command name for saving state.
-   * The command receives { snapshot: SnapshotEnvelope<T> } + args.
+   * The command receives `{ snapshot: SnapshotEnvelope<T> }` + args.
    */
   saveCommand: string;
 
   /**
    * Command name for loading state.
-   * The command should return SnapshotEnvelope<T> | null.
+   * The command should return `SnapshotEnvelope<T> | null`.
    */
   loadCommand: string;
 
