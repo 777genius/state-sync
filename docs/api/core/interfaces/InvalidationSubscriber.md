@@ -6,7 +6,7 @@
 
 # Interface: InvalidationSubscriber
 
-Defined in: [types.ts:47](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/types.ts#L47)
+Defined in: [types.ts:47](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L47)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:47](https://github.com/777genius/state-sync/blob/668de7da1
 subscribe(handler): Promise<Unsubscribe>;
 ```
 
-Defined in: [types.ts:48](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/types.ts#L48)
+Defined in: [types.ts:48](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L48)
 
 #### Parameters
 

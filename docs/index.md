@@ -3,57 +3,97 @@ layout: home
 hero:
   name: state-sync
   text: Reliable state synchronization between windows/processes
-  tagline: Invalidation → Fetch snapshot → Apply (revision gate)
+  tagline: Revision-based ordering • Multi-framework • Persistence & cross-tab sync
   actions:
     - theme: brand
       text: Quickstart
       link: /guide/quickstart
     - theme: alt
-      text: Packages
-      link: /packages/
+      text: Examples
+      link: /examples/
     - theme: alt
-      text: Lifecycle
-      link: /lifecycle
+      text: Comparison
+      link: /comparison
 features:
+  - title: Revision-based ordering
+    details: Monotonic revisions ensure updates apply in correct order. Stale events are automatically rejected.
   - title: Multi-framework
-    details: Official adapters for Pinia, Zustand, Valtio, Svelte, and Vue (reactive/ref).
+    details: Official adapters for Pinia, Zustand, Valtio, Svelte, and Vue. Works with any state management.
+  - title: Persistence & caching
+    details: localStorage, IndexedDB, schema migrations, compression, TTL. Cross-tab sync via BroadcastChannel.
   - title: Transport-agnostic
-    details: Any IPC/transport (Tauri events+invoke, BroadcastChannel, in-memory) via subscriber/provider.
-  - title: Deterministic
-    details: Monotonic revisions + snapshot source of truth guard against out-of-order events.
-  - title: Production-friendly
-    details: Contract tests, strict protocol validation, and observability via phases.
+    details: Tauri events, BroadcastChannel, WebSocket, or custom. Subscriber/provider pattern fits any transport.
+  - title: Production-ready
+    details: Throttling, retry with backoff, structured error handling by phase, comprehensive logging.
+  - title: Tiny footprint
+    details: Core is 3.1KB gzipped. Framework adapters are ~0.8KB each. No bloat.
 ---
 
 ## Install
 
 ```bash
+# Core engine (required)
 npm install @statesync/core
 
-# Framework adapters (pick one)
-npm install @statesync/pinia    # Pinia
-npm install @statesync/zustand  # Zustand
-npm install @statesync/valtio   # Valtio
-npm install @statesync/svelte   # Svelte
-npm install @statesync/vue      # Vue (reactive / ref)
+# Persistence (optional - caching, migrations, cross-tab sync)
+npm install @statesync/persistence
 
-# Transport adapter
+# Framework adapter (pick one)
+npm install @statesync/pinia    # Vue + Pinia
+npm install @statesync/zustand  # React + Zustand
+npm install @statesync/valtio   # React + Valtio
+npm install @statesync/svelte   # Svelte
+npm install @statesync/vue      # Vue (reactive/ref)
+
+# Transport adapter (optional)
 npm install @statesync/tauri    # Tauri v2
 ```
 
 ## Quick example
 
-```ts
-import { createConsoleLogger, createRevisionSync } from '@statesync/core';
+```typescript
+import { createRevisionSync } from '@statesync/core';
+import { createZustandSnapshotApplier } from '@statesync/zustand';
+import { createPersistenceApplier, createLocalStorageBackend } from '@statesync/persistence';
 
-const handle = createRevisionSync({
-  topic: 'app-config',
-  subscriber: mySubscriber,
-  provider: myProvider,
-  applier: myApplier,
-  logger: createConsoleLogger({ debug: true }),
+// Storage with cross-tab sync
+const storage = createLocalStorageBackend({ key: 'my-state' });
+
+// Applier with persistence
+const applier = createPersistenceApplier({
+  storage,
+  applier: createZustandSnapshotApplier(useMyStore),
+  throttling: { debounceMs: 300 },
+  crossTabSync: { channelName: 'my-sync' },
 });
 
-await handle.start();
+// Sync engine
+const sync = createRevisionSync({
+  topic: 'my-topic',
+  subscriber,
+  provider,
+  applier,
+});
+
+await sync.start();
 ```
 
+## Why state-sync?
+
+Most state sync libraries broadcast full state on every change. This breaks when:
+
+- Events arrive **out of order** (common in multi-window apps)
+- Multiple windows make **concurrent updates**
+- You need **persistence** with cache invalidation
+
+state-sync solves this with a simple pattern:
+
+```
+Backend: state changed → emit { topic, revision }
+    ↓
+Window: receive event → fetch snapshot → revision > local? → apply
+```
+
+Stale updates are rejected. Rapid events are coalesced. State stays consistent.
+
+[Learn more →](/guide/protocol)

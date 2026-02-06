@@ -18,4 +18,4 @@ type SyncPhase =
   | "throttle";
 ```
 
-Defined in: [types.ts:65](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/types.ts#L65)
+Defined in: [types.ts:65](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L65)

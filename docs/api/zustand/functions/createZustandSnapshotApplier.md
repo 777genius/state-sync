@@ -10,7 +10,7 @@
 function createZustandSnapshotApplier<State, Data>(store, options): SnapshotApplier<Data>;
 ```
 
-Defined in: [zustand.ts:112](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/zustand/src/zustand.ts#L112)
+Defined in: [zustand.ts:112](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/zustand/src/zustand.ts#L112)
 
 Creates a SnapshotApplier that applies snapshots into a Zustand store.
 

@@ -10,7 +10,7 @@
 function createTauriSnapshotProvider<T>(options): SnapshotProvider<T>;
 ```
 
-Defined in: [transport.ts:66](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/tauri/src/transport.ts#L66)
+Defined in: [transport.ts:66](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L66)
 
 Creates a SnapshotProvider that fetches snapshots via Tauri `invoke`.
 

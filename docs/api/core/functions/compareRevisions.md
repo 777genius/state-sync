@@ -10,7 +10,7 @@
 function compareRevisions(a, b): -1 | 0 | 1;
 ```
 
-Defined in: [revision.ts:17](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/revision.ts#L17)
+Defined in: [revision.ts:17](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/revision.ts#L17)
 
 ## Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: ThrottledHandler
 
-Defined in: [throttle.ts:35](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/throttle.ts#L35)
+Defined in: [throttle.ts:35](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/throttle.ts#L35)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: [throttle.ts:35](https://github.com/777genius/state-sync/blob/668de7
 dispose(): void;
 ```
 
-Defined in: [throttle.ts:46](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/throttle.ts#L46)
+Defined in: [throttle.ts:46](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/throttle.ts#L46)
 
 Cleanup all pending timers and reset state.
 Should be called when the sync handle is stopped.
@@ -33,7 +33,7 @@ Should be called when the sync handle is stopped.
 hasPending(): boolean;
 ```
 
-Defined in: [throttle.ts:51](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/throttle.ts#L51)
+Defined in: [throttle.ts:51](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/throttle.ts#L51)
 
 Returns true if there's a pending refresh scheduled.
 
@@ -49,7 +49,7 @@ Returns true if there's a pending refresh scheduled.
 trigger(): void;
 ```
 
-Defined in: [throttle.ts:40](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/throttle.ts#L40)
+Defined in: [throttle.ts:40](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/throttle.ts#L40)
 
 Trigger a refresh. The actual refresh call may be delayed
 based on the throttling configuration.

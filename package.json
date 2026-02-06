@@ -14,7 +14,7 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "build": "pnpm -r build",
-    "docs:api": "typedoc --options typedoc.json --entryPoints packages/core/src/index.ts --out docs/api/core && typedoc --options typedoc.json --entryPoints packages/pinia/src/index.ts --out docs/api/pinia && typedoc --options typedoc.json --entryPoints packages/tauri/src/index.ts --out docs/api/tauri && typedoc --options typedoc.json --entryPoints packages/zustand/src/index.ts --out docs/api/zustand && typedoc --options typedoc.json --entryPoints packages/valtio/src/index.ts --out docs/api/valtio && typedoc --options typedoc.json --entryPoints packages/svelte/src/index.ts --out docs/api/svelte && typedoc --options typedoc.json --entryPoints packages/vue/src/index.ts --out docs/api/vue",
+    "docs:api": "typedoc --options typedoc.json --entryPoints packages/core/src/index.ts --out docs/api/core && typedoc --options typedoc.json --entryPoints packages/persistence/src/index.ts --out docs/api/persistence && typedoc --options typedoc.json --entryPoints packages/pinia/src/index.ts --out docs/api/pinia && typedoc --options typedoc.json --entryPoints packages/tauri/src/index.ts --out docs/api/tauri && typedoc --options typedoc.json --entryPoints packages/zustand/src/index.ts --out docs/api/zustand && typedoc --options typedoc.json --entryPoints packages/valtio/src/index.ts --out docs/api/valtio && typedoc --options typedoc.json --entryPoints packages/svelte/src/index.ts --out docs/api/svelte && typedoc --options typedoc.json --entryPoints packages/vue/src/index.ts --out docs/api/vue",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",

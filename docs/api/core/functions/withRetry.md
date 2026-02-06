@@ -13,7 +13,7 @@ function withRetry<T>(
 onRetry?): SnapshotProvider<T>;
 ```
 
-Defined in: [retry.ts:36](https://github.com/777genius/state-sync/blob/668de7da1d4d3890666def53daaca924c668db8f/packages/core/src/retry.ts#L36)
+Defined in: [retry.ts:36](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L36)
 
 Wraps a SnapshotProvider with retries using exponential backoff.
 
