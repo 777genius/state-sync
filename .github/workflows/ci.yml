@@ -30,10 +30,20 @@ jobs:
         run: |
           node -e "import('./packages/core/dist/index.js').then(m => console.log('core ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/core/dist/index.cjs'); console.log('core CJS OK:', Object.keys(m))"
+          node -e "import('./packages/persistence/dist/index.js').then(m => console.log('persistence ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/persistence/dist/index.cjs'); console.log('persistence CJS OK:', Object.keys(m))"
           node -e "import('./packages/pinia/dist/index.js').then(m => console.log('pinia ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/pinia/dist/index.cjs'); console.log('pinia CJS OK:', Object.keys(m))"
           node -e "import('./packages/tauri/dist/index.js').then(m => console.log('tauri ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/tauri/dist/index.cjs'); console.log('tauri CJS OK:', Object.keys(m))"
+          node -e "import('./packages/zustand/dist/index.js').then(m => console.log('zustand ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/zustand/dist/index.cjs'); console.log('zustand CJS OK:', Object.keys(m))"
+          node -e "import('./packages/valtio/dist/index.js').then(m => console.log('valtio ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/valtio/dist/index.cjs'); console.log('valtio CJS OK:', Object.keys(m))"
+          node -e "import('./packages/svelte/dist/index.js').then(m => console.log('svelte ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/svelte/dist/index.cjs'); console.log('svelte CJS OK:', Object.keys(m))"
+          node -e "import('./packages/vue/dist/index.js').then(m => console.log('vue ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/vue/dist/index.cjs'); console.log('vue CJS OK:', Object.keys(m))"
 
   rust:
     runs-on: ubuntu-latest

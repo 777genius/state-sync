@@ -50,4 +50,4 @@ const applier = createPiniaSnapshotApplier(store, { mode: 'replace' });
 - `pickKeys` / `omitKeys` — limit which keys are updated
 - `strict` (default: `true`) — throw if `toState` returns a non-object
 
-See [adapter docs](../../docs/adapters/pinia.md).
+See [full documentation](https://github.com/777genius/state-sync/blob/main/docs/adapters/pinia.md).

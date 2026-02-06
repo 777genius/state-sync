@@ -55,4 +55,4 @@ Creates a sync handle for the given topic.
 - `refresh()` — one-shot fetch + apply
 - `getLocalRevision()` — current local revision
 
-See the [lifecycle contract](../../docs/lifecycle.md).
+See the [lifecycle contract](https://github.com/777genius/state-sync/blob/main/docs/lifecycle.md).

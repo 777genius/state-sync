@@ -1,6 +1,6 @@
 {
   "name": "@statesync/core",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Framework-agnostic state synchronization engine with revision protocol",
   "type": "module",
   "exports": {
@@ -19,6 +19,7 @@
   ],
   "sideEffects": false,
   "license": "MIT",
+  "author": "777genius <iliyazelenkog@gmail.com>",
   "keywords": [
     "state-sync",
     "state",

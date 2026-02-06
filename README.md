@@ -1,6 +1,7 @@
 # state-sync
 
 [![npm @statesync/core](https://img.shields.io/npm/v/@statesync/core?label=%40statesync%2Fcore)](https://www.npmjs.com/package/@statesync/core)
+[![npm @statesync/persistence](https://img.shields.io/npm/v/@statesync/persistence?label=%40statesync%2Fpersistence)](https://www.npmjs.com/package/@statesync/persistence)
 [![npm @statesync/pinia](https://img.shields.io/npm/v/@statesync/pinia?label=%40statesync%2Fpinia)](https://www.npmjs.com/package/@statesync/pinia)
 [![npm @statesync/zustand](https://img.shields.io/npm/v/@statesync/zustand?label=%40statesync%2Fzustand)](https://www.npmjs.com/package/@statesync/zustand)
 [![npm @statesync/valtio](https://img.shields.io/npm/v/@statesync/valtio?label=%40statesync%2Fvaltio)](https://www.npmjs.com/package/@statesync/valtio)
@@ -62,6 +63,7 @@ If invalidations come in fast (or the transport drops/duplicates), the engine ai
 | Package | What it is |
 |---|---|
 | [`@statesync/core`](packages/core/) | Engine + revision protocol + types |
+| [`@statesync/persistence`](packages/persistence/) | Persistence layer (localStorage, IndexedDB, cross-tab sync) |
 | [`@statesync/pinia`](packages/pinia/) | Pinia snapshot applier adapter |
 | [`@statesync/zustand`](packages/zustand/) | Zustand snapshot applier adapter |
 | [`@statesync/valtio`](packages/valtio/) | Valtio snapshot applier adapter |
@@ -73,6 +75,9 @@ If invalidations come in fast (or the transport drops/duplicates), the engine ai
 
 ```bash
 npm install @statesync/core
+
+# Persistence (optional):
+npm install @statesync/persistence  # localStorage, IndexedDB, cross-tab sync
 
 # Framework adapters (pick one):
 npm install @statesync/pinia    # Pinia

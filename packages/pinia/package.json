@@ -1,6 +1,6 @@
 {
   "name": "@statesync/pinia",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Pinia adapter for state-sync — automatic store synchronization",
   "type": "module",
   "exports": {
@@ -19,6 +19,7 @@
   ],
   "sideEffects": false,
   "license": "MIT",
+  "author": "777genius <iliyazelenkog@gmail.com>",
   "keywords": [
     "state-sync",
     "pinia",
@@ -37,7 +38,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@statesync/core": "*"
+    "@statesync/core": "^1.0.0"
   },
   "devDependencies": {
     "@statesync/core": "workspace:*"

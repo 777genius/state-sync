@@ -23,6 +23,7 @@ export default defineConfig({
 
     nav: [
       { text: 'Guide', link: '/guide/quickstart' },
+      { text: 'Comparison', link: '/comparison' },
       { text: 'API', link: '/api/' },
       {
         text: 'Packages',
@@ -94,6 +95,12 @@ export default defineConfig({
         },
       ],
       '/': [
+        {
+          text: 'Introduction',
+          items: [
+            { text: 'Comparison', link: '/comparison' },
+          ],
+        },
         {
           text: 'Reference',
           items: [

@@ -1,6 +1,6 @@
 {
   "name": "@statesync/tauri",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "Tauri transport layer for state-sync — event-based subscriber and provider",
   "type": "module",
   "exports": {
@@ -19,6 +19,7 @@
   ],
   "sideEffects": false,
   "license": "MIT",
+  "author": "777genius <iliyazelenkog@gmail.com>",
   "keywords": [
     "state-sync",
     "tauri",
@@ -37,7 +38,7 @@
     "node": ">=18"
   },
   "peerDependencies": {
-    "@statesync/core": "*",
+    "@statesync/core": "^1.0.0",
     "@tauri-apps/api": ">=2"
   },
   "peerDependenciesMeta": {

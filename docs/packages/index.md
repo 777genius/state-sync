@@ -7,6 +7,7 @@ title: Packages
 ## Core
 
 - [`@statesync/core`](/packages/core) — engine + protocol + helpers.
+- [`@statesync/persistence`](/packages/persistence) — storage backends, caching, migration, cross-tab sync.
 
 ## Framework adapters
 
