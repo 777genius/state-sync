@@ -27,10 +27,7 @@ export default withMermaid(
       ['meta', { property: 'og:url', content: SITE_URL }],
       ['meta', { name: 'twitter:card', content: 'summary' }],
       ['meta', { name: 'twitter:title', content: SITE_TITLE }],
-      [
-        'meta',
-        { name: 'twitter:description', content: SITE_DESCRIPTION },
-      ],
+      ['meta', { name: 'twitter:description', content: SITE_DESCRIPTION }],
     ],
 
     cleanUrls: true,
