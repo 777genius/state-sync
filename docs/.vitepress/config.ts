@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress';
+import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms';
 import { withMermaid } from 'vitepress-plugin-mermaid';
-import llmstxt from 'vitepress-plugin-llms';
-import { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms';
 
 const REPO = 'state-sync';
 const IS_GH_ACTIONS = process.env.GITHUB_ACTIONS === 'true';
@@ -10,7 +9,8 @@ export default withMermaid(
   defineConfig({
     lang: 'en-US',
     title: 'state-sync',
-    description: 'Reliable state synchronization between windows/processes using revision + snapshot',
+    description:
+      'Reliable state synchronization between windows/processes using revision + snapshot',
 
     // For GitHub Pages you typically set base to "/<repo>/".
     // Keep "/" by default; adjust if you deploy under a subpath.
