@@ -25,7 +25,11 @@
     "state",
     "synchronization",
     "revision",
-    "framework-agnostic"
+    "framework-agnostic",
+    "tauri",
+    "multi-window",
+    "cross-tab",
+    "cross-process"
   ],
   "repository": {
     "type": "git",

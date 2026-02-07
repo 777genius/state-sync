@@ -8,6 +8,8 @@
 [![npm @statesync/svelte](https://img.shields.io/npm/v/@statesync/svelte?label=%40statesync%2Fsvelte)](https://www.npmjs.com/package/@statesync/svelte)
 [![npm @statesync/vue](https://img.shields.io/npm/v/@statesync/vue?label=%40statesync%2Fvue)](https://www.npmjs.com/package/@statesync/vue)
 [![npm @statesync/tauri](https://img.shields.io/npm/v/@statesync/tauri?label=%40statesync%2Ftauri)](https://www.npmjs.com/package/@statesync/tauri)
+[![CI](https://github.com/777genius/state-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/777genius/state-sync/actions/workflows/ci.yml)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@statesync/core?label=core%20gzip)](https://bundlephobia.com/package/@statesync/core)
 
 Reliable **state synchronization** between multiple windows/processes (e.g. Tauri multi-window).
 
@@ -233,7 +235,7 @@ const applier = createVueSnapshotApplier(stateRef, {
 - **Compatibility**: `docs/compatibility.md`
 - **Troubleshooting**: `docs/troubleshooting.md`
 - **Examples**: `docs/examples/`
-- **Release checklist**: `docs/release-checklist.md`
+
 
 ## Development
 
