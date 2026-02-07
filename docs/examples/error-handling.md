@@ -6,10 +6,6 @@ title: Error handling & retry
 
 Error handling with automatic retry and graceful degradation.
 
-::: tip
-Proper error handling is crucial for multi-window apps where network/IPC can fail.
-:::
-
 ## Error phases
 
 state-sync categorizes errors by phase:
@@ -191,34 +187,20 @@ function handleSyncError(ctx: SyncErrorContext) {
 }
 
 function scheduleReconnect(sync: ReturnType<typeof createRevisionSync>) {
-  let attempts = 0;
-  const maxAttempts = 10;
-  const baseDelay = 5000;
+  let attempt = 0;
 
-  const tryReconnect = () => {
-    if (attempts >= maxAttempts) {
-      console.error('Max reconnection attempts reached');
-      return;
-    }
-
-    attempts++;
-    const delay = Math.min(baseDelay * Math.pow(1.5, attempts), 60000);
-
-    console.log(`Reconnection attempt ${attempts} in ${delay}ms`);
+  const retry = () => {
+    if (++attempt > 10) return;
+    const delay = Math.min(5000 * 1.5 ** attempt, 60_000);
 
     setTimeout(() => {
-      sync.refresh().then(() => {
-        state.syncStatus = 'synced';
-        state.error = null;
-        attempts = 0;
-        console.log('Reconnected successfully');
-      }).catch(() => {
-        tryReconnect();
-      });
+      sync.refresh()
+        .then(() => { state.syncStatus = 'synced'; state.error = null; })
+        .catch(retry);
     }, delay);
   };
 
-  tryReconnect();
+  retry();
 }
 ```
 

@@ -5,16 +5,33 @@ import { withMermaid } from 'vitepress-plugin-mermaid';
 const REPO = 'state-sync';
 const IS_GH_ACTIONS = process.env.GITHUB_ACTIONS === 'true';
 
+const SITE_URL = 'https://777genius.github.io/state-sync/';
+const SITE_TITLE = 'state-sync';
+const SITE_DESCRIPTION =
+  'Reliable state synchronization between windows/processes using revision + snapshot';
+
 export default withMermaid(
   defineConfig({
     lang: 'en-US',
-    title: 'state-sync',
-    description:
-      'Reliable state synchronization between windows/processes using revision + snapshot',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
 
     // For GitHub Pages you typically set base to "/<repo>/".
     // Keep "/" by default; adjust if you deploy under a subpath.
     base: IS_GH_ACTIONS ? `/${REPO}/` : '/',
+
+    head: [
+      ['meta', { property: 'og:type', content: 'website' }],
+      ['meta', { property: 'og:title', content: SITE_TITLE }],
+      ['meta', { property: 'og:description', content: SITE_DESCRIPTION }],
+      ['meta', { property: 'og:url', content: SITE_URL }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['meta', { name: 'twitter:title', content: SITE_TITLE }],
+      [
+        'meta',
+        { name: 'twitter:description', content: SITE_DESCRIPTION },
+      ],
+    ],
 
     cleanUrls: true,
     lastUpdated: true,

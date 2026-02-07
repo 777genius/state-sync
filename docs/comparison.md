@@ -133,49 +133,6 @@ await store.set('theme', 'dark')
 
 ---
 
-## Key Features
-
-### Revision Ordering
-
-```ts
-// Stale snapshots automatically rejected
-// rev 5 → rev 3 (skip) → rev 7 (apply)
-```
-
-### Throttling
-
-```ts
-throttling: {
-  debounceMs: 100,  // Wait for silence
-  throttleMs: 500,  // Max 1 refresh per 500ms
-  maxWaitMs: 2000,  // Force after 2s
-}
-```
-
-### Error Handling + Retry
-
-```ts
-onError: (ctx) => {
-  // ctx.phase: 'subscribe' | 'getSnapshot' | 'apply'
-  console.error(`${ctx.phase} failed:`, ctx.error)
-},
-retry: { maxAttempts: 3, initialDelayMs: 100 }
-```
-
-### Persistence (separate package)
-
-```ts
-import { createPersistenceApplier, createLZCompressionAdapter } from '@statesync/persistence'
-
-createPersistenceApplier({
-  storage: createLocalStorageBackend({ key: 'state' }),
-  compression: createLZCompressionAdapter(), // 40-60% smaller
-  throttling: { debounceMs: 300 },
-})
-```
-
----
-
 ## Bundle Size (minified + gzipped)
 
 | Package | Size |

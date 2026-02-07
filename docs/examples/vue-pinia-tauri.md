@@ -35,9 +35,7 @@ use std::sync::Mutex;
 use tauri::{AppHandle, Emitter, Manager, State, WebviewWindow};
 use serde::{Deserialize, Serialize};
 
-// ============================================================================
 // Types
-// ============================================================================
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -91,9 +89,7 @@ impl Default for AppState {
     }
 }
 
-// ============================================================================
 // Commands
-// ============================================================================
 
 /// Get current settings snapshot
 #[tauri::command]
@@ -137,86 +133,7 @@ pub fn update_settings(
     Ok(envelope)
 }
 
-/// Update a single setting field
-#[tauri::command]
-pub fn update_setting(
-    window: WebviewWindow,
-    app: AppHandle,
-    state: State<'_, Mutex<AppState>>,
-    key: String,
-    value: serde_json::Value,
-) -> Result<SnapshotEnvelope, String> {
-    let mut state = state.lock().unwrap();
-
-    // Update specific field
-    match key.as_str() {
-        "theme" => {
-            state.settings.theme = value.as_str().unwrap_or("system").to_string();
-        }
-        "language" => {
-            state.settings.language = value.as_str().unwrap_or("en").to_string();
-        }
-        "fontSize" => {
-            state.settings.font_size = value.as_u64().unwrap_or(14) as u32;
-        }
-        "notificationsEnabled" => {
-            state.settings.notifications_enabled = value.as_bool().unwrap_or(true);
-        }
-        "autoSave" => {
-            state.settings.auto_save = value.as_bool().unwrap_or(true);
-        }
-        "sidebarCollapsed" => {
-            state.settings.sidebar_collapsed = value.as_bool().unwrap_or(false);
-        }
-        _ => return Err(format!("Unknown setting key: {}", key)),
-    }
-
-    state.revision += 1;
-
-    let envelope = SnapshotEnvelope {
-        revision: state.revision.to_string(),
-        data: state.settings.clone(),
-    };
-
-    let event = InvalidationEvent {
-        topic: "settings".to_string(),
-        revision: state.revision.to_string(),
-        source_id: Some(window.label().to_string()),
-    };
-
-    app.emit("settings:invalidated", &event)
-        .map_err(|e| e.to_string())?;
-
-    Ok(envelope)
-}
-
-/// Open settings window
-#[tauri::command]
-pub fn open_settings_window(app: AppHandle) -> Result<(), String> {
-    // Check if window already exists
-    if let Some(window) = app.get_webview_window("settings") {
-        window.set_focus().map_err(|e| e.to_string())?;
-        return Ok(());
-    }
-
-    // Create new settings window
-    tauri::WebviewWindowBuilder::new(
-        &app,
-        "settings",
-        tauri::WebviewUrl::App("/settings".into()),
-    )
-    .title("Settings")
-    .inner_size(500.0, 600.0)
-    .resizable(true)
-    .build()
-    .map_err(|e| e.to_string())?;
-
-    Ok(())
-}
-
-// ============================================================================
 // App Entry
-// ============================================================================
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -225,8 +142,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_settings,
             update_settings,
-            update_setting,
-            open_settings_window,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -407,13 +322,17 @@ export async function updateSetting<K extends keyof Settings>(
   value: Settings[K]
 ) {
   const store = useSettingsStore();
-  store.isSaving = true;
+  const currentSettings = {
+    theme: store.theme,
+    language: store.language,
+    fontSize: store.fontSize,
+    notificationsEnabled: store.notificationsEnabled,
+    autoSave: store.autoSave,
+    sidebarCollapsed: store.sidebarCollapsed,
+    [key]: value,
+  };
 
-  try {
-    await invoke('update_setting', { key, value });
-  } finally {
-    store.isSaving = false;
-  }
+  await updateSettings(currentSettings);
 }
 ```
 

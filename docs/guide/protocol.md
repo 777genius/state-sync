@@ -27,17 +27,14 @@ Why this works:
 | **Coalescing** | If multiple invalidation events arrive while a refresh is in progress, only one additional refresh is queued — not one per event |
 | **Snapshot** | Full state fetched from the provider (`{ revision, data }`) |
 
-## InvalidationEvent
+## Contracts
 
-Minimal contract:
-- `topic: string`
-- `revision: Revision` (canonical decimal `u64` string, e.g. `"0"`, `"42"`, `"18446744073709551615"`)
+| Type | Fields |
+|------|--------|
+| `InvalidationEvent` | `topic: string`, `revision: Revision` |
+| `SnapshotEnvelope<T>` | `revision: Revision`, `data: T` |
 
-## SnapshotEnvelope
-
-Minimal contract:
-- `revision: Revision`
-- `data: T`
+`Revision` is a canonical decimal `u64` string (e.g. `"0"`, `"42"`, `"18446744073709551615"`).
 
 ## What is a protocol error
 

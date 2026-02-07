@@ -123,71 +123,9 @@ export function setupSettingsSync() {
 For the complete Rust backend + multi-window setup, see [Vue + Pinia + Tauri example](/examples/vue-pinia-tauri).
 :::
 
-## Example: Browser tabs (BroadcastChannel)
+## Browser tabs (BroadcastChannel)
 
-```typescript
-import { createRevisionSync } from '@statesync/core';
-import { createZustandSnapshotApplier } from '@statesync/zustand';
-import { useSettingsStore } from './stores/settings';
-
-// Shared state in localStorage (or IndexedDB)
-let currentRevision = 0;
-let currentSettings = { theme: 'light', language: 'en' };
-
-// Single channel instance for the tab lifetime
-const channel = new BroadcastChannel('settings-sync');
-
-function createBrowserTabSync() {
-  const subscriber = {
-    async subscribe(handler) {
-      const listener = (e: MessageEvent) => handler(e.data);
-      channel.addEventListener('message', listener);
-      // Return cleanup that removes listener (not closes channel)
-      return () => channel.removeEventListener('message', listener);
-    }
-  };
-
-  const provider = {
-    async getSnapshot() {
-      // In real app: fetch from localStorage or API
-      return {
-        revision: currentRevision.toString(),
-        data: currentSettings,
-      };
-    }
-  };
-
-  const sync = createRevisionSync({
-    topic: 'settings',
-    subscriber,
-    provider,
-    applier: createZustandSnapshotApplier(useSettingsStore),
-  });
-
-  return sync;
-}
-
-// When local state changes, notify other tabs
-function broadcastChange(settings) {
-  currentRevision++;
-  currentSettings = settings;
-
-  // Reuse existing channel
-  channel.postMessage({
-    topic: 'settings',
-    revision: currentRevision.toString(),
-  });
-}
-
-// Call on app unmount
-function cleanup() {
-  channel.close();
-}
-```
-
-## Persistence + Cross-tab sync
-
-Use `@statesync/persistence` for automatic cross-tab synchronization:
+For browser tab sync, use `@statesync/persistence` which handles BroadcastChannel automatically:
 
 ```typescript
 import { createRevisionSync } from '@statesync/core';

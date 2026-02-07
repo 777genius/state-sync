@@ -124,20 +124,6 @@ The `phase` field in `SyncErrorContext` helps you quickly identify the source of
 **Cause**: error in the throttle/coalescing layer.
 **Action**: check throttling configuration values.
 
-## Useful context fields
-
-Besides `phase`, the engine may populate (best-effort):
-- `localRevision` — local revision at the time of the error
-- `eventRevision` — revision from the invalidation event
-- `snapshotRevision` — snapshot revision
-- `sourceId` — change originator (if transport provides it)
-- `sourceEvent` — raw event payload (transport-specific)
-- `attempt` — current retry attempt number
-- `willRetry` — whether the engine will retry
-- `nextDelayMs` — delay before next retry
-
-See [Lifecycle contract](/lifecycle#observability-fields-best-effort) for the full table.
-
 ## onError throws
 
 If the `onError` callback throws, the engine catches and logs it. The engine keeps running — a user callback cannot bring down the sync loop.

@@ -6,10 +6,6 @@ title: Persistence with migrations
 
 Handle data format changes gracefully when your app evolves.
 
-::: tip
-Schema migrations let you update persisted data format without losing user data.
-:::
-
 ## The problem
 
 Your app stores user preferences in localStorage:
@@ -47,10 +43,7 @@ import {
 } from '@statesync/persistence';
 import { createRevisionSync } from '@statesync/core';
 
-// ============================================================================
 // Type definitions for each version
-// ============================================================================
-
 interface SettingsV1 {
   darkMode: boolean;
 }
@@ -69,10 +62,7 @@ interface SettingsV3 {
 // Current version is always the latest
 type Settings = SettingsV3;
 
-// ============================================================================
 // Migration definitions
-// ============================================================================
-
 const migration = createMigrationBuilder<Settings>()
   // V1 → V2: Add language field
   .addMigration<SettingsV1, SettingsV2>(1, (v1) => ({
@@ -87,18 +77,12 @@ const migration = createMigrationBuilder<Settings>()
   }))
   .build(3); // Current schema version
 
-// ============================================================================
 // Storage setup
-// ============================================================================
-
 const storage = createLocalStorageBackend<Settings>({
   key: 'app-settings',
 });
 
-// ============================================================================
 // Load with migration
-// ============================================================================
-
 async function loadSettings(applier: { apply: (snapshot: any) => void }) {
   const result = await loadPersistedSnapshot(storage, applier, {
     migration,
@@ -120,10 +104,7 @@ async function loadSettings(applier: { apply: (snapshot: any) => void }) {
   return result;
 }
 
-// ============================================================================
 // Validation
-// ============================================================================
-
 function isValidSettings(data: unknown): data is Settings {
   if (!data || typeof data !== 'object') return false;
 
@@ -139,10 +120,7 @@ function isValidSettings(data: unknown): data is Settings {
   );
 }
 
-// ============================================================================
 // Full example
-// ============================================================================
-
 async function main() {
   // Your applier (e.g., Zustand, Pinia, or custom)
   let currentSettings: Settings = {
@@ -221,23 +199,6 @@ User has V3 data: { theme: 'dark', language: 'es', fontSize: 16 }
 → Load detects schemaVersion: 3
 → No migration needed
 → Data used as-is
-```
-
-## Advanced: Custom migration logic
-
-```typescript
-const migration = createMigrationBuilder<Settings>()
-  .addMigration<SettingsV2, SettingsV3>(2, (v2) => {
-    // Complex migration logic
-    const theme: Settings['theme'] = v2.darkMode ? 'dark' : 'light';
-
-    return {
-      theme,
-      language: v2.language || 'en',
-      fontSize: 14,
-    };
-  })
-  .build(3);
 ```
 
 ## Handling migration failures

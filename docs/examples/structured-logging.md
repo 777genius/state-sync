@@ -92,7 +92,7 @@ function getErrorCountByPhase(phase: SyncPhase): number {
 
 const topic = 'settings';
 
-const handle = createRevisionSync({
+const sync = createRevisionSync({
   topic,
   subscriber: { subscribe: async () => () => {} },
   provider: { getSnapshot: async () => ({ revision: '1' as never, data: {} }) },
@@ -102,7 +102,7 @@ const handle = createRevisionSync({
 });
 
 // Start sync
-await handle.start();
+await sync.start();
 
 // After some time, inspect metrics:
 console.log(getErrorMetrics());
@@ -127,7 +127,7 @@ For simpler cases, use the built-in `createConsoleLogger`:
 ```typescript
 import { createConsoleLogger, createRevisionSync } from '@statesync/core';
 
-const handle = createRevisionSync({
+const sync = createRevisionSync({
   topic: 'settings',
   subscriber,
   provider,
