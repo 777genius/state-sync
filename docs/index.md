@@ -12,6 +12,9 @@ hero:
       text: Examples
       link: /examples/
     - theme: alt
+      text: Architecture
+      link: /architecture
+    - theme: alt
       text: Comparison
       link: /comparison
 features:

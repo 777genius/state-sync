@@ -26,11 +26,14 @@
     "@biomejs/biome": "^2.3.13",
     "@changesets/changelog-git": "^0.2.0",
     "@changesets/cli": "^2.29.8",
+    "mermaid": "^11.12.2",
     "tsup": "^8.5.1",
+    "typedoc": "^0.28.0",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.9.3",
     "vitepress": "^1.6.4",
-    "vitest": "^4.0.18",
-    "typedoc": "^0.28.0",
-    "typedoc-plugin-markdown": "^4.9.0"
+    "vitepress-plugin-llms": "^1.11.0",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "vitest": "^4.0.18"
   }
 }
