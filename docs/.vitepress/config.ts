@@ -19,6 +19,10 @@ export default withMermaid(
     cleanUrls: true,
     lastUpdated: true,
 
+    sitemap: {
+      hostname: 'https://777genius.github.io/state-sync/',
+    },
+
     vite: {
       plugins: [llmstxt()],
     },
