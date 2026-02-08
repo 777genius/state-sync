@@ -8,9 +8,23 @@ Transport adapter for Tauri v2 applications.
 
 ## Installation
 
+### Frontend (TypeScript)
+
 ```bash
 npm install @statesync/tauri @statesync/core
 ```
+
+### Backend (Rust)
+
+Add the `state-sync` crate to your Tauri backend for shared protocol types:
+
+```toml
+# src-tauri/Cargo.toml
+[dependencies]
+state-sync = "0.1"
+```
+
+This gives you [`Revision`](#revision), [`SnapshotEnvelope<T>`](#snapshotenvelope), [`InvalidationEvent`](#invalidationevent), and [`compare_revisions()`](#compare_revisions) — no need to define them yourself.
 
 ## Quick start
 
@@ -49,8 +63,10 @@ await sync.start();
 Your Rust backend needs two things: a `get_*` command returning `{ revision, data }` and an `emit()` call on state change.
 
 ```rust
+use state_sync::{InvalidationEvent, Revision, SnapshotEnvelope};
+
 #[tauri::command]
-fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
+fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope<Settings> {
     let state = state.lock().unwrap();
     SnapshotEnvelope {
         revision: state.revision.to_string(),
@@ -59,16 +75,24 @@ fn get_settings(state: State<'_, Mutex<AppState>>) -> SnapshotEnvelope {
 }
 
 #[tauri::command]
-fn update_settings(app: AppHandle, state: State<'_, Mutex<AppState>>, settings: Settings) -> Result<SnapshotEnvelope, String> {
+fn update_settings(
+    app: AppHandle,
+    state: State<'_, Mutex<AppState>>,
+    settings: Settings,
+) -> Result<SnapshotEnvelope<Settings>, String> {
     let mut state = state.lock().unwrap();
     state.settings = settings;
-    state.revision += 1;
-    // Emit invalidation → state-sync picks it up
+    state.revision = state.revision.next();
+
     app.emit("settings:invalidated", InvalidationEvent {
         topic: "settings".to_string(),
         revision: state.revision.to_string(),
     }).map_err(|e| e.to_string())?;
-    Ok(SnapshotEnvelope { revision: state.revision.to_string(), data: state.settings.clone() })
+
+    Ok(SnapshotEnvelope {
+        revision: state.revision.to_string(),
+        data: state.settings.clone(),
+    })
 }
 ```
 
@@ -202,6 +226,62 @@ pub fn clear_settings_file(app: AppHandle) -> Result<(), String> {
 | `throttling` | `object` | No | Throttling options |
 | `onError` | `function` | No | Error callback |
 | `logger` | `Logger` | No | Logger instance |
+
+## Rust crate API {#rust-crate-api}
+
+The `state-sync` Rust crate provides shared protocol types so you don't have to define them yourself.
+
+### Revision {#revision}
+
+Monotonic `u64` counter with saturating arithmetic — never wraps to zero.
+
+```rust
+use state_sync::Revision;
+
+let rev = Revision::new(0);
+let next = rev.next(); // Revision(1)
+
+// Display, From<u64>, Into<u64>, Ord, Serialize, Deserialize
+assert_eq!(next.to_string(), "1");
+```
+
+### SnapshotEnvelope\<T\> {#snapshotenvelope}
+
+Generic envelope returned by `getSnapshot` commands. Matches the TypeScript protocol shape.
+
+```rust
+use state_sync::SnapshotEnvelope;
+
+let envelope = SnapshotEnvelope {
+    revision: "42".to_string(),
+    data: my_app_state, // your Serialize + Deserialize type
+};
+// JSON → {"revision":"42","data":{...}}
+```
+
+### InvalidationEvent {#invalidationevent}
+
+Event emitted via `app.emit()` when state changes. The frontend subscribes and pulls a fresh snapshot.
+
+```rust
+use state_sync::InvalidationEvent;
+
+let event = InvalidationEvent {
+    topic: "settings".to_string(),
+    revision: "42".to_string(),
+};
+```
+
+### compare_revisions() {#compare_revisions}
+
+Compare two revision strings using canonical `u64` decimal ordering (length-first, then lexicographic).
+
+```rust
+use state_sync::compare_revisions;
+use std::cmp::Ordering;
+
+assert_eq!(compare_revisions("9", "10"), Ordering::Less);
+```
 
 ## Peer dependencies
 
