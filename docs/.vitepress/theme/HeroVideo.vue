@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress';
+
 const videoSources = {
-  webm: '/video/hero.webm',
-  mp4: '/video/hero.mp4',
+  webm: withBase('/video/hero.webm'),
+  mp4: withBase('/video/hero.mp4'),
 };
 </script>
 

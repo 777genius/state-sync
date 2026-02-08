@@ -28,6 +28,7 @@
 
 use serde::{Deserialize, Serialize};
 use std::fmt;
+use std::num::ParseIntError;
 
 /// A monotonic state version backed by `u64`.
 ///
@@ -88,6 +89,24 @@ impl From<Revision> for u64 {
     }
 }
 
+impl std::str::FromStr for Revision {
+    type Err = ParseIntError;
+
+    /// Parse a canonical `u64` decimal string into a [`Revision`].
+    ///
+    /// ```
+    /// use state_sync::Revision;
+    ///
+    /// let rev: Revision = "42".parse().unwrap();
+    /// assert_eq!(rev.value(), 42);
+    ///
+    /// assert!("not_a_number".parse::<Revision>().is_err());
+    /// ```
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        s.parse::<u64>().map(Self)
+    }
+}
+
 /// A snapshot envelope carrying state data alongside its revision.
 ///
 /// This is the canonical shape returned by `getSnapshot` commands.
@@ -122,7 +141,7 @@ pub struct SnapshotEnvelope<T> {
 ///     revision: "42".to_string(),
 /// };
 /// ```
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct InvalidationEvent {
     /// Topic identifier (e.g. `"settings"`, `"user_profile"`).
     pub topic: String,
@@ -130,10 +149,29 @@ pub struct InvalidationEvent {
     pub revision: String,
 }
 
-/// Compare two revision strings using the canonical `u64` decimal ordering.
+/// Compare two revision strings using canonical `u64` decimal ordering.
 ///
-/// Returns `Ordering::Less`, `Equal`, or `Greater`.
-/// Longer strings represent larger numbers (no leading zeros assumed).
+/// Returns [`Ordering::Less`], [`Ordering::Equal`], or [`Ordering::Greater`].
+///
+/// # Preconditions
+///
+/// Both `a` and `b` **must** be canonical `u64` decimal strings:
+///
+/// * Only ASCII digits `0`–`9`.
+/// * No leading zeros (e.g. `"042"` is **not** valid — use `"42"`).
+/// * No whitespace, signs, or other non-numeric characters.
+///
+/// The comparison works by first comparing string lengths (a longer
+/// decimal string is always a larger number when there are no leading
+/// zeros), then falling back to lexicographic comparison for
+/// equal-length strings.
+///
+/// # Note
+///
+/// Passing strings that violate the preconditions (leading zeros,
+/// non-digit characters, empty strings) will **not** panic, but the
+/// returned ordering may be meaningless. Callers are responsible for
+/// ensuring inputs are well-formed.
 ///
 /// ```
 /// use state_sync::compare_revisions;
@@ -191,10 +229,7 @@ mod tests {
 
     #[test]
     fn snapshot_envelope_serialize() {
-        let envelope = SnapshotEnvelope {
-            revision: "1".to_string(),
-            data: 42,
-        };
+        let envelope = SnapshotEnvelope { revision: "1".to_string(), data: 42 };
         let json = serde_json::to_string(&envelope).unwrap();
         assert!(json.contains("\"revision\":\"1\""));
         assert!(json.contains("\"data\":42"));
@@ -202,10 +237,7 @@ mod tests {
 
     #[test]
     fn invalidation_event_serialize() {
-        let event = InvalidationEvent {
-            topic: "test".to_string(),
-            revision: "5".to_string(),
-        };
+        let event = InvalidationEvent { topic: "test".to_string(), revision: "5".to_string() };
         let json = serde_json::to_string(&event).unwrap();
         assert!(json.contains("\"topic\":\"test\""));
         assert!(json.contains("\"revision\":\"5\""));
@@ -227,10 +259,7 @@ mod tests {
 
     #[test]
     fn snapshot_envelope_roundtrip() {
-        let original = SnapshotEnvelope {
-            revision: "42".to_string(),
-            data: vec![1, 2, 3],
-        };
+        let original = SnapshotEnvelope { revision: "42".to_string(), data: vec![1, 2, 3] };
         let json = serde_json::to_string(&original).unwrap();
         let restored: SnapshotEnvelope<Vec<i32>> = serde_json::from_str(&json).unwrap();
         assert_eq!(original, restored);
@@ -238,10 +267,8 @@ mod tests {
 
     #[test]
     fn invalidation_event_roundtrip() {
-        let original = InvalidationEvent {
-            topic: "settings".to_string(),
-            revision: "100".to_string(),
-        };
+        let original =
+            InvalidationEvent { topic: "settings".to_string(), revision: "100".to_string() };
         let json = serde_json::to_string(&original).unwrap();
         let restored: InvalidationEvent = serde_json::from_str(&json).unwrap();
         assert_eq!(original, restored);
@@ -261,6 +288,26 @@ mod tests {
         assert_eq!(json, "42");
         let restored: Revision = serde_json::from_str("42").unwrap();
         assert_eq!(restored, rev);
+    }
+
+    #[test]
+    fn revision_from_str_success() {
+        let rev: Revision = "42".parse().unwrap();
+        assert_eq!(rev.value(), 42);
+
+        let zero: Revision = "0".parse().unwrap();
+        assert_eq!(zero.value(), 0);
+
+        let max: Revision = "18446744073709551615".parse().unwrap();
+        assert_eq!(max.value(), u64::MAX);
+    }
+
+    #[test]
+    fn revision_from_str_error() {
+        assert!("".parse::<Revision>().is_err());
+        assert!("not_a_number".parse::<Revision>().is_err());
+        assert!("-1".parse::<Revision>().is_err());
+        assert!("18446744073709551616".parse::<Revision>().is_err()); // u64::MAX + 1
     }
 
     #[test]

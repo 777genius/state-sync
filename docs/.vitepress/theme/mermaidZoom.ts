@@ -1,4 +1,4 @@
-import { nextTick, onMounted, watch, type Ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, watch, type Ref } from 'vue';
 
 let backdrop: HTMLElement | null = null;
 let activeDiagram: HTMLElement | null = null;
@@ -126,4 +126,13 @@ export function useMermaidZoom(pagePath: Ref<string>) {
     nextTick(setupMermaidZoom);
   });
   watch(pagePath, () => nextTick(setupMermaidZoom));
+
+  onBeforeUnmount(() => {
+    document.removeEventListener('keydown', handleKeydown);
+    close();
+    if (backdrop) {
+      backdrop.remove();
+      backdrop = null;
+    }
+  });
 }

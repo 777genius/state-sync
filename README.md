@@ -1,17 +1,10 @@
 # state-sync
 
-[![npm @statesync/core](https://img.shields.io/npm/v/@statesync/core?label=%40statesync%2Fcore)](https://www.npmjs.com/package/@statesync/core)
-[![npm @statesync/persistence](https://img.shields.io/npm/v/@statesync/persistence?label=%40statesync%2Fpersistence)](https://www.npmjs.com/package/@statesync/persistence)
-[![npm @statesync/pinia](https://img.shields.io/npm/v/@statesync/pinia?label=%40statesync%2Fpinia)](https://www.npmjs.com/package/@statesync/pinia)
-[![npm @statesync/zustand](https://img.shields.io/npm/v/@statesync/zustand?label=%40statesync%2Fzustand)](https://www.npmjs.com/package/@statesync/zustand)
-[![npm @statesync/valtio](https://img.shields.io/npm/v/@statesync/valtio?label=%40statesync%2Fvaltio)](https://www.npmjs.com/package/@statesync/valtio)
-[![npm @statesync/svelte](https://img.shields.io/npm/v/@statesync/svelte?label=%40statesync%2Fsvelte)](https://www.npmjs.com/package/@statesync/svelte)
-[![npm @statesync/vue](https://img.shields.io/npm/v/@statesync/vue?label=%40statesync%2Fvue)](https://www.npmjs.com/package/@statesync/vue)
-[![npm @statesync/tauri](https://img.shields.io/npm/v/@statesync/tauri?label=%40statesync%2Ftauri)](https://www.npmjs.com/package/@statesync/tauri)
-[![CI](https://github.com/777genius/state-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/777genius/state-sync/actions/workflows/ci.yml)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@statesync/core?label=core%20gzip)](https://bundlephobia.com/package/@statesync/core)
+Scalable, transport-agnostic state synchronization for multi-window and multi-process apps -- fully typed TypeScript with framework adapters for Pinia, Zustand, Valtio, Svelte, and Vue.
 
-Reliable **state synchronization** between multiple windows/processes (e.g. Tauri multi-window).
+**[Documentation](https://777genius.github.io/state-sync/)** | **[Comparison](https://777genius.github.io/state-sync/comparison)** | **[GitHub](https://github.com/777genius/state-sync)**
+
+---
 
 **You provide**:
 - a **subscriber** (an invalidation signal: "something changed, refresh!")
@@ -24,6 +17,7 @@ Reliable **state synchronization** between multiple windows/processes (e.g. Taur
 ## Table of contents
 
 - [What is this?](#what-is-this)
+- [Why state-sync?](#why-state-sync)
 - [How it works (concepts)](#how-it-works-concepts)
 - [Packages](#packages)
 - [Install](#install)
@@ -45,7 +39,15 @@ Typical use cases:
 - Any IPC where you can emit an invalidation + fetch a snapshot
 
 Non-goals:
-- Realtime CRDT merging or fine-grained patches. The model here is **"invalidate → fetch canonical snapshot → apply"**.
+- Realtime CRDT merging or fine-grained patches. The model here is **"invalidate -> fetch canonical snapshot -> apply"**.
+
+## Why state-sync?
+
+- **Tiny footprint.** The core engine is **3.1 KB gzipped**; each framework adapter adds roughly **0.8 KB**.
+- **No vendor lock-in.** Works with any transport (Tauri events, BroadcastChannel, WebSocket, custom IPC) and any state library.
+- **One API for every framework.** The same `createRevisionSync` call works with Pinia, Zustand, Valtio, Svelte, and Vue -- swap one line to switch adapters.
+
+See the [full comparison with alternatives](https://777genius.github.io/state-sync/comparison) for details.
 
 ## How it works (concepts)
 
@@ -92,6 +94,17 @@ npm install @statesync/vue      # Vue (reactive / ref)
 # Transport adapter:
 npm install @statesync/tauri    # Tauri v2
 ```
+
+[![npm @statesync/core](https://img.shields.io/npm/v/@statesync/core?label=%40statesync%2Fcore)](https://www.npmjs.com/package/@statesync/core)
+[![npm @statesync/persistence](https://img.shields.io/npm/v/@statesync/persistence?label=%40statesync%2Fpersistence)](https://www.npmjs.com/package/@statesync/persistence)
+[![npm @statesync/pinia](https://img.shields.io/npm/v/@statesync/pinia?label=%40statesync%2Fpinia)](https://www.npmjs.com/package/@statesync/pinia)
+[![npm @statesync/zustand](https://img.shields.io/npm/v/@statesync/zustand?label=%40statesync%2Fzustand)](https://www.npmjs.com/package/@statesync/zustand)
+[![npm @statesync/valtio](https://img.shields.io/npm/v/@statesync/valtio?label=%40statesync%2Fvaltio)](https://www.npmjs.com/package/@statesync/valtio)
+[![npm @statesync/svelte](https://img.shields.io/npm/v/@statesync/svelte?label=%40statesync%2Fsvelte)](https://www.npmjs.com/package/@statesync/svelte)
+[![npm @statesync/vue](https://img.shields.io/npm/v/@statesync/vue?label=%40statesync%2Fvue)](https://www.npmjs.com/package/@statesync/vue)
+[![npm @statesync/tauri](https://img.shields.io/npm/v/@statesync/tauri?label=%40statesync%2Ftauri)](https://www.npmjs.com/package/@statesync/tauri)
+[![CI](https://github.com/777genius/state-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/777genius/state-sync/actions/workflows/ci.yml)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@statesync/core?label=core%20gzip)](https://bundlephobia.com/package/@statesync/core)
 
 ## Quickstart (core)
 
@@ -152,8 +165,6 @@ await handle.start();
 
 Each adapter creates a `SnapshotApplier` for a specific state management library. All adapters share the same options pattern: `mode` (`'patch'` | `'replace'`), `pickKeys`/`omitKeys`, `toState` mapping, and `strict` mode.
 
-### Pinia
-
 ```ts
 import { createPiniaSnapshotApplier } from '@statesync/pinia';
 
@@ -163,80 +174,29 @@ const applier = createPiniaSnapshotApplier(myPiniaStore, {
 });
 ```
 
-### Zustand
-
-```ts
-import { createZustandSnapshotApplier } from '@statesync/zustand';
-
-const applier = createZustandSnapshotApplier(useMyStore, {
-  mode: 'patch',
-  omitKeys: ['localUiFlag'],
-});
-```
-
-### Valtio
-
-```ts
-import { proxy } from 'valtio';
-import { createValtioSnapshotApplier } from '@statesync/valtio';
-
-const state = proxy({ count: 0, name: 'world' });
-const applier = createValtioSnapshotApplier(state, {
-  mode: 'patch',
-});
-```
-
-### Svelte
-
-```ts
-import { writable } from 'svelte/store';
-import { createSvelteSnapshotApplier } from '@statesync/svelte';
-
-const store = writable({ count: 0, name: 'world' });
-const applier = createSvelteSnapshotApplier(store, {
-  mode: 'patch',
-});
-```
-
-### Vue
-
-```ts
-import { reactive } from 'vue';
-import { createVueSnapshotApplier } from '@statesync/vue';
-
-// With reactive()
-const state = reactive({ count: 0, name: 'world' });
-const applier = createVueSnapshotApplier(state, { mode: 'patch' });
-
-// Or with ref()
-import { ref } from 'vue';
-const stateRef = ref({ count: 0, name: 'world' });
-const applier = createVueSnapshotApplier(stateRef, {
-  target: 'ref',
-  mode: 'patch',
-});
-```
+Every framework adapter follows the same pattern -- swap `createPiniaSnapshotApplier` for `createZustandSnapshotApplier`, `createValtioSnapshotApplier`, `createSvelteSnapshotApplier`, or `createVueSnapshotApplier`. See the [adapter documentation](https://777genius.github.io/state-sync/guide/adapters) for full examples of each.
 
 ### Adapter options (shared across all adapters)
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `mode` | `'patch' \| 'replace'` | `'patch'` | Merge vs full replacement |
-| `pickKeys` | `string[]` | — | Only sync these keys |
-| `omitKeys` | `string[]` | — | Never sync these keys |
+| `pickKeys` | `string[]` | -- | Only sync these keys |
+| `omitKeys` | `string[]` | -- | Never sync these keys |
 | `toState` | `(data, ctx) => State` | identity | Map snapshot data to state shape |
 | `strict` | `boolean` | `true` | Throw if `toState` returns non-object |
 
 ## Docs & examples
 
-- **Getting started**: `docs/guide/quickstart.md`
-- **Protocol**: `docs/guide/protocol.md`
-- **Multi-window guide**: `docs/guide/multi-window.md`
-- **Lifecycle contract**: `docs/lifecycle.md`
-- **Compatibility**: `docs/compatibility.md`
-- **Troubleshooting**: `docs/troubleshooting.md`
-- **Examples**: `docs/examples/`
+Full documentation is hosted at **[777genius.github.io/state-sync](https://777genius.github.io/state-sync/)**.
 
+- **[Getting started](https://777genius.github.io/state-sync/guide/quickstart)**
+- **[Protocol](https://777genius.github.io/state-sync/guide/protocol)**
+- **[Multi-window guide](https://777genius.github.io/state-sync/guide/multi-window)**
+- **[Lifecycle contract](https://777genius.github.io/state-sync/lifecycle)**
+- **[Compatibility](https://777genius.github.io/state-sync/compatibility)**
+- **[Troubleshooting](https://777genius.github.io/state-sync/troubleshooting)**
+- **[Examples](https://777genius.github.io/state-sync/examples/)**
 
 ## Development
 
@@ -252,10 +212,10 @@ pnpm build
 
 The [`state-sync`](crates/state-sync/) Rust crate provides shared protocol types for Tauri (or any Rust) backends:
 
-- **`Revision`** — monotonic `u64` counter with saturating arithmetic
-- **`SnapshotEnvelope<T>`** — generic `{ revision, data }` envelope (serde-ready)
-- **`InvalidationEvent`** — `{ topic, revision }` change notification (serde-ready)
-- **`compare_revisions()`** — canonical `u64` string comparison
+- **`Revision`** -- monotonic `u64` counter with saturating arithmetic
+- **`SnapshotEnvelope<T>`** -- generic `{ revision, data }` envelope (serde-ready)
+- **`InvalidationEvent`** -- `{ topic, revision }` change notification (serde-ready)
+- **`compare_revisions()`** -- canonical `u64` string comparison
 
 ```toml
 # src-tauri/Cargo.toml

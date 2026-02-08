@@ -6,6 +6,7 @@ import { generateApiSidebar } from './apiSidebar';
 
 const REPO = 'state-sync';
 const IS_GH_ACTIONS = process.env.GITHUB_ACTIONS === 'true';
+const base = IS_GH_ACTIONS ? `/${REPO}/` : '/';
 
 const SITE_URL = 'https://777genius.github.io/state-sync/';
 const SITE_TITLE = 'state-sync';
@@ -20,10 +21,10 @@ export default withMermaid(
 
     // For GitHub Pages you typically set base to "/<repo>/".
     // Keep "/" by default; adjust if you deploy under a subpath.
-    base: IS_GH_ACTIONS ? `/${REPO}/` : '/',
+    base,
 
     head: [
-      ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
+      ['link', { rel: 'icon', type: 'image/png', href: `${base}favicon.png` }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:title', content: SITE_TITLE }],
       ['meta', { property: 'og:description', content: SITE_DESCRIPTION }],
