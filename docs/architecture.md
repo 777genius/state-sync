@@ -7,58 +7,44 @@ How state-sync keeps your app state consistent across windows, tabs, and process
 The library implements an **invalidation-pull** protocol: a lightweight event signals that something changed, and the receiver pulls the latest snapshot on demand.
 
 ```mermaid
-flowchart LR
-  subgraph Source["Source of Truth"]
-    B["Backend / Main Process"]
-  end
+sequenceDiagram
+    participant B as Backend
+    participant E as InvalidationEvent
+    participant RS as RevisionSync Engine
+    participant S as SnapshotProvider
+    participant SA as SnapshotApplier
+    participant Store as App State
 
-  subgraph Protocol["Invalidation-Pull Protocol"]
-    direction TB
-    E["InvalidationEvent\n{ topic, revision }"]
-    S["SnapshotEnvelope\n{ revision, data }"]
-  end
-
-  subgraph Consumer["Consumer Window"]
-    direction TB
-    RS[RevisionSync Engine]
-    SA[SnapshotApplier]
-    Store["App State\n(Pinia / Zustand / Vue / ...)"]
-  end
-
-  B -- "1. emit event" --> E
-  E -- "2. notify" --> RS
-  RS -- "3. fetch snapshot" --> S
-  S -- "4. return data" --> RS
-  RS -- "5. apply if newer" --> SA
-  SA -- "6. update" --> Store
-
-  style Source fill:#4f46e5,color:#fff,stroke:#4338ca
-  style Protocol fill:#f59e0b,color:#000,stroke:#d97706
-  style Consumer fill:#10b981,color:#fff,stroke:#059669
+    B->>E: 1. emit { topic, revision }
+    E->>RS: 2. notify
+    RS->>S: 3. fetch snapshot
+    S-->>RS: 4. return { revision, data }
+    RS->>SA: 5. apply if newer
+    SA->>Store: 6. update state
 ```
 
 ## Package structure
 
 ```mermaid
-graph TB
-  Core["@statesync/core\n\nRevisionSync engine\nRevision utilities\nThrottling & retry\nLogger"]
+graph LR
+  Core["@statesync/core"]
 
-  Persistence["@statesync/persistence\n\nStorage backends\nSchema migrations\nCompression\nCross-tab sync"]
+  Persistence["@statesync/persistence"]
+  Tauri["@statesync/tauri"]
 
   Pinia["@statesync/pinia"]
   Zustand["@statesync/zustand"]
   Valtio["@statesync/valtio"]
   VueAdapter["@statesync/vue"]
   Svelte["@statesync/svelte"]
-  Tauri["@statesync/tauri"]
 
   Core --> Persistence
+  Core --> Tauri
   Core --> Pinia
   Core --> Zustand
   Core --> Valtio
   Core --> VueAdapter
   Core --> Svelte
-  Core --> Tauri
 
   subgraph Framework["Framework Adapters"]
     Pinia

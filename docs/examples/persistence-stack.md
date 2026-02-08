@@ -45,20 +45,20 @@ const applier = createPersistenceApplier({
   applier: innerApplier,
 
   // Compress before saving (~40-60% smaller)
-  compression: createLZCompressionAdapter(),
+  compression: createLZCompressionAdapter(), // [!code highlight]
 
   // Expire after 24 hours
-  ttlMs: 24 * 60 * 60 * 1000,
+  ttlMs: 24 * 60 * 60 * 1000, // [!code highlight]
 
   // Sync across browser tabs automatically
-  crossTabSync: {
+  crossTabSync: { // [!code highlight]
     channelName: 'settings-sync',
     receiveUpdates: true,   // Apply snapshots from other tabs
     broadcastSaves: true,   // Notify other tabs on save
   },
 
   // Don't save on every event — wait for 300ms silence
-  throttling: { debounceMs: 300 },
+  throttling: { debounceMs: 300 }, // [!code highlight]
 });
 
 // 4. Load cache BEFORE starting sync (instant UI)
@@ -105,12 +105,12 @@ Other tab receives broadcast:
 
 ```typescript
 // Without compression:
-localStorage.setItem('settings', JSON.stringify(snapshot));
-// Size: ~2.4KB for typical settings object
+localStorage.setItem('settings', JSON.stringify(snapshot)); // [!code --]
+// Size: ~2.4KB for typical settings object // [!code --]
 
 // With createLZCompressionAdapter():
-localStorage.setItem('settings', compressed);
-// Size: ~1.1KB (54% reduction)
+localStorage.setItem('settings', compressed); // [!code ++]
+// Size: ~1.1KB (54% reduction) // [!code ++]
 ```
 
 Built-in LZ compression has no external dependencies. For better ratios, use `createLZStringAdapter()` with the `lz-string` library.

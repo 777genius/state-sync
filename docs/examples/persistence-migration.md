@@ -19,14 +19,14 @@ interface SettingsV1 {
 // Version 2: Added language
 interface SettingsV2 {
   darkMode: boolean;
-  language: string;
+  language: string; // [!code ++]
 }
 
 // Version 3: Renamed darkMode to theme
 interface SettingsV3 {
-  theme: 'light' | 'dark' | 'system';
+  theme: 'light' | 'dark' | 'system'; // [!code ++]
   language: string;
-  fontSize: number;
+  fontSize: number; // [!code ++]
 }
 ```
 
@@ -75,7 +75,7 @@ const migration = createMigrationBuilder<Settings>()
     language: v2.language,
     fontSize: 14, // Default font size
   }))
-  .build(3); // Current schema version
+  .build(3); // Current schema version // [!code highlight]
 
 // Storage setup
 const storage = createLocalStorageBackend<Settings>({

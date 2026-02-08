@@ -1,0 +1,320 @@
+:root {
+  --vp-nav-bg-color: rgba(255, 255, 255, 0.5);
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #3178c6 0%, #22c55e 50%, #f59e0b 100%);
+}
+
+.dark {
+  --vp-nav-bg-color: rgba(30, 30, 32, 0.5);
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #60a5fa 0%, #4ade80 50%, #fbbf24 100%);
+}
+
+/* Force gradient text on hero name (override scoped styles) */
+.VPHero .name.clip {
+  background: var(--vp-home-hero-name-background) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Feature cards: icon + title on same line */
+.VPFeature .box {
+  display: grid !important;
+  grid-template-columns: 48px 1fr !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 12px !important;
+  align-items: center !important;
+}
+
+.VPFeature .box > .icon {
+  grid-row: 1 !important;
+  grid-column: 1 !important;
+  margin-bottom: 0 !important;
+}
+
+.VPFeature .box > .title {
+  grid-row: 1 !important;
+  grid-column: 2 !important;
+}
+
+.VPFeature .box > .details {
+  grid-row: 2 !important;
+  grid-column: 1 / -1 !important;
+}
+
+.VPNavBar {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.VPNavBarTitle .logo {
+  width: 72px;
+  height: 72px;
+}
+
+/* Animated gradient background for hero */
+.VPHero {
+  position: relative;
+}
+
+.VPHero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(49, 120, 198, 0.15) 0%,
+    rgba(34, 197, 94, 0.1) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: hero-glow 6s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dark .VPHero::before {
+  background: radial-gradient(
+    circle,
+    rgba(96, 165, 250, 0.12) 0%,
+    rgba(74, 222, 128, 0.08) 40%,
+    transparent 70%
+  );
+}
+
+@keyframes hero-glow {
+  0% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.15);
+  }
+}
+
+/* Install row: command + badges inline */
+.install-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badges a {
+  text-decoration: none !important;
+}
+
+.badges img {
+  height: 22px;
+}
+
+/* Codeblock collapse */
+.code-collapse-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  background: linear-gradient(transparent, var(--vp-code-block-bg) 70%);
+  cursor: pointer;
+  z-index: 5;
+}
+
+.code-collapse-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 0%, var(--vp-c-brand-soft) 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.code-collapse-overlay:hover::after {
+  opacity: 1;
+}
+
+.code-collapse-overlay:hover .code-collapse-btn {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+
+.code-collapse-overlay.expanded {
+  position: relative;
+  height: auto;
+  background: none;
+  padding-top: 4px;
+  padding-bottom: 0;
+}
+
+.code-collapse-overlay.expanded::after {
+  display: none;
+}
+
+.code-collapse-btn {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.code-collapse-btn:hover {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 0 8px var(--vp-c-brand-soft);
+}
+
+.code-collapse-btn.expanded {
+  transform: rotate(180deg);
+}
+
+.code-collapse-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.code-collapse-overlay:hover .code-collapse-btn svg {
+  animation: bounce-down 0.8s ease infinite;
+}
+
+.code-collapse-overlay.expanded:hover .code-collapse-btn svg {
+  animation: none;
+}
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+/* Mermaid diagrams: full width + zoomable */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  position: relative;
+}
+
+.mermaid svg {
+  max-width: none !important;
+  min-width: 100%;
+  max-height: 500px;
+}
+
+.mermaid-zoom-hint {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--vp-c-text-3);
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mermaid:hover .mermaid-zoom-hint {
+  opacity: 1;
+}
+
+.mermaid:hover .mermaid-zoom-hint:hover {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+
+/* Mermaid fullscreen backdrop */
+.mermaid-zoom-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  pointer-events: none;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+  cursor: zoom-out;
+}
+
+.mermaid-zoom-backdrop.active {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: all;
+}
+
+.dark .mermaid-zoom-backdrop.active {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* Mermaid diagram in zoomed state */
+.mermaid.mermaid-zoomed {
+  background: var(--vp-c-bg);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 92vw;
+  height: 88vh;
+  overflow: auto;
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+
+.mermaid.mermaid-zoomed svg {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root),
+.dark::view-transition-new(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root),
+.dark::view-transition-old(root) {
+  z-index: 9999;
+}

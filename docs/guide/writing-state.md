@@ -89,10 +89,10 @@ async function updateTheme(newTheme: string) {
 
 ```typescript
 // ❌ Bad: other windows never learn about this change
-store.theme = 'dark';
+store.theme = 'dark'; // [!code error]
 
 // ✅ Good: other windows get the update via state-sync
-await invoke('update_settings', { settings: { theme: 'dark' } });
+await invoke('update_settings', { settings: { theme: 'dark' } }); // [!code highlight]
 ```
 
 State changes that bypass the backend (or BroadcastChannel) will not propagate to other windows.

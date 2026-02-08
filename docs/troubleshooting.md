@@ -17,11 +17,11 @@ This will show: subscribed, invalidation received, snapshot applied, revision sk
 **Error**: `Non-canonical snapshot revision: "01"`
 
 Revision must be a canonical decimal `u64` string:
-- `"0"` — OK
-- `"123"` — OK
-- `"01"` — NOT OK (leading zero)
-- `"abc"` — NOT OK (not a number)
-- `""` — NOT OK (empty string)
+- `"0"` — OK // [!code highlight]
+- `"123"` — OK // [!code highlight]
+- `"01"` — NOT OK (leading zero) // [!code error]
+- `"abc"` — NOT OK (not a number) // [!code error]
+- `""` — NOT OK (empty string) // [!code error]
 
 **Fix**: make sure the backend returns revision without leading zeros. Revision is the string representation of an unsigned 64-bit integer.
 
@@ -54,15 +54,15 @@ const sync = createRevisionSync({
   subscriber,
   provider: {
     async getSnapshot() {
-      console.log('getSnapshot called');
+      console.log('getSnapshot called'); // [!code highlight]
       const data = await fetchData();
-      console.log('returning', data);
+      console.log('returning', data); // [!code highlight]
       return data;
     }
   },
   applier: {
     apply(snapshot) {
-      console.log('apply called with', snapshot);
+      console.log('apply called with', snapshot); // [!code highlight]
       // your apply logic
     }
   },

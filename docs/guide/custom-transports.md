@@ -118,8 +118,8 @@ const sync = createRevisionSync({
   provider,
   applier,
   shouldRefresh(event) {
-    // Skip if this window originated the change
-    return event.sourceId !== myWindowId;
+    // Skip if this window originated the change // [!code focus]
+    return event.sourceId !== myWindowId; // [!code focus]
   },
 });
 ```

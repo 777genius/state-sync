@@ -21,10 +21,10 @@ const sync = createRevisionSync({
   provider,
   applier,
   throttling: {
-    debounceMs: 200,  // Wait 200ms of silence before refresh
-    throttleMs: 1000, // At most 1 refresh per second
-    leading: true,    // Fire immediately on first event (default)
-    trailing: true,   // Fire after quiet period ends (default)
+    debounceMs: 200,  // Wait 200ms of silence before refresh // [!code highlight]
+    throttleMs: 1000, // At most 1 refresh per second // [!code highlight]
+    leading: true,    // Fire immediately on first event (default) // [!code highlight]
+    trailing: true,   // Fire after quiet period ends (default) // [!code highlight]
   },
 });
 ```

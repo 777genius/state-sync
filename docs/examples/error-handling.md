@@ -34,22 +34,22 @@ const sync = createRevisionSync({
     switch (ctx.phase) {
       case 'subscribe':
         // Transport issue - maybe show "offline" indicator
-        showOfflineIndicator();
+        showOfflineIndicator(); // [!code highlight]
         break;
 
       case 'getSnapshot':
         // Backend unavailable - show stale data warning
-        showStaleDataWarning();
+        showStaleDataWarning(); // [!code highlight]
         break;
 
       case 'apply':
         // Data format issue - log for debugging
-        logToSentry(ctx.error, { phase: ctx.phase, topic: ctx.topic });
+        logToSentry(ctx.error, { phase: ctx.phase, topic: ctx.topic }); // [!code highlight]
         break;
 
       case 'protocol':
         // Bug in code - should not happen in production
-        console.error('Protocol error - check backend revision format');
+        console.error('Protocol error - check backend revision format'); // [!code highlight]
         break;
     }
   },

@@ -120,7 +120,7 @@ pub fn update_settings(
         data: state.settings.clone(),
     };
 
-    // Notify ALL windows (including sender, for consistency)
+    // Notify ALL windows (including sender, for consistency) // [!code highlight]
     let event = InvalidationEvent {
         topic: "settings".to_string(),
         revision: state.revision.to_string(),
@@ -251,10 +251,10 @@ export async function initSettingsSync() {
   );
 
   // Create applier that excludes UI state
-  const applier = createPiniaSnapshotApplier(store, {
-    mode: 'patch',
-    omitKeys: ['isSaving', 'lastSyncedAt'],
-  });
+  const applier = createPiniaSnapshotApplier(store, { // [!code focus]
+    mode: 'patch', // [!code focus]
+    omitKeys: ['isSaving', 'lastSyncedAt'], // [!code focus]
+  }); // [!code focus]
 
   // Wrap applier to track sync time
   const wrappedApplier = {

@@ -8,20 +8,22 @@ Best practices for syncing state across multiple browser tabs or Tauri windows.
 
 ## Architecture overview
 
-```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│  Window A   │     │  Window B   │     │  Window C   │
-│  (main)     │     │  (settings) │     │  (popup)    │
-└──────┬──────┘     └──────┬──────┘     └──────┬──────┘
-       │                   │                   │
-       │    invalidation   │                   │
-       ├───────────────────┼───────────────────┤
-       │                   │                   │
-       ▼                   ▼                   ▼
-┌─────────────────────────────────────────────────────┐
-│              Source of Truth (Backend)              │
-│         Rust process / Main thread / API            │
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    A["🖥 Window A<br/><small>main</small>"]
+    B["🖥 Window B<br/><small>settings</small>"]
+    C["🖥 Window C<br/><small>popup</small>"]
+    SOT["📦 Source of Truth<br/><small>Rust process / Main thread / API</small>"]
+
+    SOT -- "invalidation event" --> A
+    SOT -- "invalidation event" --> B
+    SOT -- "invalidation event" --> C
+
+    A -. "fetch snapshot" .-> SOT
+    B -. "fetch snapshot" .-> SOT
+    C -. "fetch snapshot" .-> SOT
+
+    A -- "write" --> SOT
 ```
 
 ## Source of truth
@@ -81,14 +83,14 @@ Keep topics **domain-oriented**, not UI-oriented:
 
 ```typescript
 // Good: Domain concepts
-'auth-state'
-'app-settings'
-'user-preferences'
+'auth-state' // [!code highlight]
+'app-settings' // [!code highlight]
+'user-preferences' // [!code highlight]
 
 // Bad: UI concepts
-'settings-window'
-'main-window-state'
-'popup-data'
+'settings-window' // [!code error]
+'main-window-state' // [!code error]
+'popup-data' // [!code error]
 ```
 
 ## Example: Tauri multi-window

@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerNotationErrorLevel } from '@shikijs/transformers';
 import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms';
 import { withMermaid } from 'vitepress-plugin-mermaid';
 import { generateApiSidebar } from './apiSidebar';
@@ -22,6 +23,7 @@ export default withMermaid(
     base: IS_GH_ACTIONS ? `/${REPO}/` : '/',
 
     head: [
+      ['link', { rel: 'icon', type: 'image/png', href: '/favicon.png' }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:title', content: SITE_TITLE }],
       ['meta', { property: 'og:description', content: SITE_DESCRIPTION }],
@@ -40,15 +42,25 @@ export default withMermaid(
 
     vite: {
       plugins: [llmstxt()],
+      optimizeDeps: {
+        include: ['dayjs', 'mermaid', 'cytoscape', 'cytoscape-cose-bilkent', '@braintree/sanitize-url', 'debug'],
+      },
     },
 
     markdown: {
+      codeTransformers: [
+        transformerNotationDiff(),
+        transformerNotationFocus(),
+        transformerNotationHighlight(),
+        transformerNotationErrorLevel(),
+      ],
       config(md) {
         md.use(copyOrDownloadAsMarkdownButtons);
       },
     },
 
     themeConfig: {
+      logo: '/logo.png',
       outline: 'deep',
       search: {
         provider: 'local',
