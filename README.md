@@ -72,6 +72,7 @@ If invalidations come in fast (or the transport drops/duplicates), the engine ai
 | [`@statesync/svelte`](packages/svelte/) | Svelte snapshot applier adapter |
 | [`@statesync/vue`](packages/vue/) | Vue (reactive/ref) snapshot applier adapter |
 | [`@statesync/tauri`](packages/tauri/) | Tauri transport adapters (subscriber + provider) |
+| [`state-sync` (Rust)](crates/state-sync/) | Shared protocol types for Rust backends (`Revision`, `SnapshotEnvelope<T>`, `InvalidationEvent`) |
 
 ## Install
 
@@ -249,14 +250,35 @@ pnpm build
 
 ## Rust crate
 
-The `crates/state-sync` directory contains an experimental Rust crate.
-It is **not** part of the npm release and is versioned independently.
+The [`state-sync`](crates/state-sync/) Rust crate provides shared protocol types for Tauri (or any Rust) backends:
+
+- **`Revision`** — monotonic `u64` counter with saturating arithmetic
+- **`SnapshotEnvelope<T>`** — generic `{ revision, data }` envelope (serde-ready)
+- **`InvalidationEvent`** — `{ topic, revision }` change notification (serde-ready)
+- **`compare_revisions()`** — canonical `u64` string comparison
+
+```toml
+# src-tauri/Cargo.toml
+[dependencies]
+state-sync = "0.1"
+```
+
+```rust
+use state_sync::{InvalidationEvent, Revision, SnapshotEnvelope};
+
+let rev = Revision::new(1);
+let envelope = SnapshotEnvelope {
+    revision: rev.to_string(),
+    data: my_app_state,
+};
+```
+
+The crate is versioned independently from the npm packages.
 
 ```bash
 cd crates/state-sync
-cargo fmt
-cargo clippy --all-targets -- -D warnings
 cargo test
+cargo clippy --all-targets -- -D warnings
 ```
 
 ## License
