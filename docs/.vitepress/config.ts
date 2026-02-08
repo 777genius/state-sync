@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms';
 import { withMermaid } from 'vitepress-plugin-mermaid';
+import { generateApiSidebar } from './apiSidebar';
 
 const REPO = 'state-sync';
 const IS_GH_ACTIONS = process.env.GITHUB_ACTIONS === 'true';
@@ -84,22 +85,7 @@ export default withMermaid(
       ],
 
       sidebar: {
-        '/api/': [
-          {
-            text: 'API Reference',
-            items: [
-              { text: 'Overview', link: '/api/' },
-              { text: '@statesync/core', link: '/api/core/' },
-              { text: '@statesync/persistence', link: '/api/persistence/' },
-              { text: '@statesync/pinia', link: '/api/pinia/' },
-              { text: '@statesync/zustand', link: '/api/zustand/' },
-              { text: '@statesync/valtio', link: '/api/valtio/' },
-              { text: '@statesync/svelte', link: '/api/svelte/' },
-              { text: '@statesync/vue', link: '/api/vue/' },
-              { text: '@statesync/tauri', link: '/api/tauri/' },
-            ],
-          },
-        ],
+        '/api/': generateApiSidebar(),
         '/guide/': [
           {
             text: 'Getting Started',
