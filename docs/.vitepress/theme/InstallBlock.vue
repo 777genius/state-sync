@@ -7,7 +7,9 @@ const copied = ref(false);
 async function copy() {
   await navigator.clipboard.writeText(command);
   copied.value = true;
-  setTimeout(() => (copied.value = false), 2000);
+  setTimeout(() => {
+    copied.value = false;
+  }, 2000);
 }
 </script>
 

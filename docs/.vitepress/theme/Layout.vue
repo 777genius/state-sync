@@ -3,8 +3,8 @@ import { useData } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { computed, nextTick, provide } from 'vue';
 import { useCodeblockCollapse } from './codeblockCollapse';
-import { useMermaidZoom } from './mermaidZoom';
 import HeroVideo from './HeroVideo.vue';
+import { useMermaidZoom } from './mermaidZoom';
 
 const { Layout } = DefaultTheme;
 const { isDark, page } = useData();

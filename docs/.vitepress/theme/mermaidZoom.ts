@@ -1,4 +1,4 @@
-import { nextTick, onBeforeUnmount, onMounted, watch, type Ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, type Ref, watch } from 'vue';
 
 let backdrop: HTMLElement | null = null;
 let activeDiagram: HTMLElement | null = null;
@@ -56,29 +56,17 @@ function setupMermaidZoom() {
     svg.setAttribute('stroke-linecap', 'round');
     svg.setAttribute('stroke-linejoin', 'round');
 
-    const polyline1 = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'polyline',
-    );
+    const polyline1 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline1.setAttribute('points', '15 3 21 3 21 9');
-    const line1 = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'line',
-    );
+    const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line1.setAttribute('x1', '14');
     line1.setAttribute('y1', '10');
     line1.setAttribute('x2', '21');
     line1.setAttribute('y2', '3');
 
-    const polyline2 = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'polyline',
-    );
+    const polyline2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     polyline2.setAttribute('points', '9 21 3 21 3 15');
-    const line2 = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'line',
-    );
+    const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line2.setAttribute('x1', '10');
     line2.setAttribute('y1', '14');
     line2.setAttribute('x2', '3');

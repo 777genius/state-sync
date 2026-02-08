@@ -59,7 +59,7 @@
 }
 
 .VPHero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -20%;
   left: 50%;
@@ -140,7 +140,7 @@
 }
 
 .code-collapse-overlay::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(transparent 0%, var(--vp-c-brand-soft) 70%);
@@ -184,7 +184,11 @@
   border: 1px solid var(--vp-c-border);
   border-radius: 50%;
   cursor: pointer;
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .code-collapse-btn:hover {
@@ -210,8 +214,13 @@
 }
 
 @keyframes bounce-down {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(3px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
 }
 
 /* Mermaid diagrams: full width + zoomable */
@@ -242,7 +251,10 @@
   border: 1px solid var(--vp-c-border);
   border-radius: 6px;
   opacity: 0;
-  transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
   pointer-events: none;
   z-index: 2;
 }
@@ -268,7 +280,10 @@
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   pointer-events: none;
-  transition: background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+  transition:
+    background 0.3s ease,
+    backdrop-filter 0.3s ease,
+    -webkit-backdrop-filter 0.3s ease;
   cursor: zoom-out;
 }
 

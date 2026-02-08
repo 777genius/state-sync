@@ -1,11 +1,9 @@
-import { nextTick, onMounted, watch, type Ref } from 'vue';
+import { nextTick, onMounted, type Ref, watch } from 'vue';
 
 const MAX_HEIGHT = 380;
 
 function collapseCodeblocks() {
-  const blocks = document.querySelectorAll<HTMLElement>(
-    '.vp-doc div[class*="language-"]',
-  );
+  const blocks = document.querySelectorAll<HTMLElement>('.vp-doc div[class*="language-"]');
 
   for (const block of blocks) {
     if (block.dataset.collapsed !== undefined) continue;

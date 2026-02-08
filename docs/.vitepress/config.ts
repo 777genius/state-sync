@@ -1,5 +1,10 @@
+import {
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+} from '@shikijs/transformers';
 import { defineConfig } from 'vitepress';
-import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerNotationErrorLevel } from '@shikijs/transformers';
 import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms';
 import { withMermaid } from 'vitepress-plugin-mermaid';
 import { generateApiSidebar } from './apiSidebar';
@@ -44,7 +49,14 @@ export default withMermaid(
     vite: {
       plugins: [llmstxt()],
       optimizeDeps: {
-        include: ['dayjs', 'mermaid', 'cytoscape', 'cytoscape-cose-bilkent', '@braintree/sanitize-url', 'debug'],
+        include: [
+          'dayjs',
+          'mermaid',
+          'cytoscape',
+          'cytoscape-cose-bilkent',
+          '@braintree/sanitize-url',
+          'debug',
+        ],
       },
     },
 
