@@ -1,10 +1,10 @@
 ---
-title: "Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync"
-description: The hidden race condition in manual multi-window state sync in Tauri, and how state-sync solves it with an invalidation-pull model.
+title: "Multi-Window Tauri Apps: State Sync Made Simple"
+description: How state-sync solves multi-window state synchronization in Tauri with an invalidation-pull model.
 outline: deep
 ---
 
-# Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync
+# Multi-Window Tauri Apps: State Sync Made Simple
 
 You open a settings panel in a separate Tauri window. Switch the theme to "dark." Close the window. The main window is still in "light." The user is confused. So are you.
 

@@ -9,4 +9,4 @@ Articles and deep dives about state synchronization in multi-window apps.
 
 ## Articles
 
-- [Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync](./multi-window-tauri-sync-engine) — The hidden race condition in manual multi-window state sync, and how state-sync solves it.
+- [Multi-Window Tauri Apps: State Sync Made Simple](./multi-window-tauri-sync-engine) — How state-sync solves multi-window state synchronization in Tauri.

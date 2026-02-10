@@ -1,4 +1,4 @@
-# Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync
+# Multi-Window Tauri Apps: State Sync Made Simple
 
 You open a settings panel in a separate Tauri window. Switch the theme to "dark." Close the window. The main window is still in "light." The user is confused. So are you.
 
