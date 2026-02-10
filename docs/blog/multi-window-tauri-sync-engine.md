@@ -1,10 +1,10 @@
 ---
-title: "6 Bugs in 15 Lines: Why Multi-Window Tauri Apps Need a Sync Engine"
+title: "6 Problems in 15 Lines: Why Multi-Window Tauri Apps Need a Sync Engine"
 description: The problem with manual multi-window state sync in Tauri, and how state-sync solves it with an invalidation-pull model.
 outline: deep
 ---
 
-# 6 Bugs in 15 Lines: Why Multi-Window Tauri Apps Need a Sync Engine
+# 6 Problems in 15 Lines: Why Multi-Window Tauri Apps Need a Sync Engine
 
 You open a settings panel in a separate Tauri window. Switch the theme to "dark." Close the window. The main window is still in "light." The user is confused. So are you.
 
@@ -46,9 +46,9 @@ const unlisten = await listen('settings-changed', async (event) => {
 // BUG 6: No lifecycle management — what happens on window close?
 ```
 
-Six bugs in 15 lines. And this is the *simple* version. I know because I've written variations of this code three times — each time thinking "this time I'll get it right." Real apps add retry loops, manual debouncing, revision tracking per topic — easily 200+ lines of ad-hoc sync code per store. Untested, fragile, and different in every project.
+Six problems in 15 lines. And this is the *simple* version. I know because I've written variations of this code three times — each time thinking "this time I'll get it right." Real apps add retry loops, manual debouncing, revision tracking per topic — easily 200+ lines of ad-hoc sync code per store. Untested, fragile, and different in every project.
 
-The pattern these bugs expose is always the same: trying to push state through events, when what you really need is an invalidation signal plus a pull mechanism. I looked for an existing library that did this cleanly for Tauri. I didn't find one. So I built one.
+The pattern these problems expose is always the same: trying to push state through events, when what you really need is an invalidation signal plus a pull mechanism. I looked for an existing library that did this cleanly for Tauri. I didn't find one. So I built one.
 
 ## state-sync — What It Is and How It Works
 
