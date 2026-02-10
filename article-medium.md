@@ -1,9 +1,3 @@
----
-title: "Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync"
-description: The hidden race condition in manual multi-window state sync in Tauri, and how state-sync solves it with an invalidation-pull model.
-outline: deep
----
-
 # Multi-Window Tauri Apps: The Race Condition Hiding in Your State Sync
 
 You open a settings panel in a separate Tauri window. Switch the theme to "dark." Close the window. The main window is still in "light." The user is confused. So are you.
@@ -64,7 +58,7 @@ When a user drags a slider or types rapidly, the backend might broadcast dozens 
 
 This isn't a bug in the traditional sense — the code is correct. But it creates unnecessary load on the IPC bridge and can make the UI feel sluggish.
 
-These two problems are fundamentally connected: both stem from the fact that every invalidation event triggers its own fetch. Solving them properly — with coalescing, revision ordering after fetch, and lifecycle management — takes ~150–200 lines of careful concurrency code per store. (For a detailed comparison with existing alternatives, see the [comparison page](/comparison).)
+These two problems are fundamentally connected: both stem from the fact that every invalidation event triggers its own fetch. Solving them properly — with coalescing, revision ordering after fetch, and lifecycle management — takes ~150–200 lines of careful concurrency code per store. (For a detailed comparison with existing alternatives, see the [comparison page](https://777genius.github.io/state-sync/comparison).)
 
 I looked for an existing library that handled this cleanly for Tauri. I didn't find one. So I built one.
 
@@ -385,4 +379,4 @@ state-sync is MIT-licensed, has 370+ tests, and the core is ~3 KB gzipped. If yo
 **Links:**
 - [GitHub](https://github.com/777genius/state-sync)
 - [npm: @statesync/core](https://www.npmjs.com/package/@statesync/core)
-- [Documentation](/)
+- [Documentation](https://github.com/777genius/state-sync/tree/main/docs)
