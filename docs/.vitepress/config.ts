@@ -98,6 +98,7 @@ export default withMermaid(
         { text: 'Architecture', link: '/architecture' },
         { text: 'Examples', link: '/examples/' },
         { text: 'API', link: '/api/' },
+        { text: 'Blog', link: '/blog/' },
         {
           text: 'Reference',
           items: [
@@ -171,6 +172,18 @@ export default withMermaid(
               { text: 'Structured logging', link: '/examples/structured-logging' },
               { text: 'Error handling & retry', link: '/examples/error-handling' },
               { text: 'Persistence with migrations', link: '/examples/persistence-migration' },
+            ],
+          },
+        ],
+        '/blog/': [
+          {
+            text: 'Blog',
+            items: [
+              { text: 'All Articles', link: '/blog/' },
+              {
+                text: 'Multi-Window Tauri Sync',
+                link: '/blog/multi-window-tauri-sync-engine',
+              },
             ],
           },
         ],
