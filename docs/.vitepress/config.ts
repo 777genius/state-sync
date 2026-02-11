@@ -93,6 +93,7 @@ export default withMermaid(
             { text: '@statesync/svelte', link: '/packages/svelte' },
             { text: '@statesync/vue', link: '/packages/vue' },
             { text: '@statesync/tauri', link: '/packages/tauri' },
+            { text: '@statesync/electron', link: '/packages/electron' },
           ],
         },
         { text: 'Architecture', link: '/architecture' },
@@ -103,6 +104,7 @@ export default withMermaid(
           text: 'Reference',
           items: [
             { text: 'Comparison', link: '/comparison' },
+            { text: 'Benchmarks', link: '/benchmarks' },
             { text: 'Lifecycle', link: '/lifecycle' },
             { text: 'Troubleshooting', link: '/troubleshooting' },
             { text: 'Compatibility', link: '/compatibility' },
@@ -126,6 +128,8 @@ export default withMermaid(
               { text: 'Writing state', link: '/guide/writing-state' },
               { text: 'Custom transports', link: '/guide/custom-transports' },
               { text: 'Multi-window patterns', link: '/guide/multi-window' },
+              { text: 'Testing', link: '/guide/testing' },
+              { text: 'Svelte 5 runes', link: '/guide/svelte5-runes' },
             ],
           },
         ],
@@ -150,7 +154,10 @@ export default withMermaid(
           },
           {
             text: 'Transport Adapters',
-            items: [{ text: '@statesync/tauri', link: '/packages/tauri' }],
+            items: [
+              { text: '@statesync/tauri', link: '/packages/tauri' },
+              { text: '@statesync/electron', link: '/packages/electron' },
+            ],
           },
         ],
         '/examples/': [
@@ -160,6 +167,7 @@ export default withMermaid(
               { text: 'Overview', link: '/examples/' },
               { text: 'React + Zustand', link: '/examples/react-zustand' },
               { text: 'Vue + Pinia + Tauri', link: '/examples/vue-pinia-tauri' },
+              { text: 'Electron + Any Store', link: '/examples/electron-any-store' },
             ],
           },
           {
@@ -194,6 +202,7 @@ export default withMermaid(
               { text: 'Quickstart', link: '/guide/quickstart' },
               { text: 'Architecture', link: '/architecture' },
               { text: 'Comparison', link: '/comparison' },
+              { text: 'Benchmarks', link: '/benchmarks' },
             ],
           },
           {

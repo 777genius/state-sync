@@ -10,19 +10,27 @@ npm install @statesync/svelte @statesync/core
 
 ## Purpose
 
-`@statesync/svelte` applies snapshots to a Svelte `writable()` store. Both modes always produce a **new object reference**, required for Svelte's reactivity.
+`@statesync/svelte` applies snapshots to Svelte state containers. It supports two targets:
+
+- **`'store'`** (default) — Svelte 4 `writable()` stores. Always produces a new object reference (required for store reactivity).
+- **`'state'`** — Svelte 5 `$state` runes. Mutates the reactive proxy in-place (how `$state` tracks changes).
 
 ## API
 
-- `createSvelteSnapshotApplier(store, options?)`
-  - `mode: 'patch' | 'replace'`
-  - `pickKeys` / `omitKeys` — protect local/ephemeral fields
-  - `toState(data, ctx)` — map snapshot data to state shape
-  - `strict` — throw on invalid mapping (default: `true`)
+`createSvelteSnapshotApplier(storeOrState, options?)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `target` | `'store' \| 'state'` | `'store'` | `'store'` for `writable()`, `'state'` for `$state` runes |
+| `mode` | `'patch' \| 'replace'` | `'patch'` | Apply strategy (see below) |
+| `pickKeys` | `ReadonlyArray<keyof State>` | — | Only update these keys (mutually exclusive with `omitKeys`) |
+| `omitKeys` | `ReadonlyArray<keyof State>` | — | Protect these keys from updates |
+| `toState` | `(data, ctx) => Partial<State>` | identity | Map snapshot data to state shape. `ctx` contains `{ store }` or `{ state }` depending on target |
+| `strict` | `boolean` | `true` | Throw if `toState` returns a non-object |
 
 ## Store interface
 
-The adapter uses a structural interface — no `svelte` import required:
+For `target: 'store'`, the adapter uses a structural interface — no `svelte` import required:
 
 ```ts
 interface SvelteStoreLike<State> {
@@ -33,31 +41,46 @@ interface SvelteStoreLike<State> {
 
 Any Svelte `writable()` store satisfies this interface automatically.
 
+For `target: 'state'`, pass any plain `$state` object directly.
+
 ## Apply semantics
+
+### target: 'store' (Svelte 4)
 
 | Mode | Behavior |
 |------|----------|
-| `'patch'` (default) | `store.update(current => ({ ...current, ...patch }))` — spread creates new reference for Svelte reactivity |
-| `'replace'` | `store.update(_ => rebuiltState)` — new object preserving omitted keys from current state |
+| `'patch'` (default) | `store.update(current => ({ ...current, ...patch }))` — new reference |
+| `'replace'` | `store.update(_ => rebuiltState)` — new reference, preserving omitted keys |
 
-Both modes always produce a **new object reference**, which is required for Svelte's reactivity system to detect changes.
+### target: 'state' (Svelte 5)
 
-## Example
+| Mode | Behavior |
+|------|----------|
+| `'patch'` (default) | `state[key] = value` for each key — in-place mutation, identity preserved |
+| `'replace'` | `delete state[key]` for stale keys + `state[key] = value` for new — identity preserved |
+
+## Examples
+
+### Svelte 4 — writable store
 
 ```ts
 import { createRevisionSync } from '@statesync/core';
 import { createSvelteSnapshotApplier } from '@statesync/svelte';
 import { writable } from 'svelte/store';
 
-const store = writable({ count: 0, name: 'world' });
+const store = writable({
+  theme: 'light',
+  locale: 'en',
+  sidebarOpen: false,
+});
 
 const applier = createSvelteSnapshotApplier(store, {
   mode: 'patch',
-  omitKeys: ['localUiFlag'],
+  omitKeys: ['sidebarOpen'],
 });
 
 const sync = createRevisionSync({
-  topic: 'app-config',
+  topic: 'user-prefs',
   subscriber,
   provider,
   applier,
@@ -66,13 +89,58 @@ const sync = createRevisionSync({
 await sync.start();
 ```
 
+### Svelte 5 — $state rune
+
+```ts
+import { createRevisionSync } from '@statesync/core';
+import { createSvelteSnapshotApplier } from '@statesync/svelte';
+
+let settings = $state({
+  theme: 'light',
+  locale: 'en',
+  sidebarOpen: false,
+});
+
+const applier = createSvelteSnapshotApplier(settings, {
+  target: 'state', // [!code highlight]
+  mode: 'patch',
+  omitKeys: ['sidebarOpen'],
+});
+
+const sync = createRevisionSync({
+  topic: 'user-prefs',
+  subscriber,
+  provider,
+  applier,
+});
+
+await sync.start();
+```
+
+### Using in a Svelte 4 component
+
+```svelte
+<script>
+  import { onMount, onDestroy } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { createRevisionSync } from '@statesync/core';
+  import { createSvelteSnapshotApplier } from '@statesync/svelte';
+
+  const settings = writable({ theme: 'light', locale: 'en' });
+
+  const applier = createSvelteSnapshotApplier(settings, { mode: 'patch' });
+  const sync = createRevisionSync({ topic: 'settings', subscriber, provider, applier });
+
+  onMount(() => sync.start());
+  onDestroy(() => sync.stop());
+</script>
+
+<p>Theme: {$settings.theme}</p>
+```
+
 ## See also
 
+- [Svelte 5 Runes guide](/guide/svelte5-runes) — detailed patterns for `$state`
 - [Quickstart](/guide/quickstart) — full wiring example
 - [Multi-window patterns](/guide/multi-window) — cross-tab architecture
 - [Custom transports](/guide/custom-transports) — build your own subscriber/provider
-```
-
-::: tip Svelte 5 runes
-Current adapter targets `writable()` stores (Svelte 4 API). For Svelte 5 runes (`$state`), wrap in a `writable()`-compatible interface or use a custom applier.
-:::

@@ -233,6 +233,7 @@ export const useSettingsStore = defineStore('settings', {
 import { createTauriRevisionSync } from '@statesync/tauri';
 import { createPiniaSnapshotApplier } from '@statesync/pinia';
 import { createConsoleLogger, tagLogger } from '@statesync/core';
+import type { SnapshotEnvelope } from '@statesync/core';
 import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
@@ -258,7 +259,7 @@ export async function initSettingsSync() {
 
   // Wrap applier to track sync time
   const wrappedApplier = {
-    apply(snapshot: { revision: string; data: Settings }) {
+    apply(snapshot: SnapshotEnvelope<Settings>) {
       applier.apply(snapshot);
       store.markSynced();
     },

@@ -14,12 +14,16 @@ npm install @statesync/vue @statesync/core
 
 ## API
 
-- `createVueSnapshotApplier(stateOrRef, options?)`
-  - `target: 'reactive' | 'ref'` — which Vue primitive to target (default: `'reactive'`)
-  - `mode: 'patch' | 'replace'`
-  - `pickKeys` / `omitKeys` — protect local/ephemeral fields
-  - `toState(data, ctx)` — map snapshot data to state shape
-  - `strict` — throw on invalid mapping (default: `true`)
+`createVueSnapshotApplier(stateOrRef, options?)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `target` | `'reactive' \| 'ref'` | `'reactive'` | Which Vue primitive to target |
+| `mode` | `'patch' \| 'replace'` | `'patch'` | Apply strategy (see below) |
+| `pickKeys` | `ReadonlyArray<keyof State>` | — | Only update these keys (mutually exclusive with `omitKeys`) |
+| `omitKeys` | `ReadonlyArray<keyof State>` | — | Protect these keys from updates |
+| `toState` | `(data, ctx) => Partial<State>` | identity | Map snapshot data to state shape. `ctx` contains `{ state }` for reactive or `{ ref }` for ref target |
+| `strict` | `boolean` | `true` | Throw if `toState` returns a non-object |
 
 ## Interfaces
 
@@ -58,11 +62,11 @@ import { createRevisionSync } from '@statesync/core';
 import { createVueSnapshotApplier } from '@statesync/vue';
 import { reactive } from 'vue';
 
-const state = reactive({ count: 0, name: 'world' });
+const state = reactive({ count: 0, name: 'world', isEditing: false });
 
 const applier = createVueSnapshotApplier(state, {
   mode: 'patch',
-  omitKeys: ['localUiFlag'],
+  omitKeys: ['isEditing'],
 });
 
 const sync = createRevisionSync({
@@ -89,8 +93,30 @@ const applier = createVueSnapshotApplier(state, {
 });
 ```
 
+### Using in a Vue component
+
+```vue
+<script setup>
+import { onMounted, onUnmounted, reactive } from 'vue';
+import { createRevisionSync } from '@statesync/core';
+import { createVueSnapshotApplier } from '@statesync/vue';
+
+const state = reactive({ theme: 'light', locale: 'en' });
+
+const applier = createVueSnapshotApplier(state, { mode: 'patch' });
+const sync = createRevisionSync({ topic: 'prefs', subscriber, provider, applier });
+
+onMounted(() => sync.start());
+onUnmounted(() => sync.stop());
+</script>
+
+<template>
+  <p>Theme: {{ state.theme }}</p>
+</template>
+```
+
 ::: tip Can be used alongside @statesync/pinia
-Pinia stores use `reactive()` internally — the Vue adapter works with both standalone Vue state and Pinia stores.
+Pinia stores use `reactive()` internally — the Vue adapter works with both standalone Vue state and Pinia stores. For Pinia-specific features (`$patch`, `$state`), use the dedicated [@statesync/pinia](/packages/pinia) adapter.
 :::
 
 ## See also

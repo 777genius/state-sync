@@ -17,6 +17,7 @@ const PACKAGE_ORDER = [
   'svelte',
   'vue',
   'tauri',
+  'electron',
 ];
 
 const SUBCATEGORY_LABELS: Record<string, string> = {

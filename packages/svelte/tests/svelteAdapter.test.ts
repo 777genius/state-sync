@@ -90,8 +90,7 @@ describe('@statesync/svelte: createSvelteSnapshotApplier', () => {
   it('strict=false: ignores invalid toState result', () => {
     const store = makeStore({ a: 1, b: 2 });
     const applier = createSvelteSnapshotApplier<State, string>(store, {
-      // @ts-expect-error - intentionally wrong to test runtime behavior
-      toState: () => 'not-an-object',
+      toState: () => 'not-an-object' as unknown as Partial<State>,
       strict: false,
     });
 
@@ -113,8 +112,7 @@ describe('@statesync/svelte: createSvelteSnapshotApplier', () => {
   it('strict=true (default): throws on non-object toState result', () => {
     const store = makeStore({ a: 1, b: 2 });
     const applier = createSvelteSnapshotApplier<State, string>(store, {
-      // @ts-expect-error - intentionally wrong to test runtime behavior
-      toState: () => 'not-an-object',
+      toState: () => 'not-an-object' as unknown as Partial<State>,
     });
     expect(() => applier.apply(snapshot('anything', '4'))).toThrow(
       'toState(data) must return a plain object',
@@ -189,8 +187,7 @@ describe('@statesync/svelte: createSvelteSnapshotApplier', () => {
   it('strict rejects array from toState', () => {
     const store = makeStore({ a: 1, b: 2 });
     const applier = createSvelteSnapshotApplier<State, string>(store, {
-      // @ts-expect-error - testing runtime validation
-      toState: () => [1, 2, 3],
+      toState: () => [1, 2, 3] as unknown as Partial<State>,
     });
     expect(() => applier.apply(snapshot('x', '1'))).toThrow(
       'toState(data) must return a plain object',
@@ -200,8 +197,7 @@ describe('@statesync/svelte: createSvelteSnapshotApplier', () => {
   it('strict rejects null from toState', () => {
     const store = makeStore({ a: 1, b: 2 });
     const applier = createSvelteSnapshotApplier<State, string>(store, {
-      // @ts-expect-error - testing runtime validation
-      toState: () => null,
+      toState: () => null as unknown as Partial<State>,
     });
     expect(() => applier.apply(snapshot('x', '1'))).toThrow(
       'toState(data) must return a plain object',
@@ -267,5 +263,205 @@ describe('@statesync/svelte: createSvelteSnapshotApplier', () => {
 
     expect(ref1).not.toBe(ref2);
     expect(ref2).not.toBe(ref3);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// target: 'state' — Svelte 5 $state (in-place mutation)
+// ---------------------------------------------------------------------------
+
+describe('@statesync/svelte: createSvelteSnapshotApplier (target: state)', () => {
+  it('patch mode (default): mutates state in-place', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 10 }, '1'));
+
+    expect(state).toEqual({ a: 10, b: 2 });
+  });
+
+  it('patch mode: preserves object identity (in-place mutation)', () => {
+    const state: State = { a: 1, b: 2 };
+    const ref = state;
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 10 }, '1'));
+
+    expect(state).toBe(ref);
+  });
+
+  it('replace mode: assigns new keys and deletes stale keys', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State>(state, {
+      target: 'state',
+      mode: 'replace',
+    });
+
+    applier.apply(snapshot<State>({ a: 123 }, '2'));
+
+    expect(state).toEqual({ a: 123 });
+    expect('b' in state).toBe(false);
+  });
+
+  it('replace mode: preserves object identity', () => {
+    const state: State = { a: 1, b: 2 };
+    const ref = state;
+    const applier = createSvelteSnapshotApplier<State>(state, {
+      target: 'state',
+      mode: 'replace',
+    });
+
+    applier.apply(snapshot<State>({ a: 0 }, '2'));
+
+    expect(state).toBe(ref);
+  });
+
+  it('pickKeys limits which keys can be updated', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+      pickKeys: ['a'],
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 10, b: 999 }, '1'));
+
+    expect(state).toEqual({ a: 10, b: 2 });
+  });
+
+  it('omitKeys prevents keys from being updated', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+      omitKeys: ['b'],
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 10, b: 999 }, '1'));
+
+    expect(state).toEqual({ a: 10, b: 2 });
+  });
+
+  it('omitKeys in replace mode: preserves omitted keys', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State>(state, {
+      target: 'state',
+      mode: 'replace',
+      omitKeys: ['b'],
+    });
+
+    applier.apply(snapshot<State>({ a: 10 }, '1'));
+
+    expect(state).toEqual({ a: 10, b: 2 });
+  });
+
+  it('toState receives ctx.state', () => {
+    const state: State = { a: 1, b: 2 };
+    let receivedState: unknown;
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+      toState: (data, ctx) => {
+        receivedState = ctx.state;
+        return data;
+      },
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 5 }, '1'));
+
+    expect(receivedState).toBe(state);
+  });
+
+  it('toState in replace mode receives ctx.state', () => {
+    const state: State = { a: 1, b: 2 };
+    let receivedState: unknown;
+    const applier = createSvelteSnapshotApplier<State, { val: number }>(state, {
+      target: 'state',
+      mode: 'replace',
+      toState: (data, ctx) => {
+        receivedState = ctx.state;
+        return { a: data.val };
+      },
+    });
+
+    applier.apply(snapshot({ val: 42 }, '1'));
+
+    expect(receivedState).toBe(state);
+    expect(state).toEqual({ a: 42 });
+  });
+
+  it('strict=true (default): throws on non-object toState result', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, string>(state, {
+      target: 'state',
+      toState: () => 'not-an-object' as unknown as Partial<State>,
+    });
+
+    expect(() => applier.apply(snapshot('anything', '4'))).toThrow(
+      'toState(data) must return a plain object',
+    );
+    expect(state).toEqual({ a: 1, b: 2 });
+  });
+
+  it('strict=false: ignores invalid toState result', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, string>(state, {
+      target: 'state',
+      toState: () => 'not-an-object' as unknown as Partial<State>,
+      strict: false,
+    });
+
+    expect(() => applier.apply(snapshot('anything', '4'))).not.toThrow();
+    expect(state).toEqual({ a: 1, b: 2 });
+  });
+
+  it('multiple sequential applies accumulate correctly', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+    });
+
+    applier.apply(snapshot<Partial<State>>({ a: 10 }, '1'));
+    applier.apply(snapshot<Partial<State>>({ b: 20 }, '2'));
+    applier.apply(snapshot<Partial<State>>({ a: 100 }, '3'));
+
+    expect(state).toEqual({ a: 100, b: 20 });
+  });
+
+  it('empty snapshot data in patch mode: state unchanged', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State, Partial<State>>(state, {
+      target: 'state',
+    });
+
+    applier.apply(snapshot<Partial<State>>({}, '1'));
+
+    expect(state).toEqual({ a: 1, b: 2 });
+  });
+
+  it('replace mode with empty data: removes all allowed keys', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State>(state, {
+      target: 'state',
+      mode: 'replace',
+    });
+
+    applier.apply(snapshot<State>({} as State, '1'));
+
+    expect(state).toEqual({});
+  });
+
+  it('replace mode + pickKeys: only replaces picked keys, preserves others', () => {
+    const state: State = { a: 1, b: 2 };
+    const applier = createSvelteSnapshotApplier<State>(state, {
+      target: 'state',
+      mode: 'replace',
+      pickKeys: ['a'],
+    });
+
+    applier.apply(snapshot<State>({ a: 100 }, '1'));
+
+    expect(state).toEqual({ a: 100, b: 2 });
   });
 });

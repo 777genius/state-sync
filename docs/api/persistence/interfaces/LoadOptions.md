@@ -6,7 +6,7 @@
 
 # Interface: LoadOptions\<T\>
 
-Defined in: [persistence/src/types.ts:432](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L432)
+Defined in: [persistence/src/types.ts:432](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L432)
 
 Options for loading persisted snapshots.
 
@@ -24,7 +24,7 @@ Options for loading persisted snapshots.
 optional ignoreTTL: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:453](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L453)
+Defined in: [persistence/src/types.ts:453](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L453)
 
 If true, ignore TTL expiration.
 Default: false
@@ -37,7 +37,7 @@ Default: false
 optional migration: MigrationHandler<T>;
 ```
 
-Defined in: [persistence/src/types.ts:436](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L436)
+Defined in: [persistence/src/types.ts:436](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L436)
 
 Migration handler for schema versioning.
 
@@ -49,7 +49,7 @@ Migration handler for schema versioning.
 optional validate: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L442)
+Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L442)
 
 If true, validate data against schema.
 Default: false
@@ -62,7 +62,7 @@ Default: false
 optional validator: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:447](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L447)
+Defined in: [persistence/src/types.ts:447](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L447)
 
 Custom validator function.
 
@@ -84,7 +84,7 @@ Custom validator function.
 optional verifyHash: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:459](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L459)
+Defined in: [persistence/src/types.ts:459](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L459)
 
 If true, verify integrity hash.
 Default: false

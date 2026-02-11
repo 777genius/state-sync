@@ -12,6 +12,7 @@ Practical examples demonstrating state-sync patterns.
 |---------|-------|-------------|
 | [React + Zustand](/examples/react-zustand) | React, Zustand, BroadcastChannel | Shopping cart synced across browser tabs |
 | [Vue + Pinia + Tauri](/examples/vue-pinia-tauri) | Vue 3, Pinia, Tauri v2 | Settings panel synced across Tauri windows |
+| [Electron + Any Store](/examples/electron-any-store) | Electron, Any framework | Multi-window sync with any state manager |
 
 ## Core patterns
 

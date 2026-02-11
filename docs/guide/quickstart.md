@@ -4,7 +4,7 @@ title: Quickstart
 
 # Quickstart
 
-Get state-sync running in 5 minutes.
+Get state-sync running in under 5 minutes.
 
 ## Installation
 
@@ -19,65 +19,60 @@ npm install @statesync/valtio   # React + Valtio
 npm install @statesync/svelte   # Svelte
 npm install @statesync/vue      # Vue (reactive/ref)
 
-# Pick a transport (optional)
-npm install @statesync/tauri    # Tauri v2
+# Optional
+npm install @statesync/tauri       # Tauri v2 transport
+npm install @statesync/persistence # Offline cache + cross-tab sync
 ```
 
 ## Core concepts
 
 ### Topic
 
-A **topic** is a unique string identifier for a piece of state you want to sync (e.g., `'settings'`, `'cart'`, `'user-preferences'`). Each topic has its own revision counter and can be synced independently.
+A **topic** is a non-empty string that identifies a piece of state (e.g., `'settings'`, `'cart'`). Each topic has its own revision counter and syncs independently.
 
 ### The three parts
 
-You need 3 parts to sync state:
-
-| Part | Role | Example |
-|------|------|---------|
-| **Subscriber** | Listens for "state changed" events | Tauri event listener, BroadcastChannel |
-| **Provider** | Fetches full state snapshot | Tauri invoke, HTTP API |
-| **Applier** | Updates local state | Pinia store, Zustand store |
+| Part | Interface | Role |
+|------|-----------|------|
+| **Subscriber** | `{ subscribe(handler) => unsubscribe }` | Delivers invalidation events |
+| **Provider** | `{ getSnapshot() => SnapshotEnvelope }` | Returns the latest state |
+| **Applier** | `{ apply(snapshot) => void }` | Writes state into your store |
 
 ## Basic example
 
 ```typescript
 import { createRevisionSync, createConsoleLogger } from '@statesync/core';
 
-// 1. Define your state type
 interface AppSettings {
   theme: 'light' | 'dark';
   language: string;
 }
 
-// 2. Create subscriber (listens for invalidation events)
+// Subscriber: listens for invalidation events
 const subscriber = {
   async subscribe(handler) {
-    // Example: BroadcastChannel
     const channel = new BroadcastChannel('settings-sync');
     channel.onmessage = (e) => handler(e.data);
     return () => channel.close();
   }
 };
 
-// 3. Create provider (fetches snapshots)
+// Provider: fetches the latest snapshot
 const provider = {
   async getSnapshot() {
-    const response = await fetch('/api/settings');
-    return response.json(); // { revision: "123", data: { theme, language } }
+    const res = await fetch('/api/settings');
+    return res.json(); // { revision: "42", data: { theme, language } }
   }
 };
 
-// 4. Create applier (updates local state)
+// Applier: updates local state
 let localState: AppSettings = { theme: 'light', language: 'en' };
 const applier = {
   apply(snapshot) {
     localState = snapshot.data;
-    console.log('State updated:', localState);
   }
 };
 
-// 5. Wire it together
 const sync = createRevisionSync({
   topic: 'settings',
   subscriber,
@@ -86,7 +81,6 @@ const sync = createRevisionSync({
   logger: createConsoleLogger({ debug: true }),
 });
 
-// 6. Start sync
 await sync.start();
 ```
 
@@ -158,16 +152,14 @@ This is frontend-only. For the full Rust backend + TypeScript frontend example, 
 ## Stopping sync
 
 ```typescript
-// When component unmounts or app closes
 sync.stop();
-
-// Note: After stop(), the handle is "dead"
-// Create a new handle if you need to restart
+// After stop(), the handle is dead — create a new one to restart
 ```
 
 ## Next steps
 
-- [Protocol (mental model)](/guide/protocol) — understand how revision-based sync works
-- [Multi-window patterns](/guide/multi-window) — best practices for multi-window apps
-- [Lifecycle](/lifecycle) — detailed API reference
+- [Protocol](/guide/protocol) — how revision-based sync works
+- [Writing state](/guide/writing-state) — UI-to-backend write patterns
+- [Multi-window patterns](/guide/multi-window) — multi-tab and multi-window setups
+- [Lifecycle](/lifecycle) — API reference for `RevisionSyncHandle`
 - [Examples](/examples/) — runnable code samples

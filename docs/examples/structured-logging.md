@@ -17,15 +17,19 @@ Logging and error metrics pattern for observability.
 
 ## Logger extra keys
 
-The engine passes these keys to the logger's `extra` object:
+The engine passes a structured `extra` object to every logger call:
 
-| Call               | Extra keys                                   |
-|--------------------|----------------------------------------------|
-| All calls          | `topic`                                      |
-| error (emitError)  | `topic`, `phase`, `error`                    |
-| applied snapshot   | `topic`, `revision`                          |
-| snapshot skipped   | `topic`, `snapshotRevision`, `localRevision` |
-| invalidation skip  | `topic`, `eventRevision` / `event`           |
+| Log message | Extra keys |
+|-------------|------------|
+| `starting` / `started` / `stopped` | `topic` |
+| `subscribed` | `topic` |
+| `applied snapshot` | `topic`, `revision` |
+| `snapshot skipped (not newer)` | `topic`, `snapshotRevision`, `localRevision` |
+| `invalidation triggered refresh` | `topic`, `eventRevision` |
+| `invalidation skipped (not newer)` | `topic`, `eventRevision`, `localRevision` |
+| `invalidation skipped (shouldRefresh)` | `topic`, `event` |
+| `refresh coalesced (in-flight)` | `topic` |
+| Error (via `onError`) | `phase`, `topic`, `error`, `localRevision`, `eventRevision?`, `snapshotRevision?`, `sourceId?`, `attempt?`, `willRetry?`, `nextDelayMs?` |
 
 ## Full example
 
@@ -115,8 +119,8 @@ console.log('apply errors:', getErrorCountByPhase('apply'));
 ## Example output
 
 ```json
-{"level":"debug","topic":"settings","msg":"subscribed"}
-{"level":"debug","topic":"settings","msg":"snapshot applied","revision":"1"}
+{"level":"debug","topic":"settings","msg":"[state-sync] subscribed"}
+{"level":"debug","topic":"settings","msg":"[state-sync] applied snapshot","revision":"1"}
 {"level":"error","event":"sync_error","topic":"settings","phase":"getSnapshot","error":"Network error","totalForKey":1}
 ```
 

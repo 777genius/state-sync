@@ -6,7 +6,7 @@
 
 # Interface: MigrationHandler\<T\>
 
-Defined in: [persistence/src/types.ts:184](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L184)
+Defined in: [persistence/src/types.ts:184](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L184)
 
 Migration handler for schema versioning.
 
@@ -24,7 +24,7 @@ Migration handler for schema versioning.
 currentVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:188](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L188)
+Defined in: [persistence/src/types.ts:188](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L188)
 
 Current schema version.
 
@@ -36,7 +36,7 @@ Current schema version.
 migrations: Record<number, MigrationFn<any, unknown>>;
 ```
 
-Defined in: [persistence/src/types.ts:195](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L195)
+Defined in: [persistence/src/types.ts:195](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L195)
 
 Migration functions keyed by source version.
 Example: { 1: (v1Data) => v2Data, 2: (v2Data) => v3Data }
@@ -49,7 +49,7 @@ Example: { 1: (v1Data) => v2Data, 2: (v2Data) => v3Data }
 optional validate: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:200](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L200)
+Defined in: [persistence/src/types.ts:200](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L200)
 
 Optional validator for migrated data.
 

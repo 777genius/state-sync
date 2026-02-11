@@ -14,11 +14,15 @@ npm install @statesync/valtio @statesync/core
 
 ## API
 
-- `createValtioSnapshotApplier(proxy, options?)`
-  - `mode: 'patch' | 'replace'`
-  - `pickKeys` / `omitKeys` — protect local/ephemeral fields
-  - `toState(data, ctx)` — map snapshot data to state shape
-  - `strict` — throw on invalid mapping (default: `true`)
+`createValtioSnapshotApplier(proxy, options?)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `mode` | `'patch' \| 'replace'` | `'patch'` | Apply strategy (see below) |
+| `pickKeys` | `ReadonlyArray<keyof State>` | — | Only update these keys (mutually exclusive with `omitKeys`) |
+| `omitKeys` | `ReadonlyArray<keyof State>` | — | Protect these keys from updates |
+| `toState` | `(data, ctx) => Partial<State>` | identity | Map snapshot data to state shape. `ctx` contains `{ proxy }` |
+| `strict` | `boolean` | `true` | Throw if `toState` returns a non-object |
 
 ## Proxy interface
 
@@ -37,6 +41,10 @@ Any object created via `proxy()` satisfies this interface. The adapter mutates t
 | `'patch'` (default) | `proxy[key] = value` for each filtered key — direct mutation |
 | `'replace'` | `delete proxy[key]` for stale keys, then `proxy[key] = value` — proxy reference stays the same |
 
+::: tip Why not replace the proxy?
+Valtio's reactivity relies on the original proxy reference. Replacing it would break all `useSnapshot()` hooks. The adapter always mutates in place.
+:::
+
 ## Example
 
 ```ts
@@ -44,15 +52,20 @@ import { createRevisionSync } from '@statesync/core';
 import { createValtioSnapshotApplier } from '@statesync/valtio';
 import { proxy } from 'valtio';
 
-const state = proxy({ count: 0, name: 'world' });
+const state = proxy({
+  theme: 'light',
+  locale: 'en',
+  notifications: true,
+  isMenuOpen: false,
+});
 
 const applier = createValtioSnapshotApplier(state, {
   mode: 'patch',
-  omitKeys: ['localUiFlag'],
+  omitKeys: ['isMenuOpen'],
 });
 
 const sync = createRevisionSync({
-  topic: 'app-config',
+  topic: 'user-prefs',
   subscriber,
   provider,
   applier,
@@ -61,13 +74,24 @@ const sync = createRevisionSync({
 await sync.start();
 ```
 
+### With toState mapping
+
+```ts
+interface PrefsDTO {
+  ui_theme: string;
+  ui_locale: string;
+}
+
+const applier = createValtioSnapshotApplier(state, {
+  toState: (data: PrefsDTO, { proxy }) => ({
+    theme: data.ui_theme,
+    locale: data.ui_locale,
+  }),
+});
+```
+
 ## See also
 
 - [Quickstart](/guide/quickstart) — full wiring example
 - [Multi-window patterns](/guide/multi-window) — cross-tab architecture
 - [Writing state](/guide/writing-state) — patterns for the write path
-```
-
-::: tip Why not replace the proxy?
-Valtio's reactivity relies on the original proxy reference. Replacing it would break all `useSnapshot()` hooks. The adapter always mutates in place.
-:::

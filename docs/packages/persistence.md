@@ -39,8 +39,11 @@ if (cached) {
 }
 
 // 4. Start sync
-const sync = createRevisionSync({ ... applier ... });
+const sync = createRevisionSync({ topic: 'app', subscriber, provider, applier });
 await sync.start();
+
+// 5. Clean up when done
+applier.dispose();
 ```
 
 ## Storage Backends
@@ -51,6 +54,51 @@ await sync.start();
 | `createIndexedDBBackend` | Large data | ~50MB+ |
 | `createSessionStorageBackend` | Temporary (tab-scoped) | ~5MB |
 | `createMemoryStorageBackend` | Testing | RAM |
+
+Each backend accepts an options object:
+
+```typescript
+// LocalStorage
+createLocalStorageBackend({ key: 'my-key' });
+
+// IndexedDB
+createIndexedDBBackend({ dbName: 'my-db', storeName: 'state', key: 'my-key' });
+
+// SessionStorage
+createSessionStorageBackend({ key: 'my-key' });
+
+// Memory (for tests)
+createMemoryStorageBackend();
+// Shared memory (for multi-instance tests)
+createSharedMemoryStorage();
+```
+
+## Persistence Applier Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `storage` | `StorageBackend<T>` | required | Storage backend |
+| `applier` | `SnapshotApplier<T>` | required | Inner applier to delegate to |
+| `throttling` | `SaveThrottlingOptions` | — | Control save frequency |
+| `debounceMs` | `number` | — | *Deprecated:* use `throttling.debounceMs` |
+| `schemaVersion` | `number` | `1` | Schema version for migrations |
+| `ttlMs` | `number` | — | Cache time-to-live in ms |
+| `compression` | `CompressionAdapter` | — | Compression adapter |
+| `enableHash` | `boolean` | `false` | Non-cryptographic integrity hash |
+| `crossTabSync` | `CrossTabSyncOptions` | — | Cross-tab sync via BroadcastChannel |
+| `onPersistenceError` | `(ctx) => void` | — | Error handler for persistence ops |
+
+### DisposablePersistenceApplier
+
+The returned applier has extra methods:
+
+| Method | Description |
+|--------|-------------|
+| `dispose()` | Cancel pending saves, clean up timers |
+| `hasPendingSave()` | `true` if a save is scheduled |
+| `flush()` | Force immediate save of pending snapshot |
+| `on(event, handler)` | Subscribe to persistence events |
+| `getStats()` | Get save counts, byte totals, timing |
 
 ## Features
 
@@ -66,6 +114,7 @@ const applier = createPersistenceApplier({
     debounceMs: 300,    // Wait for silence
     throttleMs: 1000,   // Max one save/sec
     maxWaitMs: 5000,    // Force save after 5s
+    leading: false,     // Don't save on first update
   },
 });
 ```
@@ -85,6 +134,25 @@ const migration = createMigrationBuilder<AppStateV3>()
 const cached = await loadPersistedSnapshot(storage, applier, { migration });
 ```
 
+Additional migration utilities:
+
+```typescript
+import {
+  createSimpleMigration,
+  migrateData,
+  needsMigration,
+  getMigrationPath,
+} from '@statesync/persistence';
+
+// Check if migration is needed
+if (needsMigration(storedVersion, handler.currentVersion)) {
+  const result = migrateData(data, storedVersion, handler);
+  if (result.success) {
+    // use result.data
+  }
+}
+```
+
 ### Compression
 
 Reduce storage usage:
@@ -97,6 +165,20 @@ const applier = createPersistenceApplier({
   applier: innerApplier,
   compression: createLZCompressionAdapter(),
 });
+```
+
+Other compression utilities:
+
+```typescript
+import {
+  createCompressionAdapter,
+  createBase64Adapter,
+  createNoCompressionAdapter,
+  lzCompress,
+  lzDecompress,
+  benchmarkCompression,
+  estimateCompressionRatio,
+} from '@statesync/persistence';
 ```
 
 ### Cross-Tab Sync
@@ -113,6 +195,16 @@ const applier = createPersistenceApplier({
     broadcastSaves: true,
   },
 });
+```
+
+Standalone cross-tab utilities:
+
+```typescript
+import { createCrossTabSync, isBroadcastChannelSupported } from '@statesync/persistence';
+
+if (isBroadcastChannelSupported()) {
+  const crossTab = createCrossTabSync({ channelName: 'my-channel' });
+}
 ```
 
 ### TTL (Time-To-Live)
@@ -134,8 +226,34 @@ applier.on('saveComplete', (snapshot, durationMs) => {
   console.log(`Saved in ${durationMs}ms`);
 });
 
+applier.on('saveError', (error, snapshot) => {
+  console.error('Save failed:', error);
+});
+
+applier.on('expired', (snapshot, age) => {
+  console.log(`Cache expired after ${age}ms`);
+});
+
 const stats = applier.getStats();
-// { saveCount, saveErrorCount, totalBytesSaved, lastSaveDurationMs }
+// { saveCount, saveErrorCount, totalBytesSaved, lastSaveAt, lastSaveDurationMs, throttledCount }
+```
+
+### Convenience helpers
+
+```typescript
+import {
+  clearPersistedData,
+  createPersistenceApplierWithDefaults,
+} from '@statesync/persistence';
+
+// Clear stored data
+await clearPersistedData(storage);
+
+// Create applier with sensible defaults
+const applier = createPersistenceApplierWithDefaults({
+  storage,
+  applier: innerApplier,
+});
 ```
 
 ## API Reference

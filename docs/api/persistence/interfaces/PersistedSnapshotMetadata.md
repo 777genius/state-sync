@@ -6,7 +6,7 @@
 
 # Interface: PersistedSnapshotMetadata
 
-Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L44)
+Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L44)
 
 Metadata stored alongside the snapshot for integrity and management.
 
@@ -18,7 +18,7 @@ Metadata stored alongside the snapshot for integrity and management.
 compressed: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L63)
+Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L63)
 
 Whether data is compressed.
 
@@ -30,7 +30,7 @@ Whether data is compressed.
 optional hash: string;
 ```
 
-Defined in: [persistence/src/types.ts:68](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L68)
+Defined in: [persistence/src/types.ts:68](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L68)
 
 Optional integrity hash (SHA-256 hex).
 
@@ -42,7 +42,7 @@ Optional integrity hash (SHA-256 hex).
 savedAt: number;
 ```
 
-Defined in: [persistence/src/types.ts:48](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L48)
+Defined in: [persistence/src/types.ts:48](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L48)
 
 Timestamp when snapshot was saved (ms since epoch).
 
@@ -54,7 +54,7 @@ Timestamp when snapshot was saved (ms since epoch).
 schemaVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:53](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L53)
+Defined in: [persistence/src/types.ts:53](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L53)
 
 Schema version for migration support.
 
@@ -66,7 +66,7 @@ Schema version for migration support.
 sizeBytes: number;
 ```
 
-Defined in: [persistence/src/types.ts:58](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L58)
+Defined in: [persistence/src/types.ts:58](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L58)
 
 Size of serialized data in bytes (before compression).
 
@@ -78,6 +78,6 @@ Size of serialized data in bytes (before compression).
 optional ttlMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:73](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L73)
+Defined in: [persistence/src/types.ts:73](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L73)
 
 Time-to-live in milliseconds. If set, cache expires after savedAt + ttlMs.

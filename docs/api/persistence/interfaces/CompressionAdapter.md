@@ -6,7 +6,7 @@
 
 # Interface: CompressionAdapter
 
-Defined in: [persistence/src/types.ts:155](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L155)
+Defined in: [persistence/src/types.ts:155](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L155)
 
 Compression adapter for reducing storage size.
 
@@ -18,7 +18,7 @@ Compression adapter for reducing storage size.
 readonly algorithm: string;
 ```
 
-Defined in: [persistence/src/types.ts:169](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L169)
+Defined in: [persistence/src/types.ts:169](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L169)
 
 Name of compression algorithm.
 
@@ -30,7 +30,7 @@ Name of compression algorithm.
 compress(data): string;
 ```
 
-Defined in: [persistence/src/types.ts:159](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L159)
+Defined in: [persistence/src/types.ts:159](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L159)
 
 Compress a string.
 
@@ -52,7 +52,7 @@ Compress a string.
 decompress(data): string;
 ```
 
-Defined in: [persistence/src/types.ts:164](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L164)
+Defined in: [persistence/src/types.ts:164](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L164)
 
 Decompress a string.
 

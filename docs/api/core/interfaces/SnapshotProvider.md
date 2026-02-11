@@ -6,7 +6,7 @@
 
 # Interface: SnapshotProvider\<T\>
 
-Defined in: [types.ts:51](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L51)
+Defined in: [types.ts:51](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L51)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: [types.ts:51](https://github.com/777genius/state-sync/blob/48102438d
 getSnapshot(): Promise<SnapshotEnvelope<T>>;
 ```
 
-Defined in: [types.ts:52](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L52)
+Defined in: [types.ts:52](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L52)
 
 #### Returns
 

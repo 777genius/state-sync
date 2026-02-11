@@ -1,32 +1,54 @@
 # Lifecycle Contract
 
-`createRevisionSync()` returns a `RevisionSyncHandle` — a lightweight controller for the sync loop. This page documents its methods, error phases, and observability fields.
+`createRevisionSync(options)` returns a `RevisionSyncHandle` -- a lightweight controller for the sync loop.
+
+## RevisionSyncOptions
+
+| Option | Type | Required | Description |
+|--------|------|----------|-------------|
+| `topic` | `string` | Yes | Non-empty topic identifier |
+| `subscriber` | `InvalidationSubscriber` | Yes | Delivers invalidation events |
+| `provider` | `SnapshotProvider<T>` | Yes | Returns the latest snapshot |
+| `applier` | `SnapshotApplier<T>` | Yes | Writes state into your store |
+| `shouldRefresh` | `(event) => boolean` | No | Filter which events trigger a refresh |
+| `logger` | `Logger` | No | Debug/warn/error logging |
+| `onError` | `(ctx: SyncErrorContext) => void` | No | Error callback for all phases |
+| `throttling` | `InvalidationThrottlingOptions` | No | Debounce/throttle refresh rate |
+
+### Throttling options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `debounceMs` | `number` | - | Wait for N ms of silence before refreshing |
+| `throttleMs` | `number` | - | At most 1 refresh per N ms |
+| `leading` | `boolean` | `true` | Fire on the leading edge (throttle only) |
+| `trailing` | `boolean` | `true` | Fire on the trailing edge (throttle only) |
 
 ## RevisionSyncHandle
 
 ### `start()`
 
-- Subscribes to invalidation events and loads the initial snapshot.
-- **Idempotent**: repeated calls are a no-op (does not duplicate the subscription).
-- **Throws** if called after `stop()` — protects against subscription leaks.
-- On subscription or initial refresh failure, rolls back internal state (unsubscribe, `started = false`).
+- Subscribes to invalidation events, then performs an initial refresh.
+- **Idempotent**: repeated calls are a no-op.
+- **Throws** if called after `stop()`.
+- On failure (subscribe or initial refresh), rolls back state: unsubscribes, resets `started = false`.
 
 ### `stop()`
 
-- Unsubscribes from invalidation events and blocks further apply.
+- Unsubscribes from events and blocks further applies.
 - **Idempotent**: repeated calls are a no-op.
-- After `stop()`, the handle is considered "dead" — `start()` will throw.
+- After `stop()`, the handle is dead -- `start()` will throw.
 
 ### `refresh()`
 
-- One-shot: fetch a snapshot from the provider and apply it via the applier.
-- **Allowed before `start()`** — useful for eager prefetch without a subscription.
-- **No-op after `stop()`** — does not throw, it simply skips.
-- Supports coalescing: if a refresh is already in flight, the next call is queued (at most 1 queued).
+- One-shot: fetch snapshot from provider and apply if newer.
+- **Allowed before `start()`** -- useful for eager prefetch without subscription.
+- **No-op after `stop()`** -- does not throw, silently skips.
+- Supports coalescing: at most 1 refresh is queued while one is in-flight.
 
 ### `getLocalRevision()`
 
-- Returns the current local revision (the last successfully applied revision).
+- Returns the last successfully applied revision.
 - `"0"` until the first successful apply.
 
 ## Error Phases
@@ -84,15 +106,15 @@ Each phase is emitted at most once per error (deduplicated via the `alreadyEmitt
 ## Call order
 
 ```
-createRevisionSync(options)  →  handle (inactive)
+createRevisionSync(options)  →  handle (inactive, localRevision = "0")
     ↓
-handle.refresh()             →  optional: one-shot fetch+apply
+handle.refresh()             →  optional: one-shot fetch + apply
     ↓
-handle.start()               →  subscribe + initial refresh
+handle.start()               →  subscribe → initial refresh
     ↓
-[invalidation events]        →  automatic refresh cycle
+[invalidation events]        →  automatic refresh cycle (with coalescing + throttle)
     ↓
-handle.stop()                →  unsubscribe, block further apply
+handle.stop()                →  unsubscribe, dispose throttle, block further apply
 ```
 
 ## See also

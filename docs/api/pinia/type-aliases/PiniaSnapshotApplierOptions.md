@@ -24,7 +24,7 @@ type PiniaSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [pinia.ts:30](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/pinia/src/pinia.ts#L30)
+Defined in: [pinia.ts:30](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/pinia/src/pinia.ts#L30)
 
 ## Type Parameters
 

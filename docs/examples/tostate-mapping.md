@@ -154,12 +154,12 @@ await sync.start();
 
 | Adapter | `ctx` contains |
 |---------|---------------|
-| `@statesync/pinia` | `{ store: PiniaStoreLike }` |
-| `@statesync/zustand` | `{ store: ZustandStoreLike }` |
-| `@statesync/valtio` | `{ proxy: ValtioProxyLike }` |
-| `@statesync/svelte` | `{ store: SvelteStoreLike }` |
-| `@statesync/vue` (reactive) | `{ state: ReactiveObject }` |
-| `@statesync/vue` (ref) | `{ ref: VueRefLike }` |
+| `@statesync/zustand` | `{ store: ZustandStoreLike<State> }` |
+| `@statesync/pinia` | `{ store: PiniaStoreLike<State> }` |
+| `@statesync/vue` (reactive) | `{ state: State }` |
+| `@statesync/vue` (ref) | `{ ref: VueRefLike<State> }` |
+| `@statesync/valtio` | `{ proxy: ValtioProxyLike<State> }` |
+| `@statesync/svelte` | `{ store: SvelteStoreLike<State> }` |
 
 ## Key points
 

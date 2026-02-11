@@ -42,6 +42,7 @@ import {
   loadPersistedSnapshot,
 } from '@statesync/persistence';
 import { createRevisionSync } from '@statesync/core';
+import type { Revision, SnapshotEnvelope } from '@statesync/core';
 
 // Type definitions for each version
 interface SettingsV1 {
@@ -83,7 +84,7 @@ const storage = createLocalStorageBackend<Settings>({
 });
 
 // Load with migration
-async function loadSettings(applier: { apply: (snapshot: any) => void }) {
+async function loadSettings(applier: { apply: (snapshot: SnapshotEnvelope<Settings>) => void }) {
   const result = await loadPersistedSnapshot(storage, applier, {
     migration,
     validate: true,
@@ -91,12 +92,7 @@ async function loadSettings(applier: { apply: (snapshot: any) => void }) {
   });
 
   if (result) {
-    console.log(`Loaded settings from version ${result.revision}`);
-
-    // Check if migration happened
-    if (migration.currentVersion > parseInt(result.revision)) {
-      console.log('Settings were migrated to latest version');
-    }
+    console.log(`Loaded settings, revision: ${result.revision}`);
   } else {
     console.log('No saved settings found, using defaults');
   }
@@ -130,7 +126,7 @@ async function main() {
   };
 
   const innerApplier = {
-    apply(snapshot: { revision: string; data: Settings }) {
+    apply(snapshot: SnapshotEnvelope<Settings>) {
       currentSettings = snapshot.data;
       console.log('Applied settings:', currentSettings);
     },
@@ -159,14 +155,6 @@ async function main() {
   });
 
   await sync.start();
-
-  // Listen for migration events
-  applier.on('migrated', (result) => {
-    console.log(`Migrated from v${result.fromVersion} to v${result.toVersion}`);
-    if (!result.success) {
-      console.error('Migration failed:', result.error);
-    }
-  });
 }
 ```
 
@@ -209,30 +197,31 @@ const result = await loadPersistedSnapshot(storage, applier, {
 });
 
 if (!result) {
-  // No data or migration failed
-  // Use defaults
+  // No data or migration failed — use defaults
   applier.apply({
-    revision: '0',
+    revision: '0' as Revision,
     data: defaultSettings,
   });
 }
+```
 
-// Or listen for migration events
-applier.on('migrated', async (result) => {
-  if (!result.success) {
-    // Log error, show notification, or use defaults
-    console.error('Migration failed:', result.error);
+To handle migration errors in detail, pass an error handler to `loadPersistedSnapshot`:
 
-    // Option 1: Clear corrupted data and start fresh
-    await storage.clear?.();
-
-    // Option 2: Try to recover what we can
-    const partial = tryRecoverSettings(result.error);
-    if (partial) {
-      applier.apply({ revision: '0', data: { ...defaultSettings, ...partial } });
-    }
+```typescript
+const result = await loadPersistedSnapshot(storage, applier, (ctx) => {
+  if (ctx.operation === 'migrate') {
+    console.error('Migration failed:', ctx.error);
+    // Clear corrupted data and start fresh
+    storage.clear?.();
   }
-});
+}, { migration });
+
+if (!result) {
+  applier.apply({
+    revision: '0' as Revision,
+    data: defaultSettings,
+  });
+}
 ```
 
 ## Testing migrations

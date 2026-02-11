@@ -6,7 +6,7 @@
 
 # Interface: SvelteStoreLike\<State\>
 
-Defined in: [svelte.ts:14](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/svelte/src/svelte.ts#L14)
+Defined in: [svelte.ts:14](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/svelte/src/svelte.ts#L14)
 
 Minimal structural interface for a Svelte writable store.
 
@@ -32,7 +32,7 @@ The real Svelte writable store implements:
 set(value): void;
 ```
 
-Defined in: [svelte.ts:15](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/svelte/src/svelte.ts#L15)
+Defined in: [svelte.ts:15](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/svelte/src/svelte.ts#L15)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [svelte.ts:15](https://github.com/777genius/state-sync/blob/48102438
 update(updater): void;
 ```
 
-Defined in: [svelte.ts:16](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/svelte/src/svelte.ts#L16)
+Defined in: [svelte.ts:16](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/svelte/src/svelte.ts#L16)
 
 #### Parameters
 

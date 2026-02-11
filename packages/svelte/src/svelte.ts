@@ -16,6 +16,8 @@ export interface SvelteStoreLike<State> {
   update(updater: (current: State) => State): void;
 }
 
+export type SvelteTargetKind = 'store' | 'state';
+
 export type SvelteApplyMode = 'patch' | 'replace';
 
 type PickOrOmitKeys<State extends Record<string, unknown>> =
@@ -23,48 +25,45 @@ type PickOrOmitKeys<State extends Record<string, unknown>> =
   | { pickKeys?: never; omitKeys?: ReadonlyArray<keyof State> }
   | { pickKeys?: never; omitKeys?: never };
 
-export type SvelteSnapshotApplierOptions<State extends Record<string, unknown>, Data> =
+export type SvelteStoreSnapshotApplierOptions<State extends Record<string, unknown>, Data> =
   | {
-      /**
-       * Default: 'patch'
-       *
-       * - 'patch': calls `store.update(current => ({ ...current, ...filteredPatch }))`
-       *   Spread merge creates a new reference (Svelte reactivity requires new reference).
-       * - 'replace': builds a new state keeping omitted keys from current,
-       *   assigns allowed keys from snapshot. Always creates a new reference.
-       */
+      target?: 'store';
       mode?: 'patch';
-      /**
-       * Maps snapshot data to a state patch.
-       *
-       * Default: identity cast (treats `data` as `Partial<State>`).
-       */
       toState?: (data: Data, ctx: { store: SvelteStoreLike<State> }) => Partial<State>;
-      /**
-       * Limit which top-level keys are allowed to be updated by snapshots.
-       *
-       * Use this to keep ephemeral/local-only fields (like UI flags) isolated.
-       */
       pickKeys?: ReadonlyArray<keyof State>;
       omitKeys?: ReadonlyArray<keyof State>;
-      /**
-       * If true, throws when `toState` returns a non-object value.
-       * Default: true
-       */
       strict?: boolean;
     }
   | {
+      target?: 'store';
       mode: 'replace';
-      /**
-       * Maps snapshot data to a full next state.
-       *
-       * When using 'replace', prefer returning the full state to avoid leaving stale keys.
-       */
       toState?: (data: Data, ctx: { store: SvelteStoreLike<State> }) => State;
       pickKeys?: ReadonlyArray<keyof State>;
       omitKeys?: ReadonlyArray<keyof State>;
       strict?: boolean;
     };
+
+export type SvelteStateSnapshotApplierOptions<State extends Record<string, unknown>, Data> =
+  | {
+      target: 'state';
+      mode?: 'patch';
+      toState?: (data: Data, ctx: { state: State }) => Partial<State>;
+      pickKeys?: ReadonlyArray<keyof State>;
+      omitKeys?: ReadonlyArray<keyof State>;
+      strict?: boolean;
+    }
+  | {
+      target: 'state';
+      mode: 'replace';
+      toState?: (data: Data, ctx: { state: State }) => State;
+      pickKeys?: ReadonlyArray<keyof State>;
+      omitKeys?: ReadonlyArray<keyof State>;
+      strict?: boolean;
+    };
+
+export type SvelteSnapshotApplierOptions<State extends Record<string, unknown>, Data> =
+  | SvelteStoreSnapshotApplierOptions<State, Data>
+  | SvelteStateSnapshotApplierOptions<State, Data>;
 
 function isObjectLike(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -103,20 +102,83 @@ function filterTopLevelKeys<State extends Record<string, unknown>>(
 
 /**
  * Creates a SnapshotApplier that applies snapshots into a Svelte writable store.
- *
- * This is a framework adapter: it only focuses on *how to apply a snapshot*
- * into a concrete state container. It does not fetch snapshots and does not
- * listen to invalidation events.
  */
 export function createSvelteSnapshotApplier<State extends Record<string, unknown>, Data = State>(
   store: SvelteStoreLike<State>,
+  options?: SvelteStoreSnapshotApplierOptions<State, Data>,
+): SnapshotApplier<Data>;
+
+/**
+ * Creates a SnapshotApplier that applies snapshots into a Svelte 5 `$state` proxy.
+ *
+ * Mutates the state object in-place (property assignment / delete),
+ * which is how Svelte 5 fine-grained reactivity tracks changes.
+ */
+export function createSvelteSnapshotApplier<State extends Record<string, unknown>, Data = State>(
+  state: State,
+  options: SvelteStateSnapshotApplierOptions<State, Data>,
+): SnapshotApplier<Data>;
+
+/**
+ * Implementation.
+ */
+export function createSvelteSnapshotApplier<State extends Record<string, unknown>, Data = State>(
+  storeOrState: SvelteStoreLike<State> | State,
   options: SvelteSnapshotApplierOptions<State, Data> = {},
 ): SnapshotApplier<Data> {
+  const targetKind: SvelteTargetKind =
+    'target' in options && options.target === 'state' ? 'state' : 'store';
   const mode: SvelteApplyMode = options.mode ?? 'patch';
   const strict = options.strict ?? true;
-
-  const toState = options.toState ?? ((data: Data) => data as unknown as Partial<State> | State);
   const allowKey = makeKeyFilter<State>(options as PickOrOmitKeys<State>);
+
+  if (targetKind === 'state') {
+    const state = storeOrState as State;
+    const stateOptions = options as SvelteStateSnapshotApplierOptions<State, Data>;
+    const toState =
+      stateOptions.toState ?? ((data: Data) => data as unknown as Partial<State> | State);
+
+    return {
+      apply(snapshot: SnapshotEnvelope<Data>): void {
+        const mapped = toState(snapshot.data, { state });
+
+        if (!isPlainObject(mapped)) {
+          const message =
+            '@statesync/svelte: toState(data) must return a plain object (top-level state)';
+          if (strict) throw new Error(message);
+          return;
+        }
+
+        if (mode === 'replace') {
+          const next = filterTopLevelKeys<State>(mapped, allowKey) as Partial<State>;
+          const dyn = state as Record<string, unknown>;
+          for (const key of Object.keys(state)) {
+            if (!allowKey(key as keyof State)) continue;
+            if (!(key in next)) {
+              delete dyn[key];
+            }
+          }
+          for (const [key, value] of Object.entries(next)) {
+            dyn[key] = value;
+          }
+          return;
+        }
+
+        // patch mode: mutate in-place (Svelte 5 $state reactivity)
+        const patch = filterTopLevelKeys<State>(mapped, allowKey) as Partial<State>;
+        const dyn = state as Record<string, unknown>;
+        for (const [key, value] of Object.entries(patch)) {
+          dyn[key] = value;
+        }
+      },
+    };
+  }
+
+  // store target (default) — Svelte 4 writable stores
+  const store = storeOrState as SvelteStoreLike<State>;
+  const storeOptions = options as SvelteStoreSnapshotApplierOptions<State, Data>;
+  const toState =
+    storeOptions.toState ?? ((data: Data) => data as unknown as Partial<State> | State);
 
   return {
     apply(snapshot: SnapshotEnvelope<Data>): void {
@@ -133,13 +195,11 @@ export function createSvelteSnapshotApplier<State extends Record<string, unknown
         const next = filterTopLevelKeys<State>(mapped, allowKey);
         store.update((current) => {
           const base: Record<string, unknown> = {};
-          // Preserve omitted keys from current
           for (const key of Object.keys(current as Record<string, unknown>)) {
             if (!allowKey(key as keyof State)) {
               base[key] = (current as Record<string, unknown>)[key];
             }
           }
-          // Apply allowed keys from snapshot
           for (const [key, value] of Object.entries(next)) {
             base[key] = value;
           }

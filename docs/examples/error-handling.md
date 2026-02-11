@@ -16,6 +16,10 @@ state-sync categorizes errors by phase:
 | `getSnapshot` | Provider failed to fetch data | Yes (network issue) |
 | `apply` | Applier threw while updating state | Maybe (data issue) |
 | `protocol` | Invalid revision/topic format | No (fix code) |
+| `start` | Failed during `handle.start()` setup | Yes (check config) |
+| `refresh` | Unclassified error inside refresh cycle | Check logs |
+| `invalidation` | Error processing an invalidation event | Verify payload |
+| `throttle` | Error in throttle/coalescing layer | Check config |
 
 ## Basic error handling
 

@@ -10,7 +10,7 @@
 type TauriListen = <T>(eventName, handler) => Promise<Unsubscribe>;
 ```
 
-Defined in: [transport.ts:16](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L16)
+Defined in: [transport.ts:16](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/tauri/src/transport.ts#L16)
 
 Minimal structural type for Tauri `listen`.
 

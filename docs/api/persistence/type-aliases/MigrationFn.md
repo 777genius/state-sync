@@ -10,7 +10,7 @@
 type MigrationFn<TOld, TNew> = (oldData) => TNew;
 ```
 
-Defined in: [persistence/src/types.ts:179](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L179)
+Defined in: [persistence/src/types.ts:179](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L179)
 
 Migration function for upgrading persisted data.
 

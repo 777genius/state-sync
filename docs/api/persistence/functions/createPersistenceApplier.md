@@ -10,7 +10,7 @@
 function createPersistenceApplier<T>(options): DisposablePersistenceApplier<T>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:253](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/persistence-applier.ts#L253)
+Defined in: [persistence/src/persistence-applier.ts:253](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/persistence-applier.ts#L253)
 
 Wraps an applier with automatic persistence.
 

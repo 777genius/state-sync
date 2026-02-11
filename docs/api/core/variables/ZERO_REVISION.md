@@ -10,4 +10,4 @@
 const ZERO_REVISION: Revision;
 ```
 
-Defined in: [revision.ts:7](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/revision.ts#L7)
+Defined in: [revision.ts:7](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/revision.ts#L7)

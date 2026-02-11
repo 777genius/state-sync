@@ -6,7 +6,7 @@
 
 # Interface: LocalStorageBackendOptions
 
-Defined in: [persistence/src/storage/local-storage.ts:7](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/storage/local-storage.ts#L7)
+Defined in: [persistence/src/storage/local-storage.ts:7](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/local-storage.ts#L7)
 
 Options for localStorage backend.
 
@@ -18,7 +18,7 @@ Options for localStorage backend.
 optional deserialize: (data) => SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:21](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/storage/local-storage.ts#L21)
+Defined in: [persistence/src/storage/local-storage.ts:21](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/local-storage.ts#L21)
 
 Optional custom deserializer. Defaults to JSON.parse.
 
@@ -40,7 +40,7 @@ Optional custom deserializer. Defaults to JSON.parse.
 key: string;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:11](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/storage/local-storage.ts#L11)
+Defined in: [persistence/src/storage/local-storage.ts:11](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/local-storage.ts#L11)
 
 The key to use in localStorage.
 
@@ -52,7 +52,7 @@ The key to use in localStorage.
 optional serialize: (snapshot) => string;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:16](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/storage/local-storage.ts#L16)
+Defined in: [persistence/src/storage/local-storage.ts:16](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/local-storage.ts#L16)
 
 Optional custom serializer. Defaults to JSON.stringify.
 

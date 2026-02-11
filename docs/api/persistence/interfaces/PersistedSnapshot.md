@@ -6,7 +6,7 @@
 
 # Interface: PersistedSnapshot\<T\>
 
-Defined in: [persistence/src/types.ts:79](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L79)
+Defined in: [persistence/src/types.ts:79](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L79)
 
 Wrapper that includes metadata with the snapshot.
 
@@ -24,7 +24,7 @@ Wrapper that includes metadata with the snapshot.
 metadata: PersistedSnapshotMetadata;
 ```
 
-Defined in: [persistence/src/types.ts:81](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L81)
+Defined in: [persistence/src/types.ts:81](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L81)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [persistence/src/types.ts:81](https://github.com/777genius/state-syn
 snapshot: SnapshotEnvelope<T>;
 ```
 
-Defined in: [persistence/src/types.ts:80](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L80)
+Defined in: [persistence/src/types.ts:80](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L80)

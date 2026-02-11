@@ -2,9 +2,11 @@
 import { useData } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import { computed, nextTick, provide } from 'vue';
-import { useCodeblockCollapse } from './codeblockCollapse';
+import { useCodeblockCollapse } from 'vitepress-codeblock-collapse';
+import 'vitepress-codeblock-collapse/style.css';
 import HeroVideo from './HeroVideo.vue';
-import { useMermaidZoom } from './mermaidZoom';
+import { useMermaidZoom } from 'vitepress-mermaid-zoom';
+import 'vitepress-mermaid-zoom/style.css';
 
 const { Layout } = DefaultTheme;
 const { isDark, page } = useData();
