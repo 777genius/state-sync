@@ -17,12 +17,6 @@ hero:
     - theme: alt
       text: Comparison
       link: /comparison
-    - theme: alt
-      text: Benchmarks
-      link: /benchmarks
-    - theme: alt
-      text: Packages
-      link: /packages/
 features:
   - icon: 🔢
     title: Revision-based ordering
