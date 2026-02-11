@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vitepress';
-
-const { go } = useRouter();
-
 const cards = [
   { icon: '\u{1F680}', title: 'Quickstart', desc: 'Get running in 5 minutes', link: '/guide/quickstart' },
   { icon: '\u2696\uFE0F', title: 'Comparison', desc: 'vs @tauri-store, zubridge, and more', link: '/comparison' },
@@ -13,16 +9,18 @@ const cards = [
 
 <template>
   <div class="explore-grid">
-    <button
+    <a
       v-for="card in cards"
       :key="card.title"
+      :href="card.link"
       class="explore-card"
-      @click="go(card.link)"
     >
-      <span class="explore-icon">{{ card.icon }}</span>
-      <strong>{{ card.title }}</strong>
+      <div class="explore-header">
+        <span class="explore-icon">{{ card.icon }}</span>
+        <strong>{{ card.title }}</strong>
+      </div>
       <span class="explore-desc">{{ card.desc }}</span>
-    </button>
+    </a>
   </div>
 </template>
 
@@ -43,16 +41,13 @@ const cards = [
 .explore-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
+  gap: 6px;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
-  text-align: left;
-  font-family: inherit;
-  cursor: pointer;
+  text-decoration: none !important;
   transition: border-color 0.25s, background-color 0.25s, transform 0.2s;
 }
 
@@ -61,10 +56,15 @@ const cards = [
   transform: translateY(-2px);
 }
 
+.explore-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .explore-icon {
-  font-size: 24px;
+  font-size: 22px;
   line-height: 1;
-  margin-bottom: 4px;
 }
 
 .explore-card strong {

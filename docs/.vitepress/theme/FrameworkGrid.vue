@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vitepress';
-
-const { go } = useRouter();
-
 const frameworks = [
   { name: 'Zustand', link: '/packages/zustand', color: '#433e38' },
   { name: 'Pinia', link: '/packages/pinia', color: '#ffd859' },
@@ -12,19 +8,15 @@ const frameworks = [
   { name: 'Tauri', link: '/packages/tauri', color: '#ffc131' },
   { name: 'Electron', link: '/packages/electron', color: '#47848f' },
 ];
-
-function navigate(link: string) {
-  go(link);
-}
 </script>
 
 <template>
   <div class="framework-grid">
-    <button
+    <a
       v-for="fw in frameworks"
       :key="fw.name"
+      :href="fw.link"
       class="framework-card"
-      @click="navigate(fw.link)"
     >
       <span class="framework-logo">
         <!-- Zustand (bear paw) -->
@@ -79,7 +71,7 @@ function navigate(link: string) {
         </svg>
       </span>
       <span class="framework-name">{{ fw.name }}</span>
-    </button>
+    </a>
   </div>
 </template>
 
@@ -101,9 +93,9 @@ function navigate(link: string) {
   border: 1px solid var(--vp-c-divider);
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
+  text-decoration: none !important;
   font-weight: 500;
   font-size: 14px;
-  font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s, background-color 0.25s, transform 0.2s;
 }
