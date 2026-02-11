@@ -198,11 +198,49 @@ pinia.use(PiniaSharedState({ enable: true }))
 
 ---
 
-## Electron Ecosystem
+## Electron Ecosystem {#electron-ecosystem}
+
+### Electron Feature Matrix
+
+| Feature | state-sync | @zubridge/electron | reduxtron | electron-shared-state | electron-redux |
+|---------|:----------:|:------------------:|:---------:|:--------------------:|:--------------:|
+| **Architecture** | Invalidation-pull | Hub-and-spoke | Centralized store | Distributed copies | Dual store sync |
+| **Source of truth** | Main process | Main process | Main process | Every process | Main process |
+| **Revision ordering** | ✅ | ❌ | ⚠️ Sequential in main | ❌ | ❌ |
+| **Coalescing** | ✅ 2 IPC per burst | ❌ | ❌ | ❌ | ❌ |
+| **Debounce / Throttle** | ✅ Configurable | ❌ Planned | ❌ | ❌ | ❌ |
+| **Retry** | ✅ Exponential backoff | ❌ | ❌ | ❌ | ❌ |
+| **Structured errors** | ✅ Phase-based | ✅ 7 error types | ❌ | ❌ | ❌ |
+| **Persistence** | ✅ Separate pkg | ❌ | ❌ Demo only | ❌ | ❌ |
+| **Data migrations** | ✅ Versioned | ❌ | ❌ | ❌ | ❌ |
+| **Compression** | ✅ LZ / custom | ❌ | ❌ | ⚠️ Immer patches | ❌ |
+| **TypeScript** | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **contextIsolation** | ✅ | ✅ | ✅ | ❌ Requires `false` | ⚠️ v2 alpha only |
+| **sandbox: true** | ✅ | ✅ v2.2+ | ✅ | ❌ | ❌ |
+| **nodeIntegration** | Not needed | Not needed | Not needed | **Required** | Required (v1) |
+| **Multi-window** | ✅ | ✅ Auto-tracked | ⚠️ Manual wiring | ✅ Auto | ✅ Broadcast all |
+| **Framework** | Any | Zustand / Redux / Custom | Redux | Agnostic | Redux only |
+| **State lib adapters** | Zustand, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
+| **Sync mechanism** | Push (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
+| **Selective sync** | Per-topic | Per-key subscriptions | ❌ Full state | ❌ Full patches | ❌ All actions |
+| **Thunks / async** | N/A (protocol-level) | ✅ Priority-based | ❌ Serializable only | N/A | ❌ |
+| **Bundle size** | ~3 KB core + <1 KB transport | ~878 KB unpacked | ~1.2 KB (zero deps) | ~1.4 KB + immer (~16 KB) | ~5 KB |
+| **GitHub stars** | — | 44 | 37 | 60 | 758 |
+| **npm weekly downloads** | — | ~730 | ~170 | ~30 | ~2,500 |
+| **Actively maintained** | ✅ | ✅ | ⚠️ Last commit Apr 2024 | ❌ Last commit Apr 2023 | ❌ Dead since 2020 |
+| **Electron requirement** | Any | ≥12 | ≥24 | Any (legacy model) | ≥8 (v1 broken on 14+) |
+
+::: info Reading the table
+- ✅ = fully supported, ❌ = not supported, ⚠️ = partial or conditional support
+- "Bundle size" for state-sync = `@statesync/core` + `@statesync/electron`, both minified+gzipped
+- electron-redux stars are high due to historical popularity — the library is effectively abandoned
+:::
+
+---
 
 ### @zubridge/electron
 
-Active successor to `zutron`. Main process acts as source of truth, TypeScript-first.
+Active successor to [Zutron](https://github.com/goosewobbler/zutron). Main process acts as the single source of truth, TypeScript-first. The most actively maintained Electron state sync alternative.
 
 ```ts
 // Main process
@@ -212,48 +250,64 @@ const bridge = createZustandBridge(store);
 const { unsubscribe } = bridge.subscribe([mainWindow]);
 ```
 
-**Good:** Active development, TypeScript, main process as source of truth, works with any framework.
+**Good:** Active development, TypeScript, main process as source of truth, works with Zustand and Redux, follows modern Electron security model (`contextIsolation`, `sandbox`), structured error system (7 typed error classes), action scheduling with priorities, selective per-key subscriptions, built-in access control validation.
 
-**Limitations:** No coalescing, no ordering, no retry.
+**Limitations:** No revision ordering (last-write-wins), no coalescing (every action = separate IPC call, batching planned but not shipped), no retry on failure, no built-in persistence or data migrations, no compression (delta updates planned but not shipped), sends full state on every update, single maintainer (bus factor = 1), ~878 KB unpacked.
 
-**Use when:** Electron + Redux pattern, don't need ordering guarantees.
-
----
-
-### electron-redux
-
-StoreEnhancer pattern by Klarna.
-
-**Good:** Well-designed API, Redux ecosystem integration.
-
-**Limitations:** Depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). Not for new projects.
-
----
-
-### electron-shared-state
-
-Immer-based shared state for Electron.
-
-**Good:** Immer integration, TypeScript.
-
-**Limitations:** Inactive 12+ months. No ordering, no retry.
+**Use when:** Electron app with Zustand or Redux, you want proper security model, and ordering doesn't matter.
 
 ---
 
 ### reduxtron
 
-Small Redux bridge for Electron with demo apps.
+Minimal Redux bridge for Electron. Store lives exclusively in main process, renderers communicate via preload bridge. Follows modern security practices.
 
-**Good:** Minimal, Redux-based, active with examples.
+```ts
+// Preload
+import { preloadReduxBridge } from 'reduxtron/preload';
+contextBridge.exposeInMainWorld('redux', preloadReduxBridge(ipcRenderer));
+```
 
-**Limitations:** No ordering, no coalescing, no retry.
+**Good:** Tiny (~1.2 KB), modern security model (`contextIsolation`, `sandbox`), zero runtime dependencies, framework-agnostic with React/Svelte/Vue boilerplates, Zustand adapter included, supports Redux DevTools.
+
+**Limitations:** Manual per-window wiring required (confusing `ipcMain.emit` pattern), sends full state on every change, no thunks/async actions from renderer (serializable only), `getState()` is async in renderer, no ordering/coalescing/retry, pre-1.0 version (0.0.17), last commit April 2024.
+
+**Use when:** Minimal Electron + Redux setup, small state, want proper security with zero overhead.
+
+---
+
+### electron-redux
+
+StoreEnhancer pattern by Klarna. Once the most popular Electron state sync library (~758 stars).
+
+**Good:** Well-designed API concept, Redux ecosystem integration, TypeScript (v2).
+
+**Not recommended:** v1 depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). v2 never left alpha (`v2.0.0-alpha.9`, June 2021). Last meaningful code commit: August 2020. Documentation is incorrect for v2. 29 open issues, zero maintainer response since 2021. Despite being marked as "latest" on npm in October 2024, no actual code changes were made.
+
+---
+
+### electron-shared-state
+
+Immer-based shared state. Each process holds its own state copy; changes are synced via Immer patches (delta-only, efficient for large states).
+
+```ts
+import { createSharedStore } from 'electron-shared-state';
+
+const sharedStore = createSharedStore({ count: 0 });
+sharedStore.setState((state) => { state.count++; });
+```
+
+**Good:** Elegant single-function API, Immer patch-based sync (only changed data sent over IPC), TypeScript, automatic multi-window support, zero config.
+
+**Not recommended for new projects:** Requires `nodeIntegration: true` and `contextIsolation: false` — violates modern Electron security model. Broken with modern bundlers ([issue #11](https://github.com/zoubingwu/electron-shared-state/issues/11)). No initial state sync for late-connecting renderers. Last commit April 2023.
 
 ---
 
 ::: warning Not recommended for new projects
-- **electron-state-ipc** — abandoned 3+ years
-- **vuex-electron** — inactive, Vuex 3 only
-- **electron-store** — persistence/config tool, **not** state sync (commonly confused)
+- **electron-state-ipc** — abandoned, ~5 downloads/month
+- **vuex-electron** — abandoned 2019, Vuex 3 only (~1,600 downloads/month from legacy projects)
+- **redux-electron-store** — abandoned 2019, requires `nodeIntegration: true`
+- **electron-store** — persistence/config tool, **not** state sync (commonly confused). Great for saving settings to disk, but [file-watching sync is unreliable](https://github.com/sindresorhus/electron-store/issues/165) across processes.
 :::
 
 ---
