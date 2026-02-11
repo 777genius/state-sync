@@ -18,6 +18,12 @@
   -webkit-text-fill-color: transparent !important;
 }
 
+/* Hero actions: all buttons in one row */
+.VPHero .actions {
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+}
+
 /* Feature cards: icon + title on same line */
 .VPFeature .box {
   display: grid !important;
