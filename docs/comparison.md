@@ -206,26 +206,27 @@ pinia.use(PiniaSharedState({ enable: true }))
 |---------|:----------:|:------------------:|:---------:|:--------------------:|:--------------:|
 | **Architecture** | Invalidation-pull | Hub-and-spoke | Centralized store | Distributed copies | Dual store sync |
 | **Source of truth** | Main process | Main process | Main process | Every process | Main process |
+| **Multi-window** | ✅ | ✅ Auto-tracked | ⚠️ Manual wiring | ✅ Auto | ✅ Broadcast all |
+| **Framework** | Any | Zustand / Redux / Custom | Redux | Agnostic | Redux only |
+| **State lib adapters** | Zustand, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
+| **Delta sync** | ❌ Full snapshot | ❌ Full state | ❌ Full state | ✅ Immer patches | ❌ Full actions |
+| **Sync mechanism** | Pull (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
+| **Selective sync** | Per-topic | Per-key subscriptions | ❌ Full state | ❌ Full patches | ❌ All actions |
 | **Revision ordering** | ✅ | ❌ | ⚠️ Sequential in main | ❌ | ❌ |
 | **Coalescing** | ✅ 2 IPC per burst | ❌ | ❌ | ❌ | ❌ |
 | **Debounce / Throttle** | ✅ Configurable | ❌ | ❌ | ❌ | ❌ |
 | **Retry** | ✅ Exponential backoff | ❌ | ❌ | ❌ | ❌ |
-| **Delta sync** | ❌ Full snapshot | ❌ Full state | ❌ Full state | ✅ Immer patches | ❌ Full actions |
 | **Compression** | ✅ LZ / custom | ❌ | ❌ | ❌ | ❌ |
 | **Structured errors** | ✅ Phase-based | ✅ 7 error types | ❌ | ❌ | ❌ |
+| **Redux DevTools** | ❌ | ❌ | ✅ | ❌ | ✅ |
+| **Thunks / async** | N/A (protocol-level) | ✅ Priority-based | ❌ Serializable only | N/A | ❌ |
 | **Persistence** | ✅ Separate pkg | ❌ | ❌ Demo only | ❌ | ❌ |
 | **Data migrations** | ✅ Versioned | ❌ | ❌ | ❌ | ❌ |
-| **Redux DevTools** | ❌ | ❌ | ✅ | ❌ | ✅ |
 | **TypeScript** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **contextIsolation** | ✅ | ✅ | ✅ | ❌ Requires `false` | ⚠️ v2 only |
+| **contextIsolation** | ✅ | ✅ (also supports `false`) | ✅ | ❌ Requires `false` | ⚠️ v2 only |
 | **sandbox: true** | ✅ | ⚠️ v2.2 (prerelease) | ✅ | ❌ | ❌ |
 | **nodeIntegration** | Not needed | Not needed | Not needed | **Required** | Required (v1) |
-| **Multi-window** | ✅ | ✅ Auto-tracked | ⚠️ Manual wiring | ✅ Auto | ✅ Broadcast all |
-| **Framework** | Any | Zustand / Redux / Custom | Redux | Agnostic | Redux only |
-| **State lib adapters** | Zustand, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
-| **Sync mechanism** | Pull (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
-| **Selective sync** | Per-topic | Per-key subscriptions | ❌ Full state | ❌ Full patches | ❌ All actions |
-| **Thunks / async** | N/A (protocol-level) | ✅ Priority-based | ❌ Serializable only | N/A | ❌ |
+| **BrowserView / WebContentsView** | N/A | ✅ Both supported | N/A | N/A | N/A |
 | **API simplicity** | Moderate (engine setup) | Moderate (bridge setup) | Moderate (preload wiring) | ✅ Single function | Moderate (enhancer) |
 | **Bundle size** | ~3 KB core + <1 KB transport | ~8 KB | ~1.2 KB (zero deps) | ~1.4 KB + immer (~16 KB) | ~5 KB |
 | **GitHub stars** | — | 44 | 37 | 60 | 758 |
@@ -235,7 +236,7 @@ pinia.use(PiniaSharedState({ enable: true }))
 
 ::: info Reading the table
 - ✅ = fully supported, ❌ = not supported, ⚠️ = partial or conditional support
-- All bundle sizes are minified + gzipped via [bundlejs.com](https://bundlejs.com). state-sync = `@statesync/core` + `@statesync/electron`
+- Bundle sizes for state-sync and @zubridge/electron are minified + gzipped via [bundlejs.com](https://bundlejs.com). Sizes for reduxtron, electron-shared-state, and electron-redux are estimates based on source analysis (these packages import from `electron` and cannot be measured on bundlejs.com). state-sync = `@statesync/core` + `@statesync/electron`
 - state-sync is a new library with no established adoption metrics yet
 - electron-redux has high star count due to historical popularity (pre-2021)
 :::
@@ -254,11 +255,11 @@ const bridge = createZustandBridge(store);
 const { unsubscribe } = bridge.subscribe([mainWindow]);
 ```
 
-**Good:** Active development, TypeScript, main process as source of truth, works with Zustand and Redux, follows modern Electron security model (`contextIsolation`; `sandbox` support coming in v2.2), structured error system (7 typed error classes), thunk support with action scheduling, selective per-key subscriptions, automatic window tracking and cleanup.
+**Good:** Active development, TypeScript, main process as source of truth, works with Zustand and Redux, follows modern Electron security model (`contextIsolation`; `sandbox` support coming in v2.2), structured error system (7 typed error classes), thunk support with action scheduling, selective per-key subscriptions, automatic window tracking and cleanup, supports `BrowserView` and `WebContentsView` (not just `BrowserWindow`), IPC traffic logging via middleware system (v2.0+), also supports legacy `contextIsolation: false` (v2.1+).
 
-**Limitations:** No revision ordering (last-write-wins), no coalescing (every action = separate IPC call), no retry on failure, no built-in persistence or data migrations, no delta sync or compression, sends full state on every update.
+**Limitations:** No revision ordering (last-write-wins), no coalescing, no retry on failure, no built-in persistence or data migrations, no delta sync or compression, sends full state on every update.
 
-**Use when:** Electron app with Zustand or Redux, you want proper security model, and ordering doesn't matter.
+**Use when:** Electron app with Zustand or Redux, you want proper security model with active maintenance, and ordering doesn't matter.
 
 ---
 
@@ -272,11 +273,11 @@ import { preloadReduxBridge } from 'reduxtron/preload';
 contextBridge.exposeInMainWorld('redux', preloadReduxBridge(ipcRenderer));
 ```
 
-**Good:** Tiny (~1.2 KB), modern security model (`contextIsolation`, `sandbox`), zero runtime dependencies, framework-agnostic with React/Svelte/Vue boilerplates, Zustand adapter included, supports Redux DevTools.
+**Good:** Tiny (~1.2 KB), modern security model (`contextIsolation`, `sandbox`), zero runtime dependencies, framework-agnostic with React/Svelte/Vue/Vanilla boilerplates, Zustand adapter included, supports Redux DevTools, tray menu integration demonstrated in demo app.
 
-**Limitations:** Manual per-window wiring required (confusing `ipcMain.emit` pattern), sends full state on every change, no thunks/async actions from renderer (serializable only), `getState()` is async in renderer, no ordering/coalescing/retry, pre-1.0 version (0.0.17), last commit April 2024.
+**Limitations:** Manual per-window wiring required (`ipcMain.emit` pattern requires extra code to forward state to renderers), sends full state on every change, no thunks/async actions from renderer (serializable only), `getState()` is async in renderer, no ordering/coalescing/retry, last commit April 2024.
 
-**Use when:** Minimal Electron + Redux setup, small state, want proper security with zero overhead.
+**Use when:** Minimal Electron + Redux setup, want proper security with zero overhead and tiny bundle.
 
 ---
 
@@ -301,9 +302,11 @@ const sharedStore = createSharedStore({ count: 0 });
 sharedStore.setState((state) => { state.count++; });
 ```
 
-**Good:** Elegant single-function API, Immer patch-based sync (only changed data sent over IPC), TypeScript, automatic multi-window support, zero config.
+**Good:** Elegant single-function API, Immer patch-based sync (only changed data sent over IPC — the only Electron library with true delta sync), TypeScript, automatic multi-window support, zero config, named stores support for multiple independent stores, framework-agnostic.
 
-**Not recommended for new projects:** Requires `nodeIntegration: true` and `contextIsolation: false` — violates modern Electron security model. Broken with modern bundlers ([issue #11](https://github.com/zoubingwu/electron-shared-state/issues/11)). No initial state sync for late-connecting renderers. Last commit April 2023.
+**Limitations:** Requires `nodeIntegration: true` and `contextIsolation: false` — incompatible with modern Electron security model. Compatibility issues with some modern bundlers ([issue #11](https://github.com/zoubingwu/electron-shared-state/issues/11)). No initial state sync for late-connecting renderers. Last commit April 2023.
+
+**Use when:** Internal/trusted-content Electron app where delta sync matters (large state objects), you control all loaded content, and simplicity is the priority. Not suitable for apps loading remote/untrusted content.
 
 ---
 
@@ -335,7 +338,8 @@ sharedStore.setState((state) => { state.count++; });
 | Simple Tauri + Zustand/Pinia | [@tauri-store/*](https://github.com/ferreira-tb/tauri-store) — simpler API, built-in persistence |
 | App preferences / settings | [tauri-plugin-store](https://v2.tauri.app/plugin/store/) — official, minimal |
 | Collaborative editing | [Yjs](https://github.com/yjs/yjs) or [Automerge](https://automerge.org/) — CRDT-based |
-| Electron + Redux pattern | [@zubridge/electron](https://github.com/goosewobbler/zubridge) — Redux familiar |
+| Electron + Zustand/Redux, active maintenance | [@zubridge/electron](https://github.com/goosewobbler/zubridge) — most actively maintained Electron alternative |
+| Electron + Redux, minimal bundle | [reduxtron](https://github.com/vitordino/reduxtron) — tiny, zero deps, Redux DevTools |
 | Minimal bundle, browser tabs only | [zustand-sync-tabs](https://github.com/react18-tools/zustand-sync-tabs) / [pinia-shared-state](https://github.com/wobsoriano/pinia-shared-state) |
 | Single window app | You don't need state sync at all |
 
@@ -434,8 +438,9 @@ flowchart TD
 - [zubridge (Tauri)](https://github.com/goosewobbler/zubridge) — Redux-like for Tauri
 
 ### Electron
-- [@zubridge/electron](https://github.com/goosewobbler/zubridge) — Redux-like for Electron
-- [reduxtron](https://github.com/vitordino/reduxtron) — Small Redux bridge for Electron
+- [@zubridge/electron](https://github.com/goosewobbler/zubridge) — Zustand/Redux bridge for Electron
+- [reduxtron](https://github.com/vitordino/reduxtron) — Minimal Redux bridge for Electron
+- [electron-shared-state](https://github.com/zoubingwu/electron-shared-state) — Immer patch-based shared state
 
 ### Browser
 - [zustand-sync-tabs](https://github.com/react18-tools/zustand-sync-tabs) — Zustand tab sync
