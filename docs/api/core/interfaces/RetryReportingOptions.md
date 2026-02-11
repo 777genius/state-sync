@@ -6,7 +6,7 @@
 
 # Interface: RetryReportingOptions
 
-Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L66)
+Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L66)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/e93ac0627
 optional logger: Logger;
 ```
 
-Defined in: [retry.ts:69](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L69)
+Defined in: [retry.ts:69](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L69)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [retry.ts:69](https://github.com/777genius/state-sync/blob/e93ac0627
 optional onError: (ctx) => void;
 ```
 
-Defined in: [retry.ts:75](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L75)
+Defined in: [retry.ts:75](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L75)
 
 Optional error hook. This reports retry attempts with:
 - phase = 'getSnapshot'
@@ -50,7 +50,7 @@ Optional error hook. This reports retry attempts with:
 optional policy: RetryPolicy;
 ```
 
-Defined in: [retry.ts:68](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L68)
+Defined in: [retry.ts:68](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L68)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [retry.ts:68](https://github.com/777genius/state-sync/blob/e93ac0627
 topic: string;
 ```
 
-Defined in: [retry.ts:67](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L67)
+Defined in: [retry.ts:67](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L67)

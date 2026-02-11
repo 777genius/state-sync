@@ -6,7 +6,7 @@
 
 # Interface: DisposablePersistenceApplier\<T\>
 
-Defined in: [persistence/src/types.ts:12](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L12)
+Defined in: [persistence/src/types.ts:12](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L12)
 
 Extended SnapshotApplier with dispose capability.
 
@@ -30,7 +30,7 @@ Call dispose() when stopping sync to clean up pending debounce timers.
 apply(snapshot): void | Promise<void>;
 ```
 
-Defined in: [core/src/types.ts:56](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L56)
+Defined in: [core/src/types.ts:56](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L56)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ SnapshotApplier.apply
 dispose(): void;
 ```
 
-Defined in: [persistence/src/types.ts:17](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L17)
+Defined in: [persistence/src/types.ts:17](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L17)
 
 Cancels any pending debounced save operations.
 Should be called when sync is stopped.
@@ -73,7 +73,7 @@ Should be called when sync is stopped.
 flush(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:28](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L28)
+Defined in: [persistence/src/types.ts:28](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L28)
 
 Forces an immediate save of the last snapshot (if any pending).
 Useful before dispose() if you want to ensure data is saved.
@@ -90,7 +90,7 @@ Useful before dispose() if you want to ensure data is saved.
 getStats(): PersistenceStats;
 ```
 
-Defined in: [persistence/src/types.ts:38](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L38)
+Defined in: [persistence/src/types.ts:38](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L38)
 
 Get current persistence statistics.
 
@@ -106,7 +106,7 @@ Get current persistence statistics.
 hasPendingSave(): boolean;
 ```
 
-Defined in: [persistence/src/types.ts:22](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L22)
+Defined in: [persistence/src/types.ts:22](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L22)
 
 Returns true if there's a pending save operation.
 
@@ -122,7 +122,7 @@ Returns true if there's a pending save operation.
 on<K>(event, handler): () => void;
 ```
 
-Defined in: [persistence/src/types.ts:33](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L33)
+Defined in: [persistence/src/types.ts:33](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L33)
 
 Subscribe to persistence events.
 

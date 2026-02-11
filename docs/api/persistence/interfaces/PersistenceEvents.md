@@ -6,7 +6,7 @@
 
 # Interface: PersistenceEvents\<T\>
 
-Defined in: [persistence/src/types.ts:221](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L221)
+Defined in: [persistence/src/types.ts:221](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L221)
 
 Persistence event handlers.
 
@@ -24,7 +24,7 @@ Persistence event handlers.
 cleared: () => void;
 ```
 
-Defined in: [persistence/src/types.ts:255](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L255)
+Defined in: [persistence/src/types.ts:255](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L255)
 
 Emitted when storage is cleared.
 
@@ -40,7 +40,7 @@ Emitted when storage is cleared.
 expired: (snapshot, age) => void;
 ```
 
-Defined in: [persistence/src/types.ts:245](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L245)
+Defined in: [persistence/src/types.ts:245](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L245)
 
 Emitted when cache expires due to TTL.
 
@@ -63,7 +63,7 @@ Emitted when cache expires due to TTL.
 loadComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:240](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L240)
+Defined in: [persistence/src/types.ts:240](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L240)
 
 Emitted when load completes.
 
@@ -86,7 +86,7 @@ Emitted when load completes.
 migrated: (result) => void;
 ```
 
-Defined in: [persistence/src/types.ts:250](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L250)
+Defined in: [persistence/src/types.ts:250](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L250)
 
 Emitted when data is migrated.
 
@@ -108,7 +108,7 @@ Emitted when data is migrated.
 saveComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:230](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L230)
+Defined in: [persistence/src/types.ts:230](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L230)
 
 Emitted when save completes successfully.
 
@@ -131,7 +131,7 @@ Emitted when save completes successfully.
 saveError: (error, snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:235](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L235)
+Defined in: [persistence/src/types.ts:235](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L235)
 
 Emitted when save fails.
 
@@ -154,7 +154,7 @@ Emitted when save fails.
 saveStart: (snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:225](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L225)
+Defined in: [persistence/src/types.ts:225](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L225)
 
 Emitted when save starts.
 

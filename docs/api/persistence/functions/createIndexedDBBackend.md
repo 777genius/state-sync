@@ -10,7 +10,7 @@
 function createIndexedDBBackend<T>(options): StorageBackendWithMetadata<T>;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:65](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/indexed-db.ts#L65)
+Defined in: [persistence/src/storage/indexed-db.ts:65](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L65)
 
 Creates a StorageBackend that uses IndexedDB.
 

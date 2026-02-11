@@ -6,7 +6,7 @@
 
 # Interface: StorageUsage
 
-Defined in: [persistence/src/types.ts:131](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L131)
+Defined in: [persistence/src/types.ts:131](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L131)
 
 Storage usage information.
 
@@ -18,7 +18,7 @@ Storage usage information.
 optional percentage: number;
 ```
 
-Defined in: [persistence/src/types.ts:145](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L145)
+Defined in: [persistence/src/types.ts:145](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L145)
 
 Usage percentage (0-100).
 
@@ -30,7 +30,7 @@ Usage percentage (0-100).
 optional quota: number;
 ```
 
-Defined in: [persistence/src/types.ts:140](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L140)
+Defined in: [persistence/src/types.ts:140](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L140)
 
 Available quota in bytes (if known).
 
@@ -42,6 +42,6 @@ Available quota in bytes (if known).
 used: number;
 ```
 
-Defined in: [persistence/src/types.ts:135](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L135)
+Defined in: [persistence/src/types.ts:135](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L135)
 
 Used space in bytes.

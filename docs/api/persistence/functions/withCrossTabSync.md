@@ -10,7 +10,7 @@
 function withCrossTabSync<T>(storage, options): object;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:238](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/cross-tab.ts#L238)
+Defined in: [persistence/src/cross-tab.ts:238](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/cross-tab.ts#L238)
 
 Wrapper to add cross-tab sync to a storage backend.
 

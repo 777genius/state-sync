@@ -6,7 +6,7 @@
 
 # Interface: PiniaStoreLike\<State\>
 
-Defined in: [pinia.ts:14](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/pinia/src/pinia.ts#L14)
+Defined in: [pinia.ts:14](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/pinia/src/pinia.ts#L14)
 
 Minimal structural interface a Pinia store satisfies.
 
@@ -32,7 +32,7 @@ The real Pinia store implements:
 optional $id: string;
 ```
 
-Defined in: [pinia.ts:18](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/pinia/src/pinia.ts#L18)
+Defined in: [pinia.ts:18](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/pinia/src/pinia.ts#L18)
 
 Optional store id (Pinia exposes `$id`). Useful only for debugging.
 
@@ -44,7 +44,7 @@ Optional store id (Pinia exposes `$id`). Useful only for debugging.
 $state: State;
 ```
 
-Defined in: [pinia.ts:19](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/pinia/src/pinia.ts#L19)
+Defined in: [pinia.ts:19](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/pinia/src/pinia.ts#L19)
 
 ## Methods
 
@@ -54,7 +54,7 @@ Defined in: [pinia.ts:19](https://github.com/777genius/state-sync/blob/e93ac0627
 $patch(patch): void;
 ```
 
-Defined in: [pinia.ts:20](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/pinia/src/pinia.ts#L20)
+Defined in: [pinia.ts:20](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/pinia/src/pinia.ts#L20)
 
 #### Parameters
 

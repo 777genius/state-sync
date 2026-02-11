@@ -6,7 +6,7 @@
 
 # Interface: InvalidationEvent
 
-Defined in: [types.ts:33](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L33)
+Defined in: [types.ts:33](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L33)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:33](https://github.com/777genius/state-sync/blob/e93ac0627
 revision: Revision;
 ```
 
-Defined in: [types.ts:35](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L35)
+Defined in: [types.ts:35](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L35)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [types.ts:35](https://github.com/777genius/state-sync/blob/e93ac0627
 optional sourceId: string;
 ```
 
-Defined in: [types.ts:36](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L36)
+Defined in: [types.ts:36](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L36)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [types.ts:36](https://github.com/777genius/state-sync/blob/e93ac0627
 optional timestampMs: number;
 ```
 
-Defined in: [types.ts:37](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L37)
+Defined in: [types.ts:37](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L37)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [types.ts:37](https://github.com/777genius/state-sync/blob/e93ac0627
 topic: string;
 ```
 
-Defined in: [types.ts:34](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L34)
+Defined in: [types.ts:34](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/types.ts#L34)

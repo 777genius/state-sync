@@ -6,7 +6,7 @@
 
 # Interface: StorageBackend\<T\>
 
-Defined in: [persistence.ts:8](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/persistence.ts#L8)
+Defined in: [persistence.ts:8](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L8)
 
 Abstract storage backend interface (mirrors @statesync/persistence).
 Defined here to avoid requiring persistence as a dependency.
@@ -25,7 +25,7 @@ Defined here to avoid requiring persistence as a dependency.
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence.ts:11](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/persistence.ts#L11)
+Defined in: [persistence.ts:11](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L11)
 
 #### Returns
 
@@ -39,7 +39,7 @@ Defined in: [persistence.ts:11](https://github.com/777genius/state-sync/blob/e93
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence.ts:10](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/persistence.ts#L10)
+Defined in: [persistence.ts:10](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L10)
 
 #### Returns
 
@@ -53,7 +53,7 @@ Defined in: [persistence.ts:10](https://github.com/777genius/state-sync/blob/e93
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence.ts:9](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/persistence.ts#L9)
+Defined in: [persistence.ts:9](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L9)
 
 #### Parameters
 

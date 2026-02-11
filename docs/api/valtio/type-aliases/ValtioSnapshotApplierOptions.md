@@ -24,7 +24,7 @@ type ValtioSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [valtio.ts:18](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/valtio/src/valtio.ts#L18)
+Defined in: [valtio.ts:18](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/valtio/src/valtio.ts#L18)
 
 ## Type Parameters
 

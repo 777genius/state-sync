@@ -10,7 +10,7 @@
 function createTauriInvalidationSubscriber(options): InvalidationSubscriber;
 ```
 
-Defined in: [transport.ts:42](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/transport.ts#L42)
+Defined in: [transport.ts:42](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/transport.ts#L42)
 
 Creates an InvalidationSubscriber using Tauri's event system.
 

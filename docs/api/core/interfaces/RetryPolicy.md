@@ -6,7 +6,7 @@
 
 # Interface: RetryPolicy
 
-Defined in: [retry.ts:3](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L3)
+Defined in: [retry.ts:3](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L3)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [retry.ts:3](https://github.com/777genius/state-sync/blob/e93ac0627d
 optional backoffMultiplier: number;
 ```
 
-Defined in: [retry.ts:9](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L9)
+Defined in: [retry.ts:9](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L9)
 
 Exponential backoff multiplier. Default: 2
 
@@ -28,7 +28,7 @@ Exponential backoff multiplier. Default: 2
 optional initialDelayMs: number;
 ```
 
-Defined in: [retry.ts:7](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L7)
+Defined in: [retry.ts:7](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L7)
 
 Initial delay in ms. Default: 500
 
@@ -40,7 +40,7 @@ Initial delay in ms. Default: 500
 optional maxAttempts: number;
 ```
 
-Defined in: [retry.ts:5](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L5)
+Defined in: [retry.ts:5](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L5)
 
 Max attempts (including the first try). Default: 3
 
@@ -52,6 +52,6 @@ Max attempts (including the first try). Default: 3
 optional maxDelayMs: number;
 ```
 
-Defined in: [retry.ts:11](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/retry.ts#L11)
+Defined in: [retry.ts:11](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/retry.ts#L11)
 
 Max delay in ms. Default: 10000

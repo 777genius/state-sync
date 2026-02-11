@@ -6,7 +6,7 @@
 
 # Interface: StorageBackendWithMetadata\<T\>
 
-Defined in: [persistence/src/types.ts:111](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L111)
+Defined in: [persistence/src/types.ts:111](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L111)
 
 Extended storage backend with metadata support.
 
@@ -28,7 +28,7 @@ Extended storage backend with metadata support.
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:105](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L105)
+Defined in: [persistence/src/types.ts:105](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L105)
 
 Optional: Clear stored data.
 
@@ -48,7 +48,7 @@ Optional: Clear stored data.
 optional getUsage(): Promise<StorageUsage>;
 ```
 
-Defined in: [persistence/src/types.ts:125](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L125)
+Defined in: [persistence/src/types.ts:125](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L125)
 
 Get storage usage estimate in bytes.
 
@@ -64,7 +64,7 @@ Get storage usage estimate in bytes.
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:100](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L100)
+Defined in: [persistence/src/types.ts:100](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L100)
 
 Load the most recent snapshot from persistent storage.
 Returns null if no snapshot exists.
@@ -85,7 +85,7 @@ Returns null if no snapshot exists.
 loadWithMetadata(): Promise<PersistedSnapshot<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:120](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L120)
+Defined in: [persistence/src/types.ts:120](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L120)
 
 Load snapshot with metadata.
 
@@ -101,7 +101,7 @@ Load snapshot with metadata.
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:94](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L94)
+Defined in: [persistence/src/types.ts:94](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L94)
 
 Save a snapshot to persistent storage.
 
@@ -127,7 +127,7 @@ Save a snapshot to persistent storage.
 saveWithMetadata(data): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:115](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L115)
+Defined in: [persistence/src/types.ts:115](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L115)
 
 Save snapshot with metadata.
 

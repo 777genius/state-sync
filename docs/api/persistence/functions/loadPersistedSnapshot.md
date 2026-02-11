@@ -14,7 +14,7 @@ function loadPersistedSnapshot<T>(
 loadOptions?): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:447](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/persistence-applier.ts#L447)
+Defined in: [persistence/src/persistence-applier.ts:447](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/persistence-applier.ts#L447)
 
 Loads a persisted snapshot and applies it.
 

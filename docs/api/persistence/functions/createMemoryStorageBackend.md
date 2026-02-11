@@ -10,7 +10,7 @@
 function createMemoryStorageBackend<T>(options): StorageBackendWithMetadata<T> & object;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:66](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L66)
+Defined in: [persistence/src/storage/memory-storage.ts:66](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/memory-storage.ts#L66)
 
 Creates an in-memory StorageBackend for testing.
 

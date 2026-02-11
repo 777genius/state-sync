@@ -6,7 +6,7 @@
 
 # Interface: SaveThrottlingOptions
 
-Defined in: [persistence/src/types.ts:314](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L314)
+Defined in: [persistence/src/types.ts:314](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L314)
 
 Options for controlling save frequency.
 
@@ -18,7 +18,7 @@ Options for controlling save frequency.
 optional debounceMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:319](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L319)
+Defined in: [persistence/src/types.ts:319](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L319)
 
 Debounce delay in ms. Waits for "silence" before saving.
 Use for high-frequency updates where only final state matters.
@@ -31,7 +31,7 @@ Use for high-frequency updates where only final state matters.
 optional leading: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:331](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L331)
+Defined in: [persistence/src/types.ts:331](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L331)
 
 If true, save immediately on first update (before debounce/throttle).
 Default: false (for persistence, we want to wait for debounce)
@@ -44,7 +44,7 @@ Default: false (for persistence, we want to wait for debounce)
 optional maxWaitMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:337](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L337)
+Defined in: [persistence/src/types.ts:337](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L337)
 
 Maximum time to wait before forcing a save (ms).
 Prevents indefinite delay during continuous updates.
@@ -57,7 +57,7 @@ Prevents indefinite delay during continuous updates.
 optional throttleMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:325](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L325)
+Defined in: [persistence/src/types.ts:325](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L325)
 
 Throttle interval in ms. Maximum one save per interval.
 Use when you want periodic saves during continuous updates.

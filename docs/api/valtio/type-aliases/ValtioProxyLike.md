@@ -10,7 +10,7 @@
 type ValtioProxyLike<State> = State;
 ```
 
-Defined in: [valtio.ts:9](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/valtio/src/valtio.ts#L9)
+Defined in: [valtio.ts:9](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/valtio/src/valtio.ts#L9)
 
 Valtio uses mutable proxies. The "store" is just the proxy object itself.
 

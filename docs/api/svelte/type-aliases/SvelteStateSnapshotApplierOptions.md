@@ -26,7 +26,7 @@ type SvelteStateSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [svelte.ts:46](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/svelte/src/svelte.ts#L46)
+Defined in: [svelte.ts:46](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/svelte/src/svelte.ts#L46)
 
 ## Type Parameters
 

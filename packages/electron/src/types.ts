@@ -17,7 +17,7 @@ export interface ElectronIpcRendererLike {
  * Function that subscribes to IPC events and returns unsubscribe.
  * The unsubscribe pattern solves contextBridge's broken callback identity.
  *
- * Analog of TauriListen, but sync return (not Promise<Unsubscribe>).
+ * Analog of TauriListen, but sync return (not Promise of Unsubscribe).
  */
 export type ElectronListen = (channel: string, handler: (...args: unknown[]) => void) => () => void;
 

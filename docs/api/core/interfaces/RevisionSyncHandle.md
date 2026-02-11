@@ -6,7 +6,7 @@
 
 # Interface: RevisionSyncHandle
 
-Defined in: [engine.ts:36](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L36)
+Defined in: [engine.ts:36](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/engine.ts#L36)
 
 ## Methods
 
@@ -16,7 +16,7 @@ Defined in: [engine.ts:36](https://github.com/777genius/state-sync/blob/e93ac062
 getLocalRevision(): Revision;
 ```
 
-Defined in: [engine.ts:40](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L40)
+Defined in: [engine.ts:40](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/engine.ts#L40)
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [engine.ts:40](https://github.com/777genius/state-sync/blob/e93ac062
 refresh(): Promise<void>;
 ```
 
-Defined in: [engine.ts:39](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L39)
+Defined in: [engine.ts:39](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/engine.ts#L39)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [engine.ts:39](https://github.com/777genius/state-sync/blob/e93ac062
 start(): Promise<void>;
 ```
 
-Defined in: [engine.ts:37](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L37)
+Defined in: [engine.ts:37](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/engine.ts#L37)
 
 #### Returns
 
@@ -58,7 +58,7 @@ Defined in: [engine.ts:37](https://github.com/777genius/state-sync/blob/e93ac062
 stop(): void;
 ```
 
-Defined in: [engine.ts:38](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L38)
+Defined in: [engine.ts:38](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/engine.ts#L38)
 
 #### Returns
 

@@ -26,7 +26,7 @@ type VueRefSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [vue.ts:40](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/vue/src/vue.ts#L40)
+Defined in: [vue.ts:40](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/vue/src/vue.ts#L40)
 
 ## Type Parameters
 

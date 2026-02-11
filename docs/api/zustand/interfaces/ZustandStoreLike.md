@@ -6,7 +6,7 @@
 
 # Interface: ZustandStoreLike\<State\>
 
-Defined in: [zustand.ts:14](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/zustand/src/zustand.ts#L14)
+Defined in: [zustand.ts:14](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/zustand/src/zustand.ts#L14)
 
 Minimal structural interface a Zustand store satisfies.
 
@@ -32,7 +32,7 @@ The real Zustand store implements:
 getState(): State;
 ```
 
-Defined in: [zustand.ts:15](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/zustand/src/zustand.ts#L15)
+Defined in: [zustand.ts:15](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/zustand/src/zustand.ts#L15)
 
 #### Returns
 
@@ -46,7 +46,7 @@ Defined in: [zustand.ts:15](https://github.com/777genius/state-sync/blob/e93ac06
 setState(partial, replace?): void;
 ```
 
-Defined in: [zustand.ts:16](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/zustand/src/zustand.ts#L16)
+Defined in: [zustand.ts:16](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/zustand/src/zustand.ts#L16)
 
 #### Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: StorageBackend\<T\>
 
-Defined in: [persistence/src/types.ts:90](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L90)
+Defined in: [persistence/src/types.ts:90](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L90)
 
 Abstract storage backend for persisting snapshots.
 
@@ -31,7 +31,7 @@ The save/load methods work with SnapshotEnvelope to preserve revision metadata.
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:105](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L105)
+Defined in: [persistence/src/types.ts:105](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L105)
 
 Optional: Clear stored data.
 
@@ -47,7 +47,7 @@ Optional: Clear stored data.
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:100](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L100)
+Defined in: [persistence/src/types.ts:100](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L100)
 
 Load the most recent snapshot from persistent storage.
 Returns null if no snapshot exists.
@@ -64,7 +64,7 @@ Returns null if no snapshot exists.
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:94](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L94)
+Defined in: [persistence/src/types.ts:94](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L94)
 
 Save a snapshot to persistent storage.
 
