@@ -17,25 +17,58 @@ hero:
     - theme: alt
       text: Comparison
       link: /comparison
+    - theme: alt
+      text: Benchmarks
+      link: /benchmarks
+    - theme: alt
+      text: Packages
+      link: /packages/
 features:
   - icon: 🔢
     title: Revision-based ordering
     details: Monotonic revisions ensure updates apply in correct order. Stale events are automatically rejected.
+    link: /guide/protocol
+    linkText: Learn about protocol
   - icon: 🧩
     title: Multi-framework
     details: Official adapters for Pinia, Zustand, Valtio, Svelte, and Vue. Works with any state management.
+    link: /packages/
+    linkText: Browse packages
   - icon: 💾
     title: Persistence & caching
     details: localStorage, IndexedDB, schema migrations, compression, TTL. Cross-tab sync via BroadcastChannel.
+    link: /packages/persistence
+    linkText: Persistence docs
   - icon: 🔌
     title: Transport-agnostic
     details: Tauri events, BroadcastChannel, WebSocket, or custom. Subscriber/provider pattern fits any transport.
+    link: /guide/custom-transports
+    linkText: Custom transports
   - icon: 🛡️
     title: Resilient
     details: Throttling, retry with backoff, structured error handling by phase, comprehensive logging.
+    link: /examples/error-handling
+    linkText: Error handling examples
   - icon: 🪶
     title: Tiny footprint
     details: Core is 3.1KB gzipped. Framework adapters are ~0.8KB each. No bloat.
+    link: /comparison#bundle-size-minified-gzipped
+    linkText: See comparison
+  - icon: ⚡
+    title: 2ms IPC latency
+    details: p50 round-trip through Tauri IPC. 100 events coalesced to 2 fetches.
+    link: /benchmarks
+    linkText: View benchmarks
+  - icon: 🖥️
+    title: Tauri & Electron
+    details: Same core engine for both platforms. Transport adapters handle the IPC differences.
+    link: /packages/tauri
+    linkText: Tauri adapter
+  - icon: 🔒
+    title: TypeScript-first
+    details: Full type inference, generic state types, zero any. Framework adapters preserve store types.
+    link: /api/
+    linkText: API reference
 ---
 
 <div class="install-row">
@@ -82,6 +115,39 @@ npm install @statesync/tauri    # Tauri v2
 
 </details>
 
+## Supported Frameworks
+
+<div class="framework-grid">
+  <a href="/packages/zustand" class="framework-card">
+    <span class="framework-icon">⚛️</span>
+    <span>Zustand</span>
+  </a>
+  <a href="/packages/pinia" class="framework-card">
+    <span class="framework-icon">🍍</span>
+    <span>Pinia</span>
+  </a>
+  <a href="/packages/valtio" class="framework-card">
+    <span class="framework-icon">🔮</span>
+    <span>Valtio</span>
+  </a>
+  <a href="/packages/svelte" class="framework-card">
+    <span class="framework-icon">🔥</span>
+    <span>Svelte</span>
+  </a>
+  <a href="/packages/vue" class="framework-card">
+    <span class="framework-icon">💚</span>
+    <span>Vue</span>
+  </a>
+  <a href="/packages/tauri" class="framework-card">
+    <span class="framework-icon">🦀</span>
+    <span>Tauri</span>
+  </a>
+  <a href="/packages/electron" class="framework-card">
+    <span class="framework-icon">⚡</span>
+    <span>Electron</span>
+  </a>
+</div>
+
 ## Do you need state-sync?
 
 **Yes, if you have:**
@@ -115,6 +181,31 @@ sequenceDiagram
 ```
 
 Stale updates are rejected. Rapid events are merged. State stays consistent. [Learn more →](/guide/protocol)
+
+## Explore
+
+<div class="explore-grid">
+  <a href="/guide/quickstart" class="explore-card">
+    <span class="explore-icon">🚀</span>
+    <strong>Quickstart</strong>
+    <span>Get running in 5 minutes</span>
+  </a>
+  <a href="/comparison" class="explore-card">
+    <span class="explore-icon">⚖️</span>
+    <strong>Comparison</strong>
+    <span>vs @tauri-store, zubridge, and more</span>
+  </a>
+  <a href="/benchmarks" class="explore-card">
+    <span class="explore-icon">📊</span>
+    <strong>Benchmarks</strong>
+    <span>Real IPC latency & coalescing numbers</span>
+  </a>
+  <a href="/blog/" class="explore-card">
+    <span class="explore-icon">📝</span>
+    <strong>Blog</strong>
+    <span>Deep dives & architecture decisions</span>
+  </a>
+</div>
 
 ## Quick example
 
