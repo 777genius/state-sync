@@ -330,7 +330,7 @@ flowchart TD
     B1 -->|No| B2{Simple KV settings?}
     B2 -->|Yes| TPS[tauri-plugin-store]
     B2 -->|No| B3{Zustand or Pinia?}
-    B3 -->|Yes| TS[@tauri-store/*]
+    B3 -->|Yes| TS["@tauri-store/*"]
     B3 -->|No| B4{Redux pattern?}
     B4 -->|Yes| ZB1[zubridge]
     B4 -->|No| B5{Need any state sync?}
@@ -340,7 +340,7 @@ flowchart TD
     C --> C1{Need ordering / coalescing?}
     C1 -->|Yes| SS3[state-sync]
     C1 -->|No| C2{Redux pattern?}
-    C2 -->|Yes| ZB2[@zubridge/electron]
+    C2 -->|Yes| ZB2["@zubridge/electron"]
     C2 -->|No| C3{Need any state sync?}
     C3 -->|Yes| SS4[state-sync]
     C3 -->|No| NS1[No sync needed]
@@ -350,7 +350,7 @@ flowchart TD
     D1 -->|No| D2{Pinia?}
     D2 -->|Yes| PSS[pinia-shared-state]
     D2 -->|No| D3{Need state sync?}
-    D3 -->|Yes| CSS[state-sync\nwith custom transport]
+    D3 -->|Yes| CSS["state-sync<br/>with custom transport"]
     D3 -->|No| NS2[No sync needed]
 
     style SS1 fill:#10b981,color:#fff
