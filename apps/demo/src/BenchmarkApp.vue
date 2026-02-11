@@ -289,8 +289,8 @@ async function runAll() {
       p50: percentile(latencies, 50).toFixed(2),
       p95: percentile(latencies, 95).toFixed(2),
       p99: percentile(latencies, 99).toFixed(2),
-      min: latencies[0]?.toFixed(2),
-      max: latencies.at(-1)?.toFixed(2),
+      min: (latencies[0] ?? 0).toFixed(2),
+      max: (latencies.at(-1) ?? 0).toFixed(2),
       mean: mean.toFixed(2),
       iterations: ITERATIONS,
     };
