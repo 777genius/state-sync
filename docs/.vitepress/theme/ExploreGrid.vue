@@ -2,9 +2,24 @@
 import { withBase } from 'vitepress';
 
 const cards = [
-  { icon: '\u{1F680}', title: 'Quickstart', desc: 'Get running in 5 minutes', link: '/guide/quickstart' },
-  { icon: '\u2696\uFE0F', title: 'Comparison', desc: 'vs @tauri-store, zubridge, and more', link: '/comparison' },
-  { icon: '\u{1F4CA}', title: 'Benchmarks', desc: 'Real IPC latency & coalescing numbers', link: '/benchmarks' },
+  {
+    icon: '\u{1F680}',
+    title: 'Quickstart',
+    desc: 'Get running in 5 minutes',
+    link: '/guide/quickstart',
+  },
+  {
+    icon: '\u2696\uFE0F',
+    title: 'Comparison',
+    desc: 'vs @tauri-store, zubridge, and more',
+    link: '/comparison',
+  },
+  {
+    icon: '\u{1F4CA}',
+    title: 'Benchmarks',
+    desc: 'Real IPC latency & coalescing numbers',
+    link: '/benchmarks',
+  },
   { icon: '\u{1F4DD}', title: 'Blog', desc: 'Deep dives & architecture decisions', link: '/blog/' },
 ];
 </script>
