@@ -43,8 +43,10 @@
   grid-column: 1 / -1 !important;
 }
 
-.VPFeature .VPLink .link-text {
-  white-space: nowrap;
+.VPFeature .link-text,
+.VPFeature .VPLink .link-text,
+.items .item .link-text {
+  white-space: nowrap !important;
 }
 
 .VPNavBar {
