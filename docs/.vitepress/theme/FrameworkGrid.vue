@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress';
+
 const frameworks = [
   { name: 'Zustand', link: '/packages/zustand', color: '#433e38' },
   { name: 'Pinia', link: '/packages/pinia', color: '#ffd859' },
@@ -15,7 +17,7 @@ const frameworks = [
     <a
       v-for="fw in frameworks"
       :key="fw.name"
-      :href="fw.link"
+      :href="withBase(fw.link)"
       class="framework-card"
     >
       <span class="framework-logo">

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress';
+
 const cards = [
   { icon: '\u{1F680}', title: 'Quickstart', desc: 'Get running in 5 minutes', link: '/guide/quickstart' },
   { icon: '\u2696\uFE0F', title: 'Comparison', desc: 'vs @tauri-store, zubridge, and more', link: '/comparison' },
@@ -12,7 +14,7 @@ const cards = [
     <a
       v-for="card in cards"
       :key="card.title"
-      :href="card.link"
+      :href="withBase(card.link)"
       class="explore-card"
     >
       <div class="explore-header">
