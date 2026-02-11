@@ -117,36 +117,7 @@ npm install @statesync/tauri    # Tauri v2
 
 ## Supported Frameworks
 
-<div class="framework-grid">
-  <a href="/packages/zustand" class="framework-card">
-    <span class="framework-icon">⚛️</span>
-    <span>Zustand</span>
-  </a>
-  <a href="/packages/pinia" class="framework-card">
-    <span class="framework-icon">🍍</span>
-    <span>Pinia</span>
-  </a>
-  <a href="/packages/valtio" class="framework-card">
-    <span class="framework-icon">🔮</span>
-    <span>Valtio</span>
-  </a>
-  <a href="/packages/svelte" class="framework-card">
-    <span class="framework-icon">🔥</span>
-    <span>Svelte</span>
-  </a>
-  <a href="/packages/vue" class="framework-card">
-    <span class="framework-icon">💚</span>
-    <span>Vue</span>
-  </a>
-  <a href="/packages/tauri" class="framework-card">
-    <span class="framework-icon">🦀</span>
-    <span>Tauri</span>
-  </a>
-  <a href="/packages/electron" class="framework-card">
-    <span class="framework-icon">⚡</span>
-    <span>Electron</span>
-  </a>
-</div>
+<FrameworkGrid />
 
 ## Do you need state-sync?
 
@@ -184,28 +155,7 @@ Stale updates are rejected. Rapid events are merged. State stays consistent. [Le
 
 ## Explore
 
-<div class="explore-grid">
-  <a href="/guide/quickstart" class="explore-card">
-    <span class="explore-icon">🚀</span>
-    <strong>Quickstart</strong>
-    <span>Get running in 5 minutes</span>
-  </a>
-  <a href="/comparison" class="explore-card">
-    <span class="explore-icon">⚖️</span>
-    <strong>Comparison</strong>
-    <span>vs @tauri-store, zubridge, and more</span>
-  </a>
-  <a href="/benchmarks" class="explore-card">
-    <span class="explore-icon">📊</span>
-    <strong>Benchmarks</strong>
-    <span>Real IPC latency & coalescing numbers</span>
-  </a>
-  <a href="/blog/" class="explore-card">
-    <span class="explore-icon">📝</span>
-    <strong>Blog</strong>
-    <span>Deep dives & architecture decisions</span>
-  </a>
-</div>
+<ExploreGrid />
 
 ## Quick example
 
