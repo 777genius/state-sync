@@ -208,32 +208,36 @@ pinia.use(PiniaSharedState({ enable: true }))
 | **Source of truth** | Main process | Main process | Main process | Every process | Main process |
 | **Revision ordering** | ✅ | ❌ | ⚠️ Sequential in main | ❌ | ❌ |
 | **Coalescing** | ✅ 2 IPC per burst | ❌ | ❌ | ❌ | ❌ |
-| **Debounce / Throttle** | ✅ Configurable | ❌ Planned | ❌ | ❌ | ❌ |
+| **Debounce / Throttle** | ✅ Configurable | ❌ | ❌ | ❌ | ❌ |
 | **Retry** | ✅ Exponential backoff | ❌ | ❌ | ❌ | ❌ |
+| **Delta sync** | ❌ Full snapshot | ❌ Full state | ❌ Full state | ✅ Immer patches | ❌ Full actions |
+| **Compression** | ✅ LZ / custom | ❌ | ❌ | ❌ | ❌ |
 | **Structured errors** | ✅ Phase-based | ✅ 7 error types | ❌ | ❌ | ❌ |
 | **Persistence** | ✅ Separate pkg | ❌ | ❌ Demo only | ❌ | ❌ |
 | **Data migrations** | ✅ Versioned | ❌ | ❌ | ❌ | ❌ |
-| **Compression** | ✅ LZ / custom | ❌ | ❌ | ⚠️ Immer patches | ❌ |
+| **Redux DevTools** | ❌ | ❌ | ✅ | ❌ | ✅ |
 | **TypeScript** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **contextIsolation** | ✅ | ✅ | ✅ | ❌ Requires `false` | ⚠️ v2 alpha only |
-| **sandbox: true** | ✅ | ✅ v2.2+ | ✅ | ❌ | ❌ |
+| **contextIsolation** | ✅ | ✅ | ✅ | ❌ Requires `false` | ⚠️ v2 only |
+| **sandbox: true** | ✅ | ⚠️ v2.2 (prerelease) | ✅ | ❌ | ❌ |
 | **nodeIntegration** | Not needed | Not needed | Not needed | **Required** | Required (v1) |
 | **Multi-window** | ✅ | ✅ Auto-tracked | ⚠️ Manual wiring | ✅ Auto | ✅ Broadcast all |
 | **Framework** | Any | Zustand / Redux / Custom | Redux | Agnostic | Redux only |
 | **State lib adapters** | Zustand, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
-| **Sync mechanism** | Push (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
+| **Sync mechanism** | Pull (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
 | **Selective sync** | Per-topic | Per-key subscriptions | ❌ Full state | ❌ Full patches | ❌ All actions |
 | **Thunks / async** | N/A (protocol-level) | ✅ Priority-based | ❌ Serializable only | N/A | ❌ |
-| **Bundle size** | ~3 KB core + <1 KB transport | ~878 KB unpacked | ~1.2 KB (zero deps) | ~1.4 KB + immer (~16 KB) | ~5 KB |
+| **API simplicity** | Moderate (engine setup) | Moderate (bridge setup) | Moderate (preload wiring) | ✅ Single function | Moderate (enhancer) |
+| **Bundle size** | ~3 KB core + <1 KB transport | ~8 KB | ~1.2 KB (zero deps) | ~1.4 KB + immer (~16 KB) | ~5 KB |
 | **GitHub stars** | — | 44 | 37 | 60 | 758 |
-| **npm weekly downloads** | — | ~730 | ~170 | ~30 | ~2,500 |
+| **npm weekly downloads** | — | ~730 | ~35 | ~45 | ~2,500 |
 | **Actively maintained** | ✅ | ✅ | ⚠️ Last commit Apr 2024 | ❌ Last commit Apr 2023 | ❌ Dead since 2020 |
 | **Electron requirement** | Any | ≥12 | ≥24 | Any (legacy model) | ≥8 (v1 broken on 14+) |
 
 ::: info Reading the table
 - ✅ = fully supported, ❌ = not supported, ⚠️ = partial or conditional support
-- "Bundle size" for state-sync = `@statesync/core` + `@statesync/electron`, both minified+gzipped
-- electron-redux stars are high due to historical popularity — the library is effectively abandoned
+- All bundle sizes are minified + gzipped via [bundlejs.com](https://bundlejs.com). state-sync = `@statesync/core` + `@statesync/electron`
+- state-sync is a new library with no established adoption metrics yet
+- electron-redux has high star count due to historical popularity (pre-2021)
 :::
 
 ---
@@ -250,9 +254,9 @@ const bridge = createZustandBridge(store);
 const { unsubscribe } = bridge.subscribe([mainWindow]);
 ```
 
-**Good:** Active development, TypeScript, main process as source of truth, works with Zustand and Redux, follows modern Electron security model (`contextIsolation`, `sandbox`), structured error system (7 typed error classes), action scheduling with priorities, selective per-key subscriptions, built-in access control validation.
+**Good:** Active development, TypeScript, main process as source of truth, works with Zustand and Redux, follows modern Electron security model (`contextIsolation`; `sandbox` support coming in v2.2), structured error system (7 typed error classes), thunk support with action scheduling, selective per-key subscriptions, automatic window tracking and cleanup.
 
-**Limitations:** No revision ordering (last-write-wins), no coalescing (every action = separate IPC call, batching planned but not shipped), no retry on failure, no built-in persistence or data migrations, no compression (delta updates planned but not shipped), sends full state on every update, single maintainer (bus factor = 1), ~878 KB unpacked.
+**Limitations:** No revision ordering (last-write-wins), no coalescing (every action = separate IPC call), no retry on failure, no built-in persistence or data migrations, no delta sync or compression, sends full state on every update.
 
 **Use when:** Electron app with Zustand or Redux, you want proper security model, and ordering doesn't matter.
 
@@ -282,7 +286,7 @@ StoreEnhancer pattern by Klarna. Once the most popular Electron state sync libra
 
 **Good:** Well-designed API concept, Redux ecosystem integration, TypeScript (v2).
 
-**Not recommended:** v1 depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). v2 never left alpha (`v2.0.0-alpha.9`, June 2021). Last meaningful code commit: August 2020. Documentation is incorrect for v2. 29 open issues, zero maintainer response since 2021. Despite being marked as "latest" on npm in October 2024, no actual code changes were made.
+**Not recommended:** v1 depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). v2 was in alpha for years (`v2.0.0-alpha.9`, June 2021) before being published as `v2.0.0` on npm in October 2024, though the October release primarily updated CI/docs rather than library code. Documentation is incomplete for v2. 29 open issues with no maintainer response since 2021.
 
 ---
 
@@ -411,6 +415,13 @@ flowchart TD
     style SS2 fill:#10b981,color:#fff
     style SS3 fill:#10b981,color:#fff
     style SS4 fill:#10b981,color:#fff
+    style CSS fill:#10b981,color:#fff
+    style TPS fill:#3b82f6,color:#fff
+    style TS fill:#3b82f6,color:#fff
+    style ZB1 fill:#3b82f6,color:#fff
+    style ZB2 fill:#3b82f6,color:#fff
+    style ZST fill:#3b82f6,color:#fff
+    style PSS fill:#3b82f6,color:#fff
 ```
 
 ---
