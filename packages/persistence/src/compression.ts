@@ -3,8 +3,10 @@ import type { CompressionAdapter } from './types';
 /**
  * Built-in LZ-based compression for localStorage/IndexedDB.
  *
- * Uses a simplified LZW algorithm optimized for JSON strings.
- * No external dependencies required.
+ * Provides a simplified LZW (Lempel-Ziv-Welch) algorithm optimized for JSON strings.
+ * No external dependencies required. Typically achieves 40-70% compression on JSON data.
+ *
+ * @packageDocumentation
  */
 
 // =============================================================================
@@ -12,8 +14,20 @@ import type { CompressionAdapter } from './types';
 // =============================================================================
 
 /**
- * Compress a string using LZ-based compression.
- * Returns a UTF-16 safe string for localStorage.
+ * Compress a string using a built-in LZW-based algorithm.
+ *
+ * The output is a UTF-16 safe string suitable for direct storage in
+ * localStorage or any string-based backend. The dictionary size is capped
+ * at 0xFFFE entries to stay within the BMP (Basic Multilingual Plane).
+ *
+ * @param input - The raw string to compress. Returns an empty string if input is falsy.
+ * @returns The compressed string representation.
+ *
+ * @example
+ * ```typescript
+ * const compressed = lzCompress(JSON.stringify(myState));
+ * const restored = JSON.parse(lzDecompress(compressed));
+ * ```
  */
 export function lzCompress(input: string): string {
   if (!input) return '';
@@ -58,7 +72,16 @@ export function lzCompress(input: string): string {
 }
 
 /**
- * Decompress a string compressed with lzCompress.
+ * Decompress a string that was previously compressed with {@link lzCompress}.
+ *
+ * @param compressed - The compressed string to decompress. Returns an empty string if input is falsy.
+ * @returns The original uncompressed string.
+ * @throws {Error} If the compressed data is invalid or corrupt.
+ *
+ * @example
+ * ```typescript
+ * const original = lzDecompress(compressed);
+ * ```
  */
 export function lzDecompress(compressed: string): string {
   if (!compressed) return '';
@@ -145,10 +168,12 @@ function stringToCodes(str: string): number[] {
 // =============================================================================
 
 /**
- * Creates a compression adapter using built-in LZ compression.
+ * Creates a {@link CompressionAdapter} using the built-in LZW compression.
  *
- * Typically achieves 40-70% compression on JSON data.
- * No external dependencies required.
+ * This is a zero-dependency adapter that typically achieves 40-70% compression
+ * on JSON data. Suitable for most use cases where external libraries are undesirable.
+ *
+ * @returns A compression adapter with algorithm name `'lz'`.
  *
  * @example
  * ```typescript
@@ -168,11 +193,16 @@ export function createLZCompressionAdapter(): CompressionAdapter {
 }
 
 /**
- * Creates a compression adapter using external lz-string library.
+ * Creates a {@link CompressionAdapter} backed by the external `lz-string` library.
  *
- * Better compression ratio than built-in, but requires external dependency.
+ * Offers better compression ratios than the built-in adapter but requires
+ * `lz-string` as a peer dependency. Uses UTF-16 encoding for localStorage safety.
  *
  * Install: `pnpm add lz-string`
+ *
+ * @param lzString - The `lz-string` module or an object with compatible
+ *   `compressToUTF16` and `decompressFromUTF16` methods.
+ * @returns A compression adapter with algorithm name `'lz-string'`.
  *
  * @example
  * ```typescript
@@ -193,7 +223,14 @@ export function createLZStringAdapter(lzString: {
 }
 
 /**
- * Creates a compression adapter using any compatible library.
+ * Creates a {@link CompressionAdapter} from a user-supplied implementation.
+ *
+ * This is a convenience factory for wrapping any compression library that
+ * operates on strings. The returned adapter is the same object passed in --
+ * no wrapping or copying is performed.
+ *
+ * @param options - An object implementing the {@link CompressionAdapter} interface.
+ * @returns The same adapter object, typed as {@link CompressionAdapter}.
  *
  * @example
  * ```typescript
@@ -214,8 +251,12 @@ export function createCompressionAdapter(options: CompressionAdapter): Compressi
 }
 
 /**
- * Identity compression adapter (no compression).
- * Useful for testing or when compression is not needed.
+ * Creates a no-op {@link CompressionAdapter} that passes data through unchanged.
+ *
+ * Useful for testing, debugging, or when compression overhead is not worth the
+ * storage savings. The algorithm name is `'none'`.
+ *
+ * @returns A compression adapter that performs no compression or decompression.
  */
 export function createNoCompressionAdapter(): CompressionAdapter {
   return {
@@ -226,8 +267,13 @@ export function createNoCompressionAdapter(): CompressionAdapter {
 }
 
 /**
- * Base64 adapter for debugging (increases size but makes data readable).
- * Handles Unicode properly.
+ * Creates a {@link CompressionAdapter} that encodes data as Base64.
+ *
+ * This **increases** data size (approximately 33% larger) but produces
+ * human-readable output that is useful for debugging and inspection.
+ * Handles Unicode strings correctly via `TextEncoder`/`TextDecoder`.
+ *
+ * @returns A compression adapter with algorithm name `'base64'`.
  */
 export function createBase64Adapter(): CompressionAdapter {
   return {
@@ -254,8 +300,19 @@ export function createBase64Adapter(): CompressionAdapter {
 }
 
 /**
- * Estimates compression ratio for given data using a specified adapter.
- * Returns a value between 0 and 1 (lower is better compression).
+ * Estimates the compression ratio of a given string using the specified adapter.
+ *
+ * @param data - The input string to compress for measurement. Returns `1` if empty.
+ * @param adapter - The compression adapter to evaluate.
+ * @returns A ratio where lower values indicate better compression (values above 1
+ *   mean the "compressed" output is larger than the original).
+ *   For example, `0.4` means the compressed output is 40% of the original size.
+ *
+ * @example
+ * ```typescript
+ * const ratio = estimateCompressionRatio(jsonString, createLZCompressionAdapter());
+ * console.log(`Compression ratio: ${(ratio * 100).toFixed(1)}%`);
+ * ```
  */
 export function estimateCompressionRatio(data: string, adapter: CompressionAdapter): number {
   if (!data) return 1;
@@ -264,9 +321,27 @@ export function estimateCompressionRatio(data: string, adapter: CompressionAdapt
 }
 
 /**
- * Benchmark compression performance.
+ * Benchmarks a compression adapter's performance by running multiple iterations.
  *
- * @returns Object with compression ratio, compress time, decompress time
+ * Performs a warm-up pass before measuring, then runs `iterations` rounds each
+ * of compress and decompress to compute average timings.
+ *
+ * @param data - The input string to use for benchmarking.
+ * @param adapter - The compression adapter to benchmark.
+ * @param iterations - Number of iterations for each operation. Higher values
+ *   produce more stable results but take longer.
+ * @returns An object containing:
+ *   - `ratio` -- compressed size / original size (lower is better)
+ *   - `compressTimeMs` -- average compress time per iteration in milliseconds
+ *   - `decompressTimeMs` -- average decompress time per iteration in milliseconds
+ *   - `originalSize` -- length of the input string in characters
+ *   - `compressedSize` -- length of the compressed string in characters
+ *
+ * @example
+ * ```typescript
+ * const result = benchmarkCompression(largeJson, createLZCompressionAdapter(), 200);
+ * console.log(`Ratio: ${result.ratio}, Compress: ${result.compressTimeMs}ms`);
+ * ```
  */
 export function benchmarkCompression(
   data: string,

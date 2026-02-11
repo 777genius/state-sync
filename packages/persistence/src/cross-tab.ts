@@ -2,17 +2,46 @@ import type { SnapshotEnvelope } from '@statesync/core';
 import type { CrossTabSyncOptions } from './types';
 
 /**
- * Message types for cross-tab communication.
+ * Discriminated union of messages exchanged between tabs via BroadcastChannel.
+ *
+ * Each variant carries a `type` discriminator, a `tabId` identifying the sender,
+ * and (for `'snapshot'`) the actual state payload.
+ *
+ * @typeParam T - The shape of the application state.
  */
 export type CrossTabMessage<T> =
-  | { type: 'snapshot'; payload: SnapshotEnvelope<T>; tabId: string }
-  | { type: 'request-sync'; tabId: string }
-  | { type: 'clear'; tabId: string };
+  | {
+      /** Indicates this message carries a full snapshot. */
+      type: 'snapshot';
+      /** The snapshot envelope being broadcast. */
+      payload: SnapshotEnvelope<T>;
+      /** Unique identifier of the sending tab. */
+      tabId: string;
+    }
+  | {
+      /** Indicates the sender is requesting the latest state from peers. */
+      type: 'request-sync';
+      /** Unique identifier of the sending tab. */
+      tabId: string;
+    }
+  | {
+      /** Indicates the sender has cleared its persisted storage. */
+      type: 'clear';
+      /** Unique identifier of the sending tab. */
+      tabId: string;
+    };
 
 /**
- * Cross-tab synchronization manager using BroadcastChannel API.
+ * Cross-tab synchronization manager using the BroadcastChannel API.
  *
- * Enables real-time state synchronization between browser tabs.
+ * Enables real-time state synchronization between browser tabs sharing the
+ * same origin and channel name. Messages from the current tab are automatically
+ * filtered out. In environments where BroadcastChannel is unavailable, all
+ * methods become no-ops.
+ *
+ * Created via {@link createCrossTabSync}.
+ *
+ * @typeParam T - The shape of the application state.
  *
  * @example
  * ```typescript
@@ -30,52 +59,81 @@ export type CrossTabMessage<T> =
  */
 export interface CrossTabSync<T> {
   /**
-   * Broadcast a snapshot to other tabs.
+   * Broadcast a snapshot to all other tabs listening on the same channel.
+   *
+   * No-op if the instance is disposed, the channel is closed, or
+   * {@link CrossTabSyncOptions.broadcastSaves} is `false`.
+   *
+   * @param snapshot - The snapshot envelope to broadcast.
    */
   broadcast(snapshot: SnapshotEnvelope<T>): void;
 
   /**
-   * Request sync from other tabs (useful on startup).
+   * Send a sync request to other tabs, asking them to broadcast their
+   * latest state. Useful during tab startup to hydrate from a peer.
    */
   requestSync(): void;
 
   /**
-   * Notify other tabs that storage was cleared.
+   * Notify other tabs that this tab has cleared its persisted storage.
    */
   notifyClear(): void;
 
   /**
-   * Check if BroadcastChannel is supported.
+   * Check whether the BroadcastChannel API is available and the channel
+   * was successfully created.
+   *
+   * @returns `true` if cross-tab communication is functional.
    */
   isSupported(): boolean;
 
   /**
-   * Get this tab's unique ID.
+   * Get the unique identifier assigned to this tab.
+   *
+   * The ID is generated at construction time and is used to filter out
+   * messages originating from this tab.
+   *
+   * @returns A string identifier unique to this tab instance.
    */
   getTabId(): string;
 
   /**
-   * Dispose and close the channel.
+   * Close the BroadcastChannel and release all resources.
+   *
+   * After disposal, all methods become no-ops. Safe to call multiple times.
    */
   dispose(): void;
 }
 
 /**
- * Options for creating cross-tab sync.
+ * Configuration and event handlers for {@link createCrossTabSync}.
+ *
+ * Extends {@link CrossTabSyncOptions} with callback handlers for each
+ * type of cross-tab message.
+ *
+ * @typeParam T - The shape of the application state.
  */
 export interface CrossTabSyncHandlers<T> extends CrossTabSyncOptions {
   /**
    * Called when a snapshot is received from another tab.
+   *
+   * @param snapshot - The snapshot envelope broadcast by the other tab.
+   * @param fromTabId - The unique identifier of the sending tab.
    */
   onSnapshot?: (snapshot: SnapshotEnvelope<T>, fromTabId: string) => void;
 
   /**
-   * Called when another tab requests sync.
+   * Called when another tab sends a sync request, asking this tab to
+   * broadcast its latest state.
+   *
+   * @param fromTabId - The unique identifier of the requesting tab.
    */
   onSyncRequest?: (fromTabId: string) => void;
 
   /**
-   * Called when another tab clears storage.
+   * Called when another tab notifies that it has cleared its storage.
+   *
+   * @param fromTabId - The unique identifier of the tab that cleared storage.
    */
   onClear?: (fromTabId: string) => void;
 }
@@ -88,17 +146,41 @@ function generateTabId(): string {
 }
 
 /**
- * Check if BroadcastChannel is available.
+ * Checks whether the BroadcastChannel API is available in the current environment.
+ *
+ * Returns `false` in Node.js, Web Workers without BroadcastChannel support,
+ * and other restricted environments.
+ *
+ * @returns `true` if `BroadcastChannel` is defined globally.
  */
 export function isBroadcastChannelSupported(): boolean {
   return typeof BroadcastChannel !== 'undefined';
 }
 
 /**
- * Creates a cross-tab synchronization manager.
+ * Creates a {@link CrossTabSync} manager for real-time state synchronization
+ * between browser tabs.
  *
- * Uses BroadcastChannel API for real-time updates between tabs.
- * Falls back to no-op if BroadcastChannel is not supported.
+ * Uses the BroadcastChannel API to send and receive messages. If
+ * BroadcastChannel is not supported (e.g., in Node.js or restricted iframes),
+ * a no-op implementation is returned silently.
+ *
+ * Messages from the current tab are automatically ignored to prevent echo loops.
+ *
+ * @typeParam T - The shape of the application state.
+ * @param options - Channel configuration and event handler callbacks.
+ * @returns A cross-tab sync manager. Call {@link CrossTabSync.dispose} when done.
+ *
+ * @example
+ * ```typescript
+ * const crossTab = createCrossTabSync<MyState>({
+ *   channelName: 'state-sync:settings',
+ *   onSnapshot: (snapshot, tabId) => {
+ *     console.log(`Received state from tab ${tabId}`);
+ *     applier.apply(snapshot);
+ *   },
+ * });
+ * ```
  */
 export function createCrossTabSync<T>(options: CrossTabSyncHandlers<T>): CrossTabSync<T> {
   const {
@@ -222,17 +304,32 @@ function createNoopCrossTabSync<T>(tabId: string): CrossTabSync<T> {
 }
 
 /**
- * Wrapper to add cross-tab sync to a storage backend.
+ * Wraps a storage backend's `save` method to automatically broadcast
+ * snapshots to other tabs after each successful save.
+ *
+ * This is a lower-level utility for cases where you want cross-tab sync
+ * without using the full {@link createPersistenceApplier}. The returned
+ * object exposes both the wrapped `save` function and the underlying
+ * {@link CrossTabSync} instance for manual control.
+ *
+ * @typeParam T - The shape of the application state.
+ * @param storage - Any object with a `save` method (typically a {@link StorageBackend}).
+ * @param options - Cross-tab sync configuration and event handlers.
+ * @returns An object with a `save` method (broadcasts after writing) and
+ *   a `crossTab` property for direct access to the sync manager.
  *
  * @example
  * ```typescript
- * const storage = withCrossTabSync(
+ * const { save, crossTab } = withCrossTabSync(
  *   createLocalStorageBackend({ key: 'my-state' }),
  *   {
  *     channelName: 'my-app-state',
  *     onSnapshot: (snapshot) => applier.apply(snapshot),
  *   },
  * );
+ *
+ * await save(snapshot); // Saves to storage AND broadcasts to other tabs
+ * crossTab.dispose();   // Cleanup when done
  * ```
  */
 export function withCrossTabSync<T>(

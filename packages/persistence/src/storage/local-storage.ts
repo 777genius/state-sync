@@ -2,34 +2,88 @@ import type { SnapshotEnvelope } from '@statesync/core';
 import type { StorageBackend } from '../types';
 
 /**
- * Options for localStorage backend.
+ * Configuration options for the localStorage storage backend.
+ *
+ * Allows customization of the storage key and serialization behavior
+ * used when persisting snapshot data to the browser's `localStorage` API.
  */
 export interface LocalStorageBackendOptions {
   /**
-   * The key to use in localStorage.
+   * The key under which snapshot data is stored in `localStorage`.
+   *
+   * Must be unique per application or state instance to avoid collisions
+   * with other data stored in the same origin's `localStorage`.
    */
   key: string;
 
   /**
-   * Optional custom serializer. Defaults to JSON.stringify.
+   * Custom serialization function for converting a snapshot envelope into a string
+   * suitable for `localStorage` storage.
+   *
+   * @param snapshot - The snapshot envelope to serialize.
+   * @returns A string representation of the snapshot.
+   * @default JSON.stringify
    */
   serialize?: (snapshot: SnapshotEnvelope<unknown>) => string;
 
   /**
-   * Optional custom deserializer. Defaults to JSON.parse.
+   * Custom deserialization function for converting a stored string back into
+   * a snapshot envelope.
+   *
+   * @param data - The raw string retrieved from `localStorage`.
+   * @returns The deserialized snapshot envelope.
+   * @default JSON.parse
    */
   deserialize?: (data: string) => SnapshotEnvelope<unknown>;
 }
 
 /**
- * Creates a StorageBackend that uses browser localStorage.
+ * Creates a {@link StorageBackend} that persists snapshot data using the browser's
+ * `localStorage` API.
  *
- * Note: localStorage has a ~5MB limit and is synchronous.
- * For larger data, consider IndexedDB.
+ * Data stored in `localStorage` persists across browser sessions and tab closures,
+ * making it suitable for long-lived application state. The storage is synchronous
+ * under the hood but exposed through an async interface for API consistency.
  *
- * @example
+ * **Browser compatibility:** Supported in all modern browsers. Requires a secure
+ * context (HTTPS) in some browsers for full functionality. Not available in
+ * Web Workers or Service Workers.
+ *
+ * **Storage limits:** `localStorage` has a ~5MB per-origin limit in most browsers.
+ * For larger data, consider using {@link createIndexedDBBackend} instead.
+ *
+ * @typeParam T - The type of the state data stored within snapshot envelopes.
+ *
+ * @param options - Configuration options for the localStorage backend.
+ * @returns A {@link StorageBackend} instance backed by `localStorage`.
+ *
+ * @throws {Error} Throws a descriptive error wrapping `QuotaExceededError` when
+ *   the `localStorage` quota is exceeded during a save operation.
+ * @throws {Error} Throws a descriptive error when stored data cannot be deserialized
+ *   during a load operation (e.g., corrupted or incompatible data).
+ *
+ * @example Basic usage
  * ```typescript
- * const storage = createLocalStorageBackend({ key: 'my-app-state' });
+ * const storage = createLocalStorageBackend<MyState>({ key: 'my-app-state' });
+ *
+ * // Save a snapshot
+ * await storage.save({ revision: '1', data: { count: 42 } });
+ *
+ * // Load the snapshot
+ * const snapshot = await storage.load();
+ * console.log(snapshot?.data.count); // 42
+ *
+ * // Clear stored data
+ * await storage.clear();
+ * ```
+ *
+ * @example With custom serialization
+ * ```typescript
+ * const storage = createLocalStorageBackend<MyState>({
+ *   key: 'my-app-state',
+ *   serialize: (snapshot) => btoa(JSON.stringify(snapshot)),
+ *   deserialize: (data) => JSON.parse(atob(data)),
+ * });
  * ```
  */
 export function createLocalStorageBackend<T>(

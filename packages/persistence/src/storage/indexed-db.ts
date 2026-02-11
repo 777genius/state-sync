@@ -2,64 +2,170 @@ import type { SnapshotEnvelope } from '@statesync/core';
 import type { PersistedSnapshot, StorageBackendWithMetadata, StorageUsage } from '../types';
 
 /**
- * Options for IndexedDB backend.
+ * Configuration options for the IndexedDB storage backend.
+ *
+ * Allows customization of the database name, object store, versioning,
+ * retry behavior, and lifecycle callbacks used when persisting snapshot data
+ * to the browser's IndexedDB API.
  */
 export interface IndexedDBBackendOptions {
   /**
-   * Database name.
+   * The name of the IndexedDB database to open or create.
+   *
+   * This name is scoped to the current origin and should be unique
+   * per application to avoid conflicts.
    */
   dbName: string;
 
   /**
-   * Object store name.
+   * The name of the object store within the database where snapshots are persisted.
+   *
+   * The object store is automatically created during the database upgrade
+   * if it does not already exist.
    */
   storeName: string;
 
   /**
-   * Optional key for the snapshot record. Defaults to 'snapshot'.
+   * The key used to store and retrieve the snapshot record within the object store.
+   *
+   * A separate metadata record is stored under `${recordKey}:metadata`.
+   *
+   * @default 'snapshot'
    */
   recordKey?: string;
 
   /**
-   * Optional database version. Defaults to 1.
+   * The version number of the IndexedDB database schema.
+   *
+   * Incrementing this value triggers the `onupgradeneeded` event, allowing
+   * schema migrations. The object store specified by {@link storeName} is
+   * automatically created if it does not exist during an upgrade.
+   *
+   * @default 1
    */
   version?: number;
 
   /**
-   * Number of retry attempts for blocked database. Defaults to 3.
+   * The maximum number of retry attempts when the database connection is blocked
+   * or encounters a version-related error.
+   *
+   * A blocked database typically occurs when another tab holds an open connection
+   * to an older version of the database.
+   *
+   * @default 3
    */
   retryAttempts?: number;
 
   /**
-   * Delay between retries in ms. Defaults to 100.
+   * The base delay in milliseconds between retry attempts.
+   *
+   * The actual delay uses linear backoff: `retryDelayMs * (attemptNumber + 1)`.
+   *
+   * @default 100
    */
   retryDelayMs?: number;
 
   /**
-   * Called when database is blocked by another connection.
+   * Callback invoked when the database open request is blocked by another connection.
+   *
+   * This typically happens when another tab has an open connection to an older
+   * version of the database. The blocked state is handled automatically via the
+   * retry mechanism, but this callback can be used for user notification or logging.
    */
   onBlocked?: () => void;
 
   /**
-   * Called when database upgrade is needed.
+   * Callback invoked when the database requires a schema upgrade.
+   *
+   * Called after the default upgrade logic (object store creation) has executed.
+   * Use this to perform custom schema migrations such as creating indexes.
+   *
+   * @param db - The `IDBDatabase` instance being upgraded.
+   * @param oldVersion - The previous schema version number (0 for newly created databases).
+   * @param newVersion - The new schema version number being upgraded to.
    */
   onUpgrade?: (db: IDBDatabase, oldVersion: number, newVersion: number) => void;
 }
 
 /**
- * Creates a StorageBackend that uses IndexedDB.
+ * Creates a {@link StorageBackendWithMetadata} that persists snapshot data using
+ * the browser's IndexedDB API.
  *
- * IndexedDB is better for larger data and is fully async.
- * Includes automatic retry for blocked database scenarios.
+ * IndexedDB is a fully asynchronous, transactional key-value store with significantly
+ * higher storage limits than `localStorage` or `sessionStorage` (typically hundreds of MB
+ * or more, depending on browser and available disk space). This makes it the recommended
+ * backend for applications that persist large state objects.
  *
- * @example
+ * The returned backend supports the extended {@link StorageBackendWithMetadata} interface,
+ * providing metadata-aware save/load operations and storage usage estimation via the
+ * Storage Manager API when available.
+ *
+ * **Key features:**
+ * - Fully asynchronous, non-blocking I/O
+ * - Automatic retry with linear backoff for blocked database scenarios
+ * - Lazy connection management (database is opened on first operation)
+ * - Connection caching to avoid repeated open requests
+ * - Separate storage of snapshot and metadata for atomic access
+ * - Backwards-compatible loading (generates default metadata if missing)
+ *
+ * **Browser compatibility:** Supported in all modern browsers including Web Workers
+ * and Service Workers. Not available in some privacy-focused browser configurations
+ * (e.g., Firefox private browsing prior to version 115).
+ *
+ * @typeParam T - The type of the state data stored within snapshot envelopes.
+ *
+ * @param options - Configuration options for the IndexedDB backend.
+ * @returns A {@link StorageBackendWithMetadata} instance backed by IndexedDB.
+ *
+ * @throws {Error} Throws when the database cannot be opened after all retry attempts
+ *   are exhausted (e.g., persistent version conflicts or blocked connections).
+ * @throws {DOMException} Propagates IndexedDB transaction errors (e.g., `DataError`,
+ *   `ReadOnlyError`) if they are not retryable.
+ *
+ * @example Basic usage
  * ```typescript
- * const storage = createIndexedDBBackend({
+ * const storage = createIndexedDBBackend<MyState>({
+ *   dbName: 'my-app',
+ *   storeName: 'state-cache',
+ * });
+ *
+ * // Save a snapshot
+ * await storage.save({ revision: '1', data: { count: 42 } });
+ *
+ * // Load the snapshot
+ * const snapshot = await storage.load();
+ * console.log(snapshot?.data.count); // 42
+ *
+ * // Clear stored data
+ * await storage.clear();
+ * ```
+ *
+ * @example With metadata and retry configuration
+ * ```typescript
+ * const storage = createIndexedDBBackend<MyState>({
  *   dbName: 'my-app',
  *   storeName: 'state-cache',
  *   retryAttempts: 5,
- *   onBlocked: () => console.warn('Database blocked, retrying...'),
+ *   retryDelayMs: 200,
+ *   onBlocked: () => console.warn('Database blocked by another tab'),
+ *   onUpgrade: (db, oldVersion, newVersion) => {
+ *     console.log(`Upgrading DB from v${oldVersion} to v${newVersion}`);
+ *   },
  * });
+ *
+ * // Save with metadata
+ * await storage.saveWithMetadata({
+ *   snapshot: { revision: '1', data: { count: 42 } },
+ *   metadata: { savedAt: Date.now(), schemaVersion: 1, sizeBytes: 128, compressed: false },
+ * });
+ *
+ * // Load with metadata
+ * const persisted = await storage.loadWithMetadata();
+ * console.log(persisted?.metadata.savedAt);
+ *
+ * // Check storage usage
+ * const usage = await storage.getUsage();
+ * console.log(`Using ${usage.percentage}% of quota`);
  * ```
  */
 export function createIndexedDBBackend<T>(
