@@ -43,6 +43,10 @@
   grid-column: 1 / -1 !important;
 }
 
+.VPFeature .VPLink .link-text {
+  white-space: nowrap;
+}
+
 .VPNavBar {
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
