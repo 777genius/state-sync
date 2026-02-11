@@ -10,7 +10,7 @@
 function clearPersistedData<T>(storage, crossTabOptions?): Promise<void>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:635](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/persistence-applier.ts#L635)
+Defined in: [persistence/src/persistence-applier.ts:635](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/persistence-applier.ts#L635)
 
 Clear persisted data from storage.
 

@@ -10,7 +10,7 @@
 function createElectronRevisionSync<T>(options): RevisionSyncHandle;
 ```
 
-Defined in: sync.ts:37
+Defined in: [sync.ts:37](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L37)
 
 Convenience factory wiring Electron bridge → transport → core engine.
 Mirrors createTauriRevisionSync.

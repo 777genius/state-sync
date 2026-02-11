@@ -6,7 +6,7 @@
 
 # Interface: VueRefLike\<State\>
 
-Defined in: [vue.ts:9](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/vue/src/vue.ts#L9)
+Defined in: [vue.ts:9](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/vue/src/vue.ts#L9)
 
 Minimal structural interface for a Vue ref-like container.
 
@@ -27,4 +27,4 @@ property of type `State`.
 value: State;
 ```
 
-Defined in: [vue.ts:10](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/vue/src/vue.ts#L10)
+Defined in: [vue.ts:10](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/vue/src/vue.ts#L10)

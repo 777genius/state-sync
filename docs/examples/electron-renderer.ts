@@ -7,9 +7,10 @@
  * - Write path via exposed api.updateSettings
  * - Init and cleanup lifecycle
  */
-import { create } from 'zustand';
+
 import { createElectronRevisionSync } from '@statesync/electron';
 import { createZustandSnapshotApplier } from '@statesync/zustand';
+import { create } from 'zustand';
 
 // ─── Types ──────────────────────────────────────────
 

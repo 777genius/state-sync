@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
-import { computed, nextTick, provide } from 'vue';
 import { useCodeblockCollapse } from 'vitepress-codeblock-collapse';
+import { computed, nextTick, provide } from 'vue';
 import 'vitepress-codeblock-collapse/style.css';
-import HeroVideo from './HeroVideo.vue';
 import { useMermaidZoom } from 'vitepress-mermaid-zoom';
+import HeroVideo from './HeroVideo.vue';
 import 'vitepress-mermaid-zoom/style.css';
 
 const { Layout } = DefaultTheme;

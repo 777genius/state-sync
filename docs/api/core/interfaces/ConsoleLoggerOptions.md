@@ -6,7 +6,7 @@
 
 # Interface: ConsoleLoggerOptions
 
-Defined in: [logger.ts:3](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/logger.ts#L3)
+Defined in: [logger.ts:3](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/logger.ts#L3)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [logger.ts:3](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional debug: boolean;
 ```
 
-Defined in: [logger.ts:13](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/logger.ts#L13)
+Defined in: [logger.ts:13](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/logger.ts#L13)
 
 If true, debug() logs are emitted. Otherwise debug() is a no-op.
 Default: false
@@ -29,7 +29,7 @@ Default: false
 optional prefix: string;
 ```
 
-Defined in: [logger.ts:8](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/logger.ts#L8)
+Defined in: [logger.ts:8](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/logger.ts#L8)
 
 Prefix added to each log line.
 Default: "[state-sync]"

@@ -6,7 +6,7 @@
 
 # Interface: SyncErrorContext
 
-Defined in: [types.ts:75](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L75)
+Defined in: [types.ts:75](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L75)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [types.ts:75](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional attempt: number;
 ```
 
-Defined in: [types.ts:91](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L91)
+Defined in: [types.ts:91](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L91)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [types.ts:91](https://github.com/777genius/state-sync/blob/6c6e0d479
 error: unknown;
 ```
 
-Defined in: [types.ts:78](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L78)
+Defined in: [types.ts:78](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L78)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [types.ts:78](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional eventRevision: Revision;
 ```
 
-Defined in: [types.ts:88](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L88)
+Defined in: [types.ts:88](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L88)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [types.ts:88](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional localRevision: Revision;
 ```
 
-Defined in: [types.ts:87](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L87)
+Defined in: [types.ts:87](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L87)
 
 Helpful context for triage/metrics. These fields are optional and best-effort.
 
@@ -58,7 +58,7 @@ Helpful context for triage/metrics. These fields are optional and best-effort.
 optional nextDelayMs: number;
 ```
 
-Defined in: [types.ts:93](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L93)
+Defined in: [types.ts:93](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L93)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [types.ts:93](https://github.com/777genius/state-sync/blob/6c6e0d479
 phase: SyncPhase;
 ```
 
-Defined in: [types.ts:76](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L76)
+Defined in: [types.ts:76](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L76)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [types.ts:76](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional snapshotRevision: Revision;
 ```
 
-Defined in: [types.ts:89](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L89)
+Defined in: [types.ts:89](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L89)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [types.ts:89](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional sourceEvent: unknown;
 ```
 
-Defined in: [types.ts:83](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L83)
+Defined in: [types.ts:83](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L83)
 
 Raw event payload when applicable (transport-specific).
 Intentionally `unknown` to keep core transport-agnostic.
@@ -101,7 +101,7 @@ Intentionally `unknown` to keep core transport-agnostic.
 optional sourceId: string;
 ```
 
-Defined in: [types.ts:90](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L90)
+Defined in: [types.ts:90](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L90)
 
 ***
 
@@ -111,7 +111,7 @@ Defined in: [types.ts:90](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional topic: string;
 ```
 
-Defined in: [types.ts:77](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L77)
+Defined in: [types.ts:77](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L77)
 
 ***
 
@@ -121,4 +121,4 @@ Defined in: [types.ts:77](https://github.com/777genius/state-sync/blob/6c6e0d479
 optional willRetry: boolean;
 ```
 
-Defined in: [types.ts:92](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L92)
+Defined in: [types.ts:92](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L92)

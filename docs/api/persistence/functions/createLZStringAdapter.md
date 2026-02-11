@@ -10,7 +10,7 @@
 function createLZStringAdapter(lzString): CompressionAdapter;
 ```
 
-Defined in: [persistence/src/compression.ts:184](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/compression.ts#L184)
+Defined in: [persistence/src/compression.ts:184](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/compression.ts#L184)
 
 Creates a compression adapter using external lz-string library.
 

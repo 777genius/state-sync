@@ -10,7 +10,7 @@
 function createConsoleLogger(options): Logger;
 ```
 
-Defined in: [logger.ts:22](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/logger.ts#L22)
+Defined in: [logger.ts:22](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/logger.ts#L22)
 
 Creates a Logger backed by console.* with an optional prefix.
 

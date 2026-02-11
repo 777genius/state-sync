@@ -10,7 +10,7 @@
 function tagLogger(base, tags): Logger;
 ```
 
-Defined in: [logger.ts:64](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/logger.ts#L64)
+Defined in: [logger.ts:64](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/logger.ts#L64)
 
 Adds static tags to every log call (useful for windowId/sourceId, etc).
 

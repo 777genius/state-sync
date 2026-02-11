@@ -6,7 +6,7 @@
 
 # Interface: PersistenceApplierOptions\<T\>
 
-Defined in: [persistence/src/types.ts:347](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L347)
+Defined in: [persistence/src/types.ts:347](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L347)
 
 Options for creating a persistence-enabled applier.
 
@@ -24,7 +24,7 @@ Options for creating a persistence-enabled applier.
 applier: object;
 ```
 
-Defined in: [persistence/src/types.ts:356](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L356)
+Defined in: [persistence/src/types.ts:356](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L356)
 
 Inner applier to delegate snapshot application to.
 
@@ -52,7 +52,7 @@ apply(snapshot): void | Promise<void>;
 optional compression: CompressionAdapter;
 ```
 
-Defined in: [persistence/src/types.ts:393](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L393)
+Defined in: [persistence/src/types.ts:393](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L393)
 
 Optional compression adapter.
 
@@ -64,7 +64,7 @@ Optional compression adapter.
 optional crossTabSync: CrossTabSyncOptions;
 ```
 
-Defined in: [persistence/src/types.ts:404](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L404)
+Defined in: [persistence/src/types.ts:404](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L404)
 
 Enable cross-tab synchronization via BroadcastChannel.
 
@@ -76,7 +76,7 @@ Enable cross-tab synchronization via BroadcastChannel.
 optional debounceMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:365](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L365)
+Defined in: [persistence/src/types.ts:365](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L365)
 
 Optional debounce for save operations (ms).
 Prevents excessive writes during rapid updates.
@@ -93,7 +93,7 @@ Use `throttling.debounceMs` instead.
 optional enableHash: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:399](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L399)
+Defined in: [persistence/src/types.ts:399](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L399)
 
 Enable integrity hash verification.
 Default: false
@@ -106,7 +106,7 @@ Default: false
 optional onPersistenceError: (context) => void;
 ```
 
-Defined in: [persistence/src/types.ts:376](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L376)
+Defined in: [persistence/src/types.ts:376](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L376)
 
 Optional error handler for persistence operations.
 Called when save/load fails but does not prevent the inner applier from working.
@@ -129,7 +129,7 @@ Called when save/load fails but does not prevent the inner applier from working.
 optional schemaVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:382](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L382)
+Defined in: [persistence/src/types.ts:382](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L382)
 
 Schema version for migration support.
 Default: 1
@@ -142,7 +142,7 @@ Default: 1
 storage: StorageBackend<T>;
 ```
 
-Defined in: [persistence/src/types.ts:351](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L351)
+Defined in: [persistence/src/types.ts:351](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L351)
 
 Storage backend to use for persistence.
 
@@ -154,7 +154,7 @@ Storage backend to use for persistence.
 optional throttling: SaveThrottlingOptions;
 ```
 
-Defined in: [persistence/src/types.ts:370](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L370)
+Defined in: [persistence/src/types.ts:370](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L370)
 
 Advanced throttling options.
 
@@ -166,7 +166,7 @@ Advanced throttling options.
 optional ttlMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:388](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L388)
+Defined in: [persistence/src/types.ts:388](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L388)
 
 Time-to-live for cached data in ms.
 Expired data will not be loaded.

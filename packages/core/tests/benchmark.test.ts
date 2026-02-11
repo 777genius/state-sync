@@ -12,7 +12,11 @@ describe('Benchmark A: compareRevisions throughput', () => {
   const categories = [
     { label: 'small (42 vs 17)', a: r('42'), b: r('17') },
     { label: 'medium (999999 vs 100000)', a: r('999999'), b: r('100000') },
-    { label: 'large (max u64 vs max-1)', a: r('18446744073709551615'), b: r('18446744073709551614') },
+    {
+      label: 'large (max u64 vs max-1)',
+      a: r('18446744073709551615'),
+      b: r('18446744073709551614'),
+    },
     { label: 'equal (1000 vs 1000)', a: r('1000'), b: r('1000') },
     { label: 'different-length (99 vs 100)', a: r('99'), b: r('100') },
   ];
@@ -70,60 +74,64 @@ describe('Benchmark B: Engine coalescing (InMemoryTransport)', () => {
 
   for (const count of eventCounts) {
     for (const delay of delays) {
-      it(`${count} events, ${delay}ms IPC delay → fetches <= 2`, async () => {
-        const transport = new InMemoryTransport<string>();
-        transport.setSnapshotDelay(delay);
+      it(
+        `${count} events, ${delay}ms IPC delay → fetches <= 2`,
+        async () => {
+          const transport = new InMemoryTransport<string>();
+          transport.setSnapshotDelay(delay);
 
-        let rev = 1;
-        transport.setSnapshot({ revision: r(String(rev)), data: 'snap' });
+          let rev = 1;
+          transport.setSnapshot({ revision: r(String(rev)), data: 'snap' });
 
-        const applied: SnapshotEnvelope<string>[] = [];
-        const applier: SnapshotApplier<string> = {
-          apply(snapshot) {
-            applied.push(snapshot);
-          },
-        };
+          const applied: SnapshotEnvelope<string>[] = [];
+          const applier: SnapshotApplier<string> = {
+            apply(snapshot) {
+              applied.push(snapshot);
+            },
+          };
 
-        const getSnapshotSpy = vi.spyOn(transport, 'getSnapshot');
+          const getSnapshotSpy = vi.spyOn(transport, 'getSnapshot');
 
-        const handle = createRevisionSync({
-          topic: 'bench',
-          subscriber: transport,
-          provider: transport,
-          applier,
-        });
+          const handle = createRevisionSync({
+            topic: 'bench',
+            subscriber: transport,
+            provider: transport,
+            applier,
+          });
 
-        await handle.start();
+          await handle.start();
 
-        const startFetches = getSnapshotSpy.mock.calls.length;
+          const startFetches = getSnapshotSpy.mock.calls.length;
 
-        for (let i = 0; i < count; i++) {
-          rev++;
-          transport.setSnapshot({ revision: r(String(rev)), data: `snap-${rev}` });
-          transport.emit({ topic: 'bench', revision: r(String(rev)) });
-        }
+          for (let i = 0; i < count; i++) {
+            rev++;
+            transport.setSnapshot({ revision: r(String(rev)), data: `snap-${rev}` });
+            transport.emit({ topic: 'bench', revision: r(String(rev)) });
+          }
 
-        await vi.waitFor(
-          () => {
-            expect(applied.at(-1)?.revision).toBe(r(String(rev)));
-          },
-          { timeout: delay * 2 + 5000 },
-        );
+          await vi.waitFor(
+            () => {
+              expect(applied.at(-1)?.revision).toBe(r(String(rev)));
+            },
+            { timeout: delay * 2 + 5000 },
+          );
 
-        const fetches = getSnapshotSpy.mock.calls.length - startFetches;
+          const fetches = getSnapshotSpy.mock.calls.length - startFetches;
 
-        results.push({
-          Events: count,
-          'IPC Delay (ms)': delay,
-          Fetches: fetches,
-          'Ratio (events/fetch)': fetches > 0 ? (count / fetches).toFixed(1) : 'N/A',
-        });
+          results.push({
+            Events: count,
+            'IPC Delay (ms)': delay,
+            Fetches: fetches,
+            'Ratio (events/fetch)': fetches > 0 ? (count / fetches).toFixed(1) : 'N/A',
+          });
 
-        expect(fetches).toBeLessThanOrEqual(2);
+          expect(fetches).toBeLessThanOrEqual(2);
 
-        handle.stop();
-        getSnapshotSpy.mockRestore();
-      }, delay * 2 + 10_000);
+          handle.stop();
+          getSnapshotSpy.mockRestore();
+        },
+        delay * 2 + 10_000,
+      );
     }
   }
 

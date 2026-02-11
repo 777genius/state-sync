@@ -14,7 +14,7 @@ Implementation.
 function createSvelteSnapshotApplier<State, Data>(store, options?): SnapshotApplier<Data>;
 ```
 
-Defined in: [svelte.ts:106](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/svelte/src/svelte.ts#L106)
+Defined in: [svelte.ts:106](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/svelte/src/svelte.ts#L106)
 
 Creates a SnapshotApplier that applies snapshots into a Svelte writable store.
 
@@ -42,7 +42,7 @@ Creates a SnapshotApplier that applies snapshots into a Svelte writable store.
 function createSvelteSnapshotApplier<State, Data>(state, options): SnapshotApplier<Data>;
 ```
 
-Defined in: [svelte.ts:117](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/svelte/src/svelte.ts#L117)
+Defined in: [svelte.ts:117](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/svelte/src/svelte.ts#L117)
 
 Creates a SnapshotApplier that applies snapshots into a Svelte 5 `$state` proxy.
 

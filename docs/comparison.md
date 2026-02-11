@@ -76,7 +76,7 @@ Stale updates are automatically rejected. Rapid events are coalesced into at mos
 | Debounce/Throttle | ✅ | ✅ SaveStrategy | ✅ Debounce | ❌ | ❌ | ❌ |
 | Retry | ✅ Exponential | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Persistence | ✅ Separate pkg | ✅ Built-in | ✅ File | ❌ | ✅ localStorage | ❌ |
-| Framework | Any | Zustand / Pinia | Any | Any | Zustand only | Pinia only |
+| Framework | Any | Zustand / Pinia / Valtio | Any | Any | Zustand only | Pinia only |
 | Tauri IPC | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
 | Electron IPC | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ |
 | Browser (BroadcastChannel) | ❌ | ❌ | ❌ | ❌ | ✅ | ✅ |
@@ -109,7 +109,7 @@ await tauriStore.start();
 
 **Good:** Clean DX, disk persistence built-in, `SaveStrategy` with debounce/throttle, actively maintained, great for simple cases.
 
-**Limitations:** No revision ordering (debounce ≠ coalescing — see [above](#coalescing-vs-debounce)), Zustand or Pinia only, Tauri 2.x only.
+**Limitations:** No revision ordering (debounce ≠ coalescing — see [above](#coalescing-vs-debounce)), Zustand/Pinia/Valtio only, Tauri 2.x only.
 
 **Use @tauri-store when:** Simple Tauri app with Zustand or Pinia, ordering doesn't matter, want persistence with minimal setup.
 
@@ -158,6 +158,21 @@ dispatch({ type: 'increment' });
 **Limitations:** No ordering, no coalescing, no retry, no persistence.
 
 **Use when:** Your team knows Redux and ordering doesn't matter.
+
+::: details How does state-sync compare in code?
+```ts
+import { SyncEngine } from '@statesync/core';
+import { tauriTransport } from '@statesync/tauri';
+
+const engine = new SyncEngine({
+  transport: tauriTransport({ key: 'my-store' }),
+  onSnapshot: (snapshot) => store.setState(snapshot),
+});
+
+engine.start();
+```
+state-sync doesn't wrap your store — it subscribes to invalidation events and applies snapshots with revision checking.
+:::
 
 ---
 
@@ -211,7 +226,7 @@ StoreEnhancer pattern by Klarna.
 
 **Good:** Well-designed API, Redux ecosystem integration.
 
-**Bad:** Depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). Not for new projects.
+**Limitations:** Depends on deprecated `electron.remote` — **broken with Electron 14+** (removed in 2021). Not for new projects.
 
 ---
 
@@ -221,7 +236,7 @@ Immer-based shared state for Electron.
 
 **Good:** Immer integration, TypeScript.
 
-**Bad:** Inactive 12+ months. No ordering, no retry.
+**Limitations:** Inactive 12+ months. No ordering, no retry.
 
 ---
 
@@ -231,7 +246,7 @@ Small Redux bridge for Electron with demo apps.
 
 **Good:** Minimal, Redux-based, active with examples.
 
-**Bad:** No ordering, no coalescing, no retry.
+**Limitations:** No ordering, no coalescing, no retry.
 
 ---
 
@@ -284,6 +299,8 @@ Small Redux bridge for Electron with demo apps.
 | @statesync/valtio | < 1 KB |
 | @statesync/svelte | < 1 KB |
 
+Measured via [bundlejs.com](https://bundlejs.com) with ESM tree-shaking.
+
 ### Alternatives
 
 | Package | Size |
@@ -316,7 +333,9 @@ flowchart TD
     B3 -->|Yes| TS[@tauri-store/*]
     B3 -->|No| B4{Redux pattern?}
     B4 -->|Yes| ZB1[zubridge]
-    B4 -->|No| SS2[state-sync]
+    B4 -->|No| B5{Need any state sync?}
+    B5 -->|Yes| SS2[state-sync]
+    B5 -->|No| NS3[No sync needed]
 
     C --> C1{Need ordering / coalescing?}
     C1 -->|Yes| SS3[state-sync]

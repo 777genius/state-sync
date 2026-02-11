@@ -6,7 +6,7 @@
 
 # Interface: SnapshotApplier\<T\>
 
-Defined in: [types.ts:55](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L55)
+Defined in: [types.ts:55](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L55)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: [types.ts:55](https://github.com/777genius/state-sync/blob/6c6e0d479
 apply(snapshot): void | Promise<void>;
 ```
 
-Defined in: [types.ts:56](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/types.ts#L56)
+Defined in: [types.ts:56](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/types.ts#L56)
 
 #### Parameters
 

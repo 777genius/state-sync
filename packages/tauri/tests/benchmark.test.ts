@@ -2,9 +2,6 @@ import { afterAll, describe, expect, it, vi } from 'vitest';
 import { createTauriRevisionSync } from '../src/sync';
 import type { TauriInvoke, TauriListen } from '../src/transport';
 
-type Revision = string & { readonly __brand: 'Revision' };
-const r = (v: string) => v as Revision;
-
 // ─── Helper: createMockTauri ────────────────────────────────────────────
 
 interface MockTauriOptions {
@@ -75,54 +72,58 @@ describe('Benchmark C: Tauri coalescing efficiency', () => {
 
   for (const count of eventCounts) {
     for (const delay of delays) {
-      it(`${count} events, ${delay}ms IPC → invoke calls <= 2`, async () => {
-        const mock = createMockTauri({ ipcDelayMs: delay });
-        const applied: Array<{ revision: string }> = [];
+      it(
+        `${count} events, ${delay}ms IPC → invoke calls <= 2`,
+        async () => {
+          const mock = createMockTauri({ ipcDelayMs: delay });
+          const applied: Array<{ revision: string }> = [];
 
-        const handle = createTauriRevisionSync<string>({
-          topic: 'bench',
-          listen: mock.listen,
-          invoke: mock.invoke,
-          eventName: 'evt',
-          commandName: 'get_snapshot',
-          applier: {
-            apply: (s) => {
-              applied.push({ revision: s.revision });
+          const handle = createTauriRevisionSync<string>({
+            topic: 'bench',
+            listen: mock.listen,
+            invoke: mock.invoke,
+            eventName: 'evt',
+            commandName: 'get_snapshot',
+            applier: {
+              apply: (s) => {
+                applied.push({ revision: s.revision });
+              },
             },
-          },
-          logger: noopLogger,
-        });
+            logger: noopLogger,
+          });
 
-        await handle.start();
-        const startCalls = mock.getInvokeCallCount();
+          await handle.start();
+          const startCalls = mock.getInvokeCallCount();
 
-        let rev = 1;
-        for (let i = 0; i < count; i++) {
-          rev++;
-          mock.setSnapshot(String(rev), `data-${rev}`);
-          mock.fireEvent('bench', String(rev));
-        }
+          let rev = 1;
+          for (let i = 0; i < count; i++) {
+            rev++;
+            mock.setSnapshot(String(rev), `data-${rev}`);
+            mock.fireEvent('bench', String(rev));
+          }
 
-        await vi.waitFor(
-          () => {
-            expect(applied.at(-1)?.revision).toBe(String(rev));
-          },
-          { timeout: delay * 2 + 5000 },
-        );
+          await vi.waitFor(
+            () => {
+              expect(applied.at(-1)?.revision).toBe(String(rev));
+            },
+            { timeout: delay * 2 + 5000 },
+          );
 
-        const invokeCalls = mock.getInvokeCallCount() - startCalls;
+          const invokeCalls = mock.getInvokeCallCount() - startCalls;
 
-        results.push({
-          Events: count,
-          'IPC Delay (ms)': delay,
-          'Invoke calls': invokeCalls,
-          'Ratio (events/invoke)': invokeCalls > 0 ? (count / invokeCalls).toFixed(1) : 'N/A',
-        });
+          results.push({
+            Events: count,
+            'IPC Delay (ms)': delay,
+            'Invoke calls': invokeCalls,
+            'Ratio (events/invoke)': invokeCalls > 0 ? (count / invokeCalls).toFixed(1) : 'N/A',
+          });
 
-        expect(invokeCalls).toBeLessThanOrEqual(2);
+          expect(invokeCalls).toBeLessThanOrEqual(2);
 
-        handle.stop();
-      }, delay * 2 + 10_000);
+          handle.stop();
+        },
+        delay * 2 + 10_000,
+      );
     }
   }
 
@@ -162,7 +163,7 @@ describe('Benchmark D: Race condition verification', () => {
     const invoke = vi.fn(async () => {
       const capturedRevision = snapshotRevision;
       const capturedData = snapshotData;
-      const delay = delayRotation[callIndex % delayRotation.length]!;
+      const delay = delayRotation[callIndex % delayRotation.length] ?? 1;
       callIndex++;
       await new Promise((res) => setTimeout(res, delay));
       return { revision: capturedRevision, data: capturedData };
@@ -205,7 +206,7 @@ describe('Benchmark D: Race condition verification', () => {
       expect(
         appliedRevisions[i],
         `Revision at index ${i} (${appliedRevisions[i]}) should be > index ${i - 1} (${appliedRevisions[i - 1]})`,
-      ).toBeGreaterThan(appliedRevisions[i - 1]!);
+      ).toBeGreaterThan(appliedRevisions[i - 1] ?? 0);
     }
 
     expect(appliedRevisions.at(-1)).toBe(EVENT_COUNT + 1);

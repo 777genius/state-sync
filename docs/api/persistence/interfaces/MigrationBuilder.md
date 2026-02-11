@@ -6,7 +6,7 @@
 
 # Interface: MigrationBuilder\<TFinal\>
 
-Defined in: [persistence/src/migration.ts:147](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/migration.ts#L147)
+Defined in: [persistence/src/migration.ts:147](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/migration.ts#L147)
 
 Migration builder interface.
 
@@ -24,7 +24,7 @@ Migration builder interface.
 addMigration<TFrom, TTo>(fromVersion, fn): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:151](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/migration.ts#L151)
+Defined in: [persistence/src/migration.ts:151](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/migration.ts#L151)
 
 Add a migration from one version to the next.
 
@@ -54,7 +54,7 @@ Add a migration from one version to the next.
 build(currentVersion): MigrationHandler<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:164](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/migration.ts#L164)
+Defined in: [persistence/src/migration.ts:164](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/migration.ts#L164)
 
 Build the migration handler.
 
@@ -76,7 +76,7 @@ Build the migration handler.
 withValidator(fn): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:159](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/migration.ts#L159)
+Defined in: [persistence/src/migration.ts:159](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/migration.ts#L159)
 
 Add a validator for the final data type.
 

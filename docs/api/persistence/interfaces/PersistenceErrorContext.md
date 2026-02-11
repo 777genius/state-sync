@@ -6,7 +6,7 @@
 
 # Interface: PersistenceErrorContext
 
-Defined in: [persistence/src/types.ts:300](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L300)
+Defined in: [persistence/src/types.ts:300](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L300)
 
 Context provided to error handlers.
 
@@ -18,7 +18,7 @@ Context provided to error handlers.
 error: unknown;
 ```
 
-Defined in: [persistence/src/types.ts:302](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L302)
+Defined in: [persistence/src/types.ts:302](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L302)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [persistence/src/types.ts:302](https://github.com/777genius/state-sy
 optional metadata: PersistedSnapshotMetadata;
 ```
 
-Defined in: [persistence/src/types.ts:304](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L304)
+Defined in: [persistence/src/types.ts:304](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L304)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [persistence/src/types.ts:304](https://github.com/777genius/state-sy
 operation: "load" | "clear" | "save" | "migrate";
 ```
 
-Defined in: [persistence/src/types.ts:301](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L301)
+Defined in: [persistence/src/types.ts:301](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L301)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [persistence/src/types.ts:301](https://github.com/777genius/state-sy
 optional snapshot: SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/types.ts:303](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/types.ts#L303)
+Defined in: [persistence/src/types.ts:303](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/types.ts#L303)

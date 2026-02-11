@@ -6,7 +6,7 @@
 
 # Interface: MemoryStorageBackendOptions
 
-Defined in: [persistence/src/storage/memory-storage.ts:7](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L7)
+Defined in: [persistence/src/storage/memory-storage.ts:7](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L7)
 
 Options for in-memory storage backend.
 
@@ -18,7 +18,7 @@ Options for in-memory storage backend.
 optional errorMessage: string;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:31](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L31)
+Defined in: [persistence/src/storage/memory-storage.ts:31](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L31)
 
 Custom error message for failures.
 
@@ -30,7 +30,7 @@ Custom error message for failures.
 optional failOnLoad: boolean;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:26](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L26)
+Defined in: [persistence/src/storage/memory-storage.ts:26](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L26)
 
 If true, throws an error on load (for testing error handling).
 
@@ -42,7 +42,7 @@ If true, throws an error on load (for testing error handling).
 optional failOnSave: boolean;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:21](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L21)
+Defined in: [persistence/src/storage/memory-storage.ts:21](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L21)
 
 If true, throws an error on save (for testing error handling).
 
@@ -54,7 +54,7 @@ If true, throws an error on save (for testing error handling).
 optional initialSnapshot: SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:11](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L11)
+Defined in: [persistence/src/storage/memory-storage.ts:11](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L11)
 
 Initial snapshot to pre-populate storage.
 
@@ -66,7 +66,7 @@ Initial snapshot to pre-populate storage.
 optional latencyMs: number;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:16](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L16)
+Defined in: [persistence/src/storage/memory-storage.ts:16](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L16)
 
 Simulated latency in ms (for testing async behavior).
 
@@ -78,6 +78,6 @@ Simulated latency in ms (for testing async behavior).
 optional maxSizeBytes: number;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:36](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/persistence/src/storage/memory-storage.ts#L36)
+Defined in: [persistence/src/storage/memory-storage.ts:36](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/persistence/src/storage/memory-storage.ts#L36)
 
 Maximum storage size in bytes (simulates quota).

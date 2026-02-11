@@ -7,12 +7,10 @@
  * - IPC handler for renderer → main write path
  * - Proper lifecycle cleanup
  */
-import { app, BrowserWindow, ipcMain } from 'electron';
+
 import path from 'node:path';
-import {
-  createElectronBroadcaster,
-  createElectronSnapshotHandler,
-} from '@statesync/electron';
+import { createElectronBroadcaster, createElectronSnapshotHandler } from '@statesync/electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 
 // ─── State ──────────────────────────────────────────
 

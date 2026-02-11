@@ -10,4 +10,4 @@
 type VueApplyMode = "patch" | "replace";
 ```
 
-Defined in: [vue.ts:15](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/vue/src/vue.ts#L15)
+Defined in: [vue.ts:15](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/vue/src/vue.ts#L15)

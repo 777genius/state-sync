@@ -6,7 +6,7 @@
 
 # Interface: CreateElectronRevisionSyncOptions\<T\>
 
-Defined in: sync.ts:12
+Defined in: [sync.ts:12](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L12)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: sync.ts:12
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: sync.ts:16
+Defined in: [sync.ts:16](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L16)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: sync.ts:16
 bridge: ElectronStateSyncBridge;
 ```
 
-Defined in: sync.ts:15
+Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L15)
 
 The bridge object from window.statesync
 
@@ -44,7 +44,7 @@ The bridge object from window.statesync
 optional invalidationChannel: string;
 ```
 
-Defined in: sync.ts:19
+Defined in: [sync.ts:19](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L19)
 
 Override default channel: statesync:${topic}:invalidated
 
@@ -56,7 +56,7 @@ Override default channel: statesync:${topic}:invalidated
 optional logger: Logger;
 ```
 
-Defined in: sync.ts:24
+Defined in: [sync.ts:24](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L24)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: sync.ts:24
 optional onError: (ctx) => void;
 ```
 
-Defined in: sync.ts:25
+Defined in: [sync.ts:25](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L25)
 
 #### Parameters
 
@@ -86,7 +86,7 @@ Defined in: sync.ts:25
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: sync.ts:23
+Defined in: [sync.ts:23](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L23)
 
 #### Parameters
 
@@ -106,7 +106,7 @@ Defined in: sync.ts:23
 optional snapshotChannel: string;
 ```
 
-Defined in: sync.ts:21
+Defined in: [sync.ts:21](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L21)
 
 Override default channel: statesync:${topic}:snapshot
 
@@ -118,7 +118,7 @@ Override default channel: statesync:${topic}:snapshot
 optional throttling: InvalidationThrottlingOptions;
 ```
 
-Defined in: sync.ts:26
+Defined in: [sync.ts:26](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L26)
 
 ***
 
@@ -128,4 +128,4 @@ Defined in: sync.ts:26
 topic: string;
 ```
 
-Defined in: sync.ts:13
+Defined in: [sync.ts:13](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/sync.ts#L13)

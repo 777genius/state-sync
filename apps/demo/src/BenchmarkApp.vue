@@ -289,8 +289,8 @@ async function runAll() {
       p50: percentile(latencies, 50).toFixed(2),
       p95: percentile(latencies, 95).toFixed(2),
       p99: percentile(latencies, 99).toFixed(2),
-      min: latencies[0]!.toFixed(2),
-      max: latencies.at(-1)!.toFixed(2),
+      min: latencies[0]?.toFixed(2),
+      max: latencies.at(-1)?.toFixed(2),
       mean: mean.toFixed(2),
       iterations: ITERATIONS,
     };
@@ -322,7 +322,7 @@ async function runAll() {
 
       // Pick median by totalMs
       runs.sort((a, b) => a.totalMs - b.totalMs);
-      const med = runs[Math.floor(runs.length / 2)]!;
+      const med = runs[Math.floor(runs.length / 2)] ?? runs[0];
 
       coalescingResults.value.push({
         events: count,
@@ -350,7 +350,7 @@ async function runAll() {
     }
 
     thruRuns.sort((a, b) => a.totalMs - b.totalMs);
-    const medThru = thruRuns[Math.floor(thruRuns.length / 2)]!;
+    const medThru = thruRuns[Math.floor(thruRuns.length / 2)] ?? thruRuns[0];
 
     throughputResult.value = {
       events: 1000,

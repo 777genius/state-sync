@@ -6,7 +6,7 @@
 
 # Interface: ElectronBroadcasterHandle
 
-Defined in: main.ts:22
+Defined in: [main.ts:25](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/main.ts#L25)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: main.ts:22
 readonly topic: string;
 ```
 
-Defined in: main.ts:23
+Defined in: [main.ts:26](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/main.ts#L26)
 
 ## Methods
 
@@ -26,7 +26,7 @@ Defined in: main.ts:23
 invalidate(revision, extra?): void;
 ```
 
-Defined in: main.ts:24
+Defined in: [main.ts:27](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/electron/src/main.ts#L27)
 
 #### Parameters
 

@@ -6,7 +6,7 @@
 
 # Interface: TauriSnapshotProviderOptions
 
-Defined in: [transport.ts:57](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/tauri/src/transport.ts#L57)
+Defined in: [transport.ts:57](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/transport.ts#L57)
 
 ## Properties
 
@@ -16,7 +16,7 @@ Defined in: [transport.ts:57](https://github.com/777genius/state-sync/blob/6c6e0
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [transport.ts:60](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/tauri/src/transport.ts#L60)
+Defined in: [transport.ts:60](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/transport.ts#L60)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [transport.ts:60](https://github.com/777genius/state-sync/blob/6c6e0
 commandName: string;
 ```
 
-Defined in: [transport.ts:59](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/tauri/src/transport.ts#L59)
+Defined in: [transport.ts:59](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/transport.ts#L59)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [transport.ts:59](https://github.com/777genius/state-sync/blob/6c6e0
 invoke: TauriInvoke;
 ```
 
-Defined in: [transport.ts:58](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/tauri/src/transport.ts#L58)
+Defined in: [transport.ts:58](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/tauri/src/transport.ts#L58)

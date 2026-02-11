@@ -6,7 +6,7 @@
 
 # Interface: RevisionSyncOptions\<T\>
 
-Defined in: [engine.ts:20](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L20)
+Defined in: [engine.ts:20](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L20)
 
 ## Type Parameters
 
@@ -22,7 +22,7 @@ Defined in: [engine.ts:20](https://github.com/777genius/state-sync/blob/6c6e0d47
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: [engine.ts:24](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L24)
+Defined in: [engine.ts:24](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L24)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [engine.ts:24](https://github.com/777genius/state-sync/blob/6c6e0d47
 optional logger: Logger;
 ```
 
-Defined in: [engine.ts:26](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L26)
+Defined in: [engine.ts:26](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L26)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [engine.ts:26](https://github.com/777genius/state-sync/blob/6c6e0d47
 optional onError: (ctx) => void;
 ```
 
-Defined in: [engine.ts:27](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L27)
+Defined in: [engine.ts:27](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L27)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [engine.ts:27](https://github.com/777genius/state-sync/blob/6c6e0d47
 provider: SnapshotProvider<T>;
 ```
 
-Defined in: [engine.ts:23](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L23)
+Defined in: [engine.ts:23](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L23)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [engine.ts:23](https://github.com/777genius/state-sync/blob/6c6e0d47
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: [engine.ts:25](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L25)
+Defined in: [engine.ts:25](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L25)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: [engine.ts:25](https://github.com/777genius/state-sync/blob/6c6e0d47
 subscriber: InvalidationSubscriber;
 ```
 
-Defined in: [engine.ts:22](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L22)
+Defined in: [engine.ts:22](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L22)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [engine.ts:22](https://github.com/777genius/state-sync/blob/6c6e0d47
 optional throttling: InvalidationThrottlingOptions;
 ```
 
-Defined in: [engine.ts:33](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L33)
+Defined in: [engine.ts:33](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L33)
 
 Optional throttling configuration to control refresh rate.
 Use debounceMs to wait for "silence" before refreshing.
@@ -116,4 +116,4 @@ Use throttleMs to limit refresh frequency.
 topic: string;
 ```
 
-Defined in: [engine.ts:21](https://github.com/777genius/state-sync/blob/6c6e0d479cf192c3cfd1c8f1bfbceaf70a62ee5d/packages/core/src/engine.ts#L21)
+Defined in: [engine.ts:21](https://github.com/777genius/state-sync/blob/e93ac0627da2558efb78e4efceaa287e9a61c5b8/packages/core/src/engine.ts#L21)
