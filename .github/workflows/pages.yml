@@ -5,8 +5,10 @@ on:
     branches: [main]
     paths:
       - docs/**
+      - packages/*/src/**
       - package.json
       - pnpm-lock.yaml
+      - typedoc.json
       - .github/workflows/pages.yml
   workflow_dispatch:
 
