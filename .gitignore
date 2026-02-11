@@ -13,3 +13,6 @@ target/
 # VitePress
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+
+# Medium drafts
+*.medium.md
