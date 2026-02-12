@@ -243,6 +243,101 @@ pinia.use(PiniaSharedState({ enable: true }))
 
 ---
 
+### Architecture Overview
+
+How each library moves state between Electron's main and renderer processes.
+
+#### state-sync — Invalidation-pull
+
+```mermaid
+sequenceDiagram
+    participant M as Main process
+    participant R1 as Renderer A
+    participant R2 as Renderer B
+
+    M->>M: state changed (rev 5)
+    M-->>R1: emit "invalidated" (rev 5)
+    M-->>R2: emit "invalidated" (rev 5)
+    R1->>M: invoke getSnapshot()
+    M->>R1: { data, revision: 5 }
+    R1->>R1: 5 > local 4 → apply
+    R2->>M: invoke getSnapshot()
+    M->>R2: { data, revision: 5 }
+    R2->>R2: 5 > local 4 → apply
+```
+
+Renderer never receives state directly — it **pulls** a verified snapshot. Stale events are safe (revision check). Burst of 100 events → 2 IPC calls (coalescing).
+
+#### @zubridge/electron — Hub-and-spoke push
+
+```mermaid
+sequenceDiagram
+    participant R1 as Renderer A
+    participant M as Main process
+    participant R2 as Renderer B
+
+    R1->>M: dispatch({ type: 'increment' })
+    M->>M: store.setState()
+    M-->>R1: push full state
+    M-->>R2: push full state
+```
+
+Main pushes the **entire state** to all tracked windows on every change. Simple and reliable, but no ordering guarantees and O(N) IPC calls per update.
+
+#### reduxtron — Centralized Redux via preload
+
+```mermaid
+sequenceDiagram
+    participant R as Renderer
+    participant P as Preload bridge
+    participant M as Main (Redux store)
+
+    R->>P: window.redux.dispatch(action)
+    P->>M: ipcRenderer.invoke('dispatch', action)
+    M->>M: store.dispatch(action)
+    M-->>R: push new state via IPC
+```
+
+Store exists **only** in main. Renderer dispatches through a preload bridge. `getState()` requires an IPC round-trip (async).
+
+#### electron-shared-state — Distributed Immer patches
+
+```mermaid
+sequenceDiagram
+    participant A as Process A
+    participant B as Process B
+    participant C as Process C
+
+    A->>A: setState(draft => draft.count++)
+    A->>A: Immer generates patch
+    A-->>B: send patch [{op: "replace", path: "/count", value: 1}]
+    A-->>C: send patch
+    B->>B: applyPatches(localState, patches)
+    C->>C: applyPatches(localState, patches)
+```
+
+Each process holds its own copy. Only the **delta** (Immer patch) is sent — most bandwidth-efficient. Requires `nodeIntegration: true`.
+
+#### electron-redux — Dual store action replay
+
+```mermaid
+sequenceDiagram
+    participant R1 as Renderer A
+    participant M as Main store (source of truth)
+    participant R2 as Renderer B
+
+    R1->>M: forward action via IPC
+    M->>M: dispatch(action) → new state
+    M-->>R1: replay action
+    M-->>R2: replay action
+    R1->>R1: local dispatch(action)
+    R2->>R2: local dispatch(action)
+```
+
+Actions are forwarded to main and replayed in all renderers. Each process maintains its own Redux store. v1 depends on deprecated `electron.remote`.
+
+---
+
 ### Technical Architecture Ranking
 
 Engineering-only comparison: protocol design, correctness guarantees, IPC efficiency, security model. Does not factor in adoption, community size, or maintenance activity.

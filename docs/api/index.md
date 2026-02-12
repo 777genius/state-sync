@@ -9,10 +9,12 @@ If you don’t see a function here, it is likely not part of the public API (not
 ## Packages
 
 - [Core (@statesync/core)](/api/core/)
-- [Pinia (@statesync/pinia)](/api/pinia/)
+- [Persistence (@statesync/persistence)](/api/persistence/)
+- [Electron (@statesync/electron)](/api/electron/)
+- [Tauri (@statesync/tauri)](/api/tauri/)
 - [Zustand (@statesync/zustand)](/api/zustand/)
+- [Pinia (@statesync/pinia)](/api/pinia/)
+- [Vue (@statesync/vue)](/api/vue/)
 - [Valtio (@statesync/valtio)](/api/valtio/)
 - [Svelte (@statesync/svelte)](/api/svelte/)
-- [Vue (@statesync/vue)](/api/vue/)
-- [Tauri (@statesync/tauri)](/api/tauri/)
 
