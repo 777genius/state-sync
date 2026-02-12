@@ -11,11 +11,17 @@ import './custom.css';
 export default {
   extends: DefaultTheme,
   Layout,
-  enhanceApp({ app }) {
+  enhanceApp({ app, router }) {
     app.component('ApiPackageList', ApiPackageList);
     app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons);
     app.component('ExploreGrid', ExploreGrid);
     app.component('FrameworkGrid', FrameworkGrid);
     app.component('InstallBlock', InstallBlock);
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('vite:preloadError', () => {
+        window.location.reload();
+      });
+    }
   },
 } satisfies Theme;
