@@ -192,9 +192,137 @@ pinia.use(PiniaSharedState({ enable: true }))
 
 **Good:** Tiny (~1 KB each), zero config, simple API.
 
-**Limitations:** No ordering, no error handling, browser-only transport, Rust backend is blind to state.
+**Limitations:** No ordering, no error handling, browser-only transport, Rust backend is unaware of state.
 
 **Use when:** Lightweight UI sync between Tauri webviews where backend awareness isn't needed.
+
+---
+
+### Technical Architecture Ranking
+
+Engineering-only comparison: protocol design, correctness guarantees, IPC efficiency, security model. Does not factor in adoption, community size, or maintenance activity.
+
+| # | Library | Score | Key technical advantage |
+|---|---------|:-----:|------------------------|
+| 1 | **state-sync** | **9.0** | Revision ordering + coalescing O(2) + pluggable transport + 8 error phases |
+| 2 | **@tauri-store/\*** | **7.0** | Bidirectional Rust↔JS + configurable SaveStrategy (debounce/throttle) + key filtering |
+| 3 | **zubridge** | **6.0** | Cross-platform Tauri+Electron + Redux dispatch pattern + StateManager trait |
+| 4 | **tauri-plugin-store** | **5.5** | Official Tauri plugin + custom serialization + per-key change events |
+| 5 | **Browser-based (zustand-sync-tabs / pinia-shared-state)** | **4.5** | Zero config, ~1 KB, no Rust dependency, standards-backed API |
+
+```mermaid
+quadrantChart
+    title IPC Efficiency vs Correctness Guarantees
+    x-axis Low Correctness --> High Correctness
+    y-axis Low IPC Efficiency --> High IPC Efficiency
+    quadrant-1 High Correctness + Efficiency
+    quadrant-2 Efficient, No Ordering
+    quadrant-3 Low Correctness + Efficiency
+    quadrant-4 Correct, Higher Overhead
+    state-sync: [0.9, 0.85]
+    tauri-store: [0.4, 0.65]
+    tauri-plugin-store: [0.35, 0.45]
+    zubridge: [0.4, 0.4]
+    BroadcastChannel: [0.2, 0.75]
+```
+
+::: details Scoring breakdown (8 criteria, weighted)
+
+Criteria weighted by engineering importance for a state sync library:
+- **High weight (×2):** consistency model, IPC efficiency, security architecture
+- **Medium weight (×1.5):** error resilience, modularity
+- **Standard weight (×1):** type system, cross-platform, bundle efficiency
+
+| Criteria | state-sync | @tauri-store | zubridge | plugin-store | Browser-based |
+|----------|:----------:|:------------:|:--------:|:------------:|:-------------:|
+| Consistency model | 10 | 5 | 4 | 4 | 2 |
+| IPC efficiency | 9.5 | 7 | 4 | 5 | **10** |
+| Security architecture | 10 | 8 | 8 | 8 | 3 |
+| Error resilience | 10 | 6 | 5 | 5 | 1 |
+| Modularity | 10 | 8 | 6 | 5 | 3 |
+| Type system | 9 | 8 | 7 | 6 | 5 |
+| Cross-platform | 8 | 3 | **10** | 3 | 7 |
+| Bundle efficiency | 8 | 6 | 7 | 8 | **10** |
+
+**Why browser-based tools score low despite having the best IPC efficiency:** BroadcastChannel bypasses Rust IPC entirely (zero overhead), but provides no ordering, no error handling, and the Rust backend remains unaware of state changes. In Tauri apps the backend is often the source of truth, making this a fundamental limitation.
+
+**Why @tauri-store scores higher than tauri-plugin-store:** both use similar Rust-backed KV patterns, but @tauri-store adds configurable SaveStrategy (debounce/throttle for disk persistence), key filtering via `filterKeys`, a JS-side `syncStrategy` option, and framework adapters for Zustand, Pinia, Valtio, Svelte, and Vue. tauri-plugin-store has the advantage of being the official Tauri plugin with guaranteed long-term maintenance and first-class Tauri integration.
+
+state-sync is the author of this page. Verify claims using the raw data in the [Feature Matrix](#feature-matrix) above.
+:::
+
+---
+
+### Architecture Overview
+
+How each library moves state between Tauri's Rust backend and webview frontends. Grouped by architectural pattern rather than per-library.
+
+#### Pattern 1 — Invalidation-pull (state-sync)
+
+```mermaid
+sequenceDiagram
+    participant R as Rust backend
+    participant W1 as Webview A
+    participant W2 as Webview B
+
+    R->>R: state changed (rev 5)
+    R-->>W1: app.emit("invalidated", { rev: 5 })
+    R-->>W2: app.emit("invalidated", { rev: 5 })
+    Note over R,W2: Events carry topic + revision only — no data
+    W1->>R: invoke("get_snapshot")
+    R->>W1: { data, revision: 5 }
+    W1->>W1: 5 > local 4 → apply
+    W2->>R: invoke("get_snapshot")
+    R->>W2: { data, revision: 5 }
+    W2->>W2: 5 > local 4 → apply
+```
+
+Events are lightweight (topic + revision number, no payload). Webview **pulls** a verified snapshot only when needed. Stale events are safe (revision comparison rejects them). Burst of 100 rapid changes → 2 IPC calls thanks to coalescing (`refreshInFlight` / `refreshQueued` flags).
+
+#### Pattern 2 — Bidirectional KV sync (tauri-store, tauri-plugin-store)
+
+```mermaid
+sequenceDiagram
+    participant W1 as Webview A
+    participant R as Rust backend (HashMap)
+    participant D as Disk
+    participant W2 as Webview B
+
+    W1->>R: invoke("patch", { key: "count", value: 42 })
+    R->>R: HashMap.insert("count", 42)
+    R-->>W1: app.emit("store://change", { key: "count" })
+    R-->>W2: app.emit("store://change", { key: "count" })
+    W2->>W2: update local store
+    R->>D: save (debounce 100ms)
+```
+
+Source of truth is the Rust `HashMap` behind a `Mutex`. Every `set()` in JS triggers an `invoke()` to Rust, which updates the map and broadcasts a change event to all webviews. Disk persistence is debounced (tauri-plugin-store: 100ms default, @tauri-store: configurable debounce/throttle via tokio channels). No revision ordering — last write wins.
+
+#### Pattern 3 — Hub-and-spoke dispatch (zubridge) + peer-to-peer (BroadcastChannel)
+
+```mermaid
+sequenceDiagram
+    participant W1 as Webview A
+    participant R as Rust (StateManager)
+    participant W2 as Webview B
+
+    rect rgb(240, 248, 255)
+    Note over W1,W2: zubridge — full state push
+    W1->>R: invoke("dispatch", { type: "increment" })
+    R->>R: StateManager::process_action()
+    R-->>W1: app.emit(full state)
+    R-->>W2: app.emit(full state)
+    end
+
+    rect rgb(255, 248, 240)
+    Note over W1,W2: BroadcastChannel — peer-to-peer, no Rust
+    W1->>W2: BroadcastChannel.postMessage(partial diff)
+    W2->>W2: merge top-level keys
+    Note over R: Rust backend is unaware
+    end
+```
+
+zubridge uses a Redux-style dispatch → process → push cycle through Rust. The `StateManager` trait processes actions in a `Mutex`, then emits **full state** to all windows (no delta, no ordering). BroadcastChannel tools (`zustand-sync-tabs`, `pinia-shared-state`) bypass Rust entirely — fast (~0 overhead) but the backend remains unaware of state changes.
 
 ---
 
