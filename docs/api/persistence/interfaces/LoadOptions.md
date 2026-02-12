@@ -6,7 +6,7 @@
 
 # Interface: LoadOptions\<T\>
 
-Defined in: [persistence/src/types.ts:756](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L756)
+Defined in: [persistence/src/types.ts:756](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L756)
 
 Options for [loadPersistedSnapshot](../functions/loadPersistedSnapshot.md) controlling migration, validation,
 TTL enforcement, and integrity checking.
@@ -25,7 +25,7 @@ TTL enforcement, and integrity checking.
 optional ignoreTTL: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:790](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L790)
+Defined in: [persistence/src/types.ts:790](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L790)
 
 If `true`, load the snapshot even if its TTL has expired.
 
@@ -43,7 +43,7 @@ Useful for "best-effort" hydration where stale data is better than no data.
 optional migration: MigrationHandler<T>;
 ```
 
-Defined in: [persistence/src/types.ts:764](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L764)
+Defined in: [persistence/src/types.ts:764](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L764)
 
 Migration handler for upgrading persisted data to the current schema version.
 
@@ -59,7 +59,7 @@ functions are applied in sequence.
 optional validate: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:771](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L771)
+Defined in: [persistence/src/types.ts:771](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L771)
 
 Whether to run the migration handler's built-in validator on the loaded data.
 
@@ -75,7 +75,7 @@ Whether to run the migration handler's built-in validator on the loaded data.
 optional validator: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:781](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L781)
+Defined in: [persistence/src/types.ts:781](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L781)
 
 A custom type-guard function to validate the loaded (and possibly migrated) data.
 
@@ -101,7 +101,7 @@ If provided and the function returns `false`, the snapshot is discarded.
 optional verifyHash: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:800](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L800)
+Defined in: [persistence/src/types.ts:800](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L800)
 
 If `true`, verify the stored integrity hash against the loaded data.
 

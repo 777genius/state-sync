@@ -6,7 +6,7 @@
 
 # Interface: DisposablePersistenceApplier\<T\>
 
-Defined in: [persistence/src/types.ts:16](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L16)
+Defined in: [persistence/src/types.ts:16](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L16)
 
 Extended SnapshotApplier with lifecycle management for persistence.
 
@@ -32,7 +32,7 @@ sync to clean up pending debounce timers, event listeners, and BroadcastChannel 
 apply(snapshot): void | Promise<void>;
 ```
 
-Defined in: [core/src/types.ts:191](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L191)
+Defined in: [core/src/types.ts:191](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L191)
 
 Applies the given snapshot to local state.
 
@@ -67,7 +67,7 @@ SnapshotApplier.apply
 dispose(): void;
 ```
 
-Defined in: [persistence/src/types.ts:26](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L26)
+Defined in: [persistence/src/types.ts:26](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L26)
 
 Cancels any pending debounced/throttled save operations and releases all
 internal resources (timers, event listeners, BroadcastChannel).
@@ -89,7 +89,7 @@ Should be called when sync is stopped to prevent memory leaks.
 flush(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L44)
+Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L44)
 
 Forces an immediate save of the most recently queued snapshot (if any).
 
@@ -110,7 +110,7 @@ A promise that resolves when the flush completes (or immediately if nothing is p
 getStats(): PersistenceStats;
 ```
 
-Defined in: [persistence/src/types.ts:71](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L71)
+Defined in: [persistence/src/types.ts:71](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L71)
 
 Returns a snapshot of the current persistence statistics.
 
@@ -129,7 +129,7 @@ A copy of the current [PersistenceStats](PersistenceStats.md) including save cou
 hasPendingSave(): boolean;
 ```
 
-Defined in: [persistence/src/types.ts:34](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L34)
+Defined in: [persistence/src/types.ts:34](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L34)
 
 Returns `true` if there is a pending save operation that has been scheduled
 but not yet written to storage.
@@ -148,7 +148,7 @@ Whether a save is currently queued by the throttle/debounce handler.
 on<K>(event, handler): () => void;
 ```
 
-Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L63)
+Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L63)
 
 Subscribe to a persistence lifecycle event.
 

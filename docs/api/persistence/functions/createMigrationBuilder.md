@@ -10,7 +10,7 @@
 function createMigrationBuilder<TFinal>(): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:139](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/migration.ts#L139)
+Defined in: [persistence/src/migration.ts:139](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L139)
 
 Creates a fluent builder for constructing [MigrationHandler](../interfaces/MigrationHandler.md) instances
 with full type safety across migration steps.

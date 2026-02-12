@@ -6,7 +6,7 @@
 
 # Interface: ConsoleLoggerOptions
 
-Defined in: [logger.ts:18](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/logger.ts#L18)
+Defined in: [logger.ts:18](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L18)
 
 Configuration options for the console-based logger created by
 [createConsoleLogger](../functions/createConsoleLogger.md).
@@ -19,7 +19,7 @@ Configuration options for the console-based logger created by
 optional debug: boolean;
 ```
 
-Defined in: [logger.ts:36](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/logger.ts#L36)
+Defined in: [logger.ts:36](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L36)
 
 Whether `debug()`-level messages are emitted.
 
@@ -38,7 +38,7 @@ Set to `true` during development or troubleshooting to see verbose sync output.
 optional prefix: string;
 ```
 
-Defined in: [logger.ts:26](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/logger.ts#L26)
+Defined in: [logger.ts:26](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L26)
 
 A string prefix prepended to every log message.
 

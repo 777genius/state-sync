@@ -6,7 +6,7 @@
 
 # Interface: PersistedSnapshotMetadata
 
-Defined in: [persistence/src/types.ts:82](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L82)
+Defined in: [persistence/src/types.ts:82](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L82)
 
 Metadata stored alongside a persisted snapshot for integrity checking,
 expiration management, and schema migration.
@@ -23,7 +23,7 @@ whether the snapshot is still valid.
 compressed: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:111](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L111)
+Defined in: [persistence/src/types.ts:111](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L111)
 
 Whether the snapshot data was compressed before storage.
 
@@ -38,7 +38,7 @@ When `true`, the data must be decompressed using the same
 optional hash: string;
 ```
 
-Defined in: [persistence/src/types.ts:119](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L119)
+Defined in: [persistence/src/types.ts:119](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L119)
 
 Optional integrity hash of the serialized (and possibly compressed) data.
 
@@ -53,7 +53,7 @@ when the `verifyHash` option is enabled in [LoadOptions](LoadOptions.md).
 savedAt: number;
 ```
 
-Defined in: [persistence/src/types.ts:88](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L88)
+Defined in: [persistence/src/types.ts:88](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L88)
 
 Timestamp when the snapshot was saved, in milliseconds since the Unix epoch.
 
@@ -67,7 +67,7 @@ Used together with [ttlMs](#ttlms) to determine cache expiration.
 schemaVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:96](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L96)
+Defined in: [persistence/src/types.ts:96](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L96)
 
 Schema version number at the time the snapshot was saved.
 
@@ -82,7 +82,7 @@ data migration is needed. Versions are sequential positive integers.
 sizeBytes: number;
 ```
 
-Defined in: [persistence/src/types.ts:103](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L103)
+Defined in: [persistence/src/types.ts:103](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L103)
 
 Size of the serialized JSON data in bytes, measured **before** compression.
 
@@ -96,7 +96,7 @@ Useful for observability and storage quota estimation.
 optional ttlMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:128](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L128)
+Defined in: [persistence/src/types.ts:128](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L128)
 
 Time-to-live in milliseconds. When set, the cached snapshot is considered
 expired if `Date.now() - savedAt > ttlMs`.

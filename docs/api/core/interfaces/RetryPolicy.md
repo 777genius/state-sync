@@ -6,7 +6,7 @@
 
 # Interface: RetryPolicy
 
-Defined in: [retry.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L30)
+Defined in: [retry.ts:30](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L30)
 
 Configuration for retry behavior with exponential backoff.
 
@@ -33,7 +33,7 @@ const policy: RetryPolicy = {
 optional backoffMultiplier: number;
 ```
 
-Defined in: [retry.ts:57](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L57)
+Defined in: [retry.ts:57](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L57)
 
 Multiplier applied to the delay for each successive retry attempt.
 
@@ -52,7 +52,7 @@ Set to `1` for fixed-interval retries (no exponential growth).
 optional initialDelayMs: number;
 ```
 
-Defined in: [retry.ts:47](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L47)
+Defined in: [retry.ts:47](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L47)
 
 Delay in milliseconds before the first retry attempt.
 
@@ -70,7 +70,7 @@ Subsequent retries are scaled by [backoffMultiplier](#backoffmultiplier).
 optional maxAttempts: number;
 ```
 
-Defined in: [retry.ts:38](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L38)
+Defined in: [retry.ts:38](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L38)
 
 Maximum number of attempts including the initial try.
 
@@ -88,7 +88,7 @@ For example, `maxAttempts: 3` means 1 initial try + 2 retries.
 optional maxDelayMs: number;
 ```
 
-Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L66)
+Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L66)
 
 Upper bound for the computed delay in milliseconds.
 

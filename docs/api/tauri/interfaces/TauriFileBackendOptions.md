@@ -6,7 +6,7 @@
 
 # Interface: TauriFileBackendOptions
 
-Defined in: [persistence.ts:52](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L52)
+Defined in: [persistence.ts:52](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L52)
 
 Configuration for [createTauriFileBackend](../functions/createTauriFileBackend.md).
 
@@ -18,7 +18,7 @@ Configuration for [createTauriFileBackend](../functions/createTauriFileBackend.m
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [persistence.ts:104](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L104)
+Defined in: [persistence.ts:104](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L104)
 
 Optional additional arguments forwarded to every Tauri command invocation.
 
@@ -38,7 +38,7 @@ Useful for scoping storage to a specific user, profile, or namespace.
 optional clearCommand: string;
 ```
 
-Defined in: [persistence.ts:92](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L92)
+Defined in: [persistence.ts:92](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L92)
 
 Optional Tauri command name for clearing persisted state.
 
@@ -60,7 +60,7 @@ delete the stored data.
 invoke: TauriInvoke;
 ```
 
-Defined in: [persistence.ts:60](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L60)
+Defined in: [persistence.ts:60](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L60)
 
 A Tauri-compatible `invoke` function used to call Rust commands.
 
@@ -78,7 +78,7 @@ Typically `invoke` from `@tauri-apps/api/core`.
 loadCommand: string;
 ```
 
-Defined in: [persistence.ts:81](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L81)
+Defined in: [persistence.ts:81](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L81)
 
 The Tauri command name for loading a previously persisted snapshot.
 
@@ -99,7 +99,7 @@ and should return `SnapshotEnvelope<T> | null`.
 saveCommand: string;
 ```
 
-Defined in: [persistence.ts:71](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L71)
+Defined in: [persistence.ts:71](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L71)
 
 The Tauri command name for persisting a snapshot.
 

@@ -10,7 +10,7 @@
 function createElectronBroadcaster(options): ElectronBroadcasterHandle;
 ```
 
-Defined in: [main.ts:104](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L104)
+Defined in: [main.ts:104](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L104)
 
 Creates a broadcaster that pushes InvalidationEvent payloads to
 renderer windows over Electron IPC.

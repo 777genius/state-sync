@@ -10,7 +10,7 @@
 function isBroadcastChannelSupported(): boolean;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:156](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L156)
+Defined in: [persistence/src/cross-tab.ts:156](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L156)
 
 Checks whether the BroadcastChannel API is available in the current environment.
 

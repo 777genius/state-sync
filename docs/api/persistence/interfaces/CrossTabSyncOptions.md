@@ -6,7 +6,7 @@
 
 # Interface: CrossTabSyncOptions
 
-Defined in: [persistence/src/types.ts:726](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L726)
+Defined in: [persistence/src/types.ts:726](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L726)
 
 Options for cross-tab state synchronization via the BroadcastChannel API.
 
@@ -24,7 +24,7 @@ Controls the channel name and whether this tab sends and/or receives updates.
 optional broadcastSaves: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L747)
+Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L747)
 
 Whether this tab should broadcast its saves to other tabs.
 
@@ -40,7 +40,7 @@ Whether this tab should broadcast its saves to other tabs.
 channelName: string;
 ```
 
-Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L733)
+Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L733)
 
 The name of the BroadcastChannel used for inter-tab communication.
 
@@ -55,7 +55,7 @@ Convention: `'state-sync:<topic>'`.
 optional receiveUpdates: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L740)
+Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L740)
 
 Whether this tab should apply snapshots received from other tabs.
 

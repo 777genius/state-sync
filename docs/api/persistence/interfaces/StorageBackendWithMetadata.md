@@ -6,7 +6,7 @@
 
 # Interface: StorageBackendWithMetadata\<T\>
 
-Defined in: [persistence/src/types.ts:204](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L204)
+Defined in: [persistence/src/types.ts:204](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L204)
 
 Extended storage backend that persists metadata alongside snapshots.
 
@@ -34,7 +34,7 @@ and uses the metadata-aware methods when available.
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:190](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L190)
+Defined in: [persistence/src/types.ts:190](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L190)
 
 Remove all persisted data from this backend's storage key.
 
@@ -58,7 +58,7 @@ A promise that resolves when the data has been removed.
 optional getUsage(): Promise<StorageUsage>;
 ```
 
-Defined in: [persistence/src/types.ts:227](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L227)
+Defined in: [persistence/src/types.ts:227](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L227)
 
 Estimate current storage usage for this backend.
 
@@ -78,7 +78,7 @@ Storage usage information including bytes used and quota (if available).
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:181](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L181)
+Defined in: [persistence/src/types.ts:181](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L181)
 
 Load the most recent snapshot from persistent storage.
 
@@ -100,7 +100,7 @@ The stored snapshot, or `null` if no snapshot has been persisted yet.
 loadWithMetadata(): Promise<PersistedSnapshot<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:218](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L218)
+Defined in: [persistence/src/types.ts:218](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L218)
 
 Load the most recent snapshot along with its metadata.
 
@@ -118,7 +118,7 @@ The stored snapshot and metadata bundle, or `null` if nothing is persisted.
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:174](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L174)
+Defined in: [persistence/src/types.ts:174](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L174)
 
 Save a snapshot to persistent storage.
 
@@ -146,7 +146,7 @@ A promise that resolves when the write is complete.
 saveWithMetadata(data): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:211](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L211)
+Defined in: [persistence/src/types.ts:211](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L211)
 
 Save a snapshot together with its metadata to persistent storage.
 

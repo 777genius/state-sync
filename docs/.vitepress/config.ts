@@ -88,6 +88,7 @@ export default withMermaid(
             { text: '@statesync/core', link: '/packages/core' },
             { text: '@statesync/persistence', link: '/packages/persistence' },
             { text: '@statesync/pinia', link: '/packages/pinia' },
+            { text: '@statesync/redux', link: '/packages/redux' },
             { text: '@statesync/zustand', link: '/packages/zustand' },
             { text: '@statesync/valtio', link: '/packages/valtio' },
             { text: '@statesync/svelte', link: '/packages/svelte' },
@@ -146,6 +147,7 @@ export default withMermaid(
             text: 'Framework Adapters',
             items: [
               { text: '@statesync/pinia', link: '/packages/pinia' },
+              { text: '@statesync/redux', link: '/packages/redux' },
               { text: '@statesync/zustand', link: '/packages/zustand' },
               { text: '@statesync/valtio', link: '/packages/valtio' },
               { text: '@statesync/svelte', link: '/packages/svelte' },

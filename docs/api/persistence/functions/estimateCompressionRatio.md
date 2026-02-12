@@ -10,7 +10,7 @@
 function estimateCompressionRatio(data, adapter): number;
 ```
 
-Defined in: [persistence/src/compression.ts:317](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/compression.ts#L317)
+Defined in: [persistence/src/compression.ts:317](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L317)
 
 Estimates the compression ratio of a given string using the specified adapter.
 

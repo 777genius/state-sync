@@ -6,7 +6,7 @@
 
 # Interface: InvalidationEvent
 
-Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L60)
+Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L60)
 
 An event signaling that the authoritative state for a given topic has changed.
 
@@ -33,7 +33,7 @@ const event: InvalidationEvent = {
 revision: Revision;
 ```
 
-Defined in: [types.ts:64](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L64)
+Defined in: [types.ts:64](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L64)
 
 The revision that the server has moved to. Must be a canonical decimal u64 string.
 
@@ -45,7 +45,7 @@ The revision that the server has moved to. Must be a canonical decimal u64 strin
 optional sourceId: string;
 ```
 
-Defined in: [types.ts:69](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L69)
+Defined in: [types.ts:69](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L69)
 
 Optional identifier of the source that produced this event.
 Useful for deduplication or debugging in multi-source setups.
@@ -58,7 +58,7 @@ Useful for deduplication or debugging in multi-source setups.
 optional timestampMs: number;
 ```
 
-Defined in: [types.ts:74](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L74)
+Defined in: [types.ts:74](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L74)
 
 Optional timestamp (milliseconds since epoch) of when the event was produced.
 The engine does not use this for ordering; it is informational only.
@@ -71,6 +71,6 @@ The engine does not use this for ordering; it is informational only.
 topic: string;
 ```
 
-Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L62)
+Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L62)
 
 The topic this invalidation belongs to.

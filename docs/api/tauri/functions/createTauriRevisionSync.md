@@ -10,7 +10,7 @@
 function createTauriRevisionSync<T>(options): RevisionSyncHandle;
 ```
 
-Defined in: [sync.ts:187](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/sync.ts#L187)
+Defined in: [sync.ts:187](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L187)
 
 One-call convenience factory that wires Tauri transport and the core
 revision-sync engine together into a single RevisionSyncHandle.

@@ -6,7 +6,7 @@
 
 # Interface: ElectronBroadcasterOptions
 
-Defined in: [main.ts:27](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L27)
+Defined in: [main.ts:27](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L27)
 
 Configuration options for [createElectronBroadcaster](../functions/createElectronBroadcaster.md).
 
@@ -18,7 +18,7 @@ Configuration options for [createElectronBroadcaster](../functions/createElectro
 optional channel: string;
 ```
 
-Defined in: [main.ts:45](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L45)
+Defined in: [main.ts:45](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L45)
 
 Override the default IPC channel name for invalidation events.
 
@@ -32,7 +32,7 @@ Defaults to `statesync:<topic>:invalidated` (produced by [invalidationChannel](.
 getTargets: () => ElectronWebContentsLike[];
 ```
 
-Defined in: [main.ts:39](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L39)
+Defined in: [main.ts:39](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L39)
 
 Returns the list of `webContents` targets to broadcast invalidation events to.
 
@@ -54,6 +54,6 @@ An array of [ElectronWebContentsLike](ElectronWebContentsLike.md) instances.
 topic: string;
 ```
 
-Defined in: [main.ts:29](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L29)
+Defined in: [main.ts:29](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L29)
 
 The sync topic identifier (e.g. `"user-profile"`).

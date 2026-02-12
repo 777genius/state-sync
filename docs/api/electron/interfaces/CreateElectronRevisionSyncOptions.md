@@ -6,7 +6,7 @@
 
 # Interface: CreateElectronRevisionSyncOptions\<T\>
 
-Defined in: [sync.ts:28](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L28)
+Defined in: [sync.ts:28](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L28)
 
 Configuration options for [createElectronRevisionSync](../functions/createElectronRevisionSync.md).
 
@@ -24,7 +24,7 @@ Configuration options for [createElectronRevisionSync](../functions/createElectr
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: [sync.ts:45](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L45)
+Defined in: [sync.ts:45](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L45)
 
 Callback invoked to apply a new snapshot to the application state.
 
@@ -40,7 +40,7 @@ SnapshotApplier from `@statesync/core`.
 bridge: ElectronStateSyncBridge;
 ```
 
-Defined in: [sync.ts:38](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L38)
+Defined in: [sync.ts:38](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L38)
 
 The bridge object exposed via `contextBridge.exposeInMainWorld()` in the preload script.
 
@@ -55,7 +55,7 @@ Created by [createElectronBridge](../functions/createElectronBridge.md).
 optional invalidationChannel: string;
 ```
 
-Defined in: [sync.ts:52](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L52)
+Defined in: [sync.ts:52](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L52)
 
 Override the default IPC channel for invalidation events.
 
@@ -69,7 +69,7 @@ Defaults to `statesync:<topic>:invalidated`.
 optional logger: Logger;
 ```
 
-Defined in: [sync.ts:75](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L75)
+Defined in: [sync.ts:75](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L75)
 
 Optional logger for debug, warn, and error messages.
 
@@ -85,7 +85,7 @@ RevisionSyncOptions.logger
 optional onError: (ctx) => void;
 ```
 
-Defined in: [sync.ts:82](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L82)
+Defined in: [sync.ts:82](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L82)
 
 Optional error callback invoked when any phase of the sync loop fails.
 
@@ -111,7 +111,7 @@ RevisionSyncOptions.onError
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: [sync.ts:68](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L68)
+Defined in: [sync.ts:68](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L68)
 
 Optional predicate to filter invalidation events before triggering a refresh.
 
@@ -139,7 +139,7 @@ RevisionSyncOptions.shouldRefresh
 optional snapshotChannel: string;
 ```
 
-Defined in: [sync.ts:59](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L59)
+Defined in: [sync.ts:59](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L59)
 
 Override the default IPC channel for snapshot requests.
 
@@ -153,7 +153,7 @@ Defaults to `statesync:<topic>:snapshot`.
 optional throttling: InvalidationThrottlingOptions;
 ```
 
-Defined in: [sync.ts:90](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L90)
+Defined in: [sync.ts:90](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L90)
 
 Optional throttling/debouncing configuration to control how frequently
 invalidation events trigger snapshot refreshes.
@@ -170,6 +170,6 @@ InvalidationThrottlingOptions from `@statesync/core`.
 topic: string;
 ```
 
-Defined in: [sync.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L30)
+Defined in: [sync.ts:30](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/sync.ts#L30)
 
 The sync topic identifier (e.g. `"user-profile"`). Must be a non-empty string.

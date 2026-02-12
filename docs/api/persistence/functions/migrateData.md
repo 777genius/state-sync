@@ -13,7 +13,7 @@ function migrateData<T>(
 handler): MigrationResult<T>;
 ```
 
-Defined in: [persistence/src/migration.ts:40](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/migration.ts#L40)
+Defined in: [persistence/src/migration.ts:40](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L40)
 
 Migrate data from one schema version to another by applying migration
 functions sequentially.

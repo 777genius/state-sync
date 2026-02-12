@@ -10,7 +10,7 @@
 function createSharedMemoryStorage<T>(): object;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:370](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L370)
+Defined in: [persistence/src/storage/memory-storage.ts:370](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L370)
 
 Creates a shared in-memory storage registry that can be used to simulate
 multiple components or persistence layers sharing a common storage medium.

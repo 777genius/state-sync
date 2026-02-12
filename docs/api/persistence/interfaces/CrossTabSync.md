@@ -6,7 +6,7 @@
 
 # Interface: CrossTabSync\<T\>
 
-Defined in: [persistence/src/cross-tab.ts:60](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L60)
+Defined in: [persistence/src/cross-tab.ts:60](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L60)
 
 Cross-tab synchronization manager using the BroadcastChannel API.
 
@@ -46,7 +46,7 @@ crossTab.dispose();
 broadcast(snapshot): void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:69](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L69)
+Defined in: [persistence/src/cross-tab.ts:69](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L69)
 
 Broadcast a snapshot to all other tabs listening on the same channel.
 
@@ -71,7 +71,7 @@ No-op if the instance is disposed, the channel is closed, or
 dispose(): void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:105](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L105)
+Defined in: [persistence/src/cross-tab.ts:105](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L105)
 
 Close the BroadcastChannel and release all resources.
 
@@ -89,7 +89,7 @@ After disposal, all methods become no-ops. Safe to call multiple times.
 getTabId(): string;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:98](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L98)
+Defined in: [persistence/src/cross-tab.ts:98](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L98)
 
 Get the unique identifier assigned to this tab.
 
@@ -110,7 +110,7 @@ A string identifier unique to this tab instance.
 isSupported(): boolean;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:88](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L88)
+Defined in: [persistence/src/cross-tab.ts:88](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L88)
 
 Check whether the BroadcastChannel API is available and the channel
 was successfully created.
@@ -129,7 +129,7 @@ was successfully created.
 notifyClear(): void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:80](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L80)
+Defined in: [persistence/src/cross-tab.ts:80](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L80)
 
 Notify other tabs that this tab has cleared its persisted storage.
 
@@ -145,7 +145,7 @@ Notify other tabs that this tab has cleared its persisted storage.
 requestSync(): void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:75](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L75)
+Defined in: [persistence/src/cross-tab.ts:75](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L75)
 
 Send a sync request to other tabs, asking them to broadcast their
 latest state. Useful during tab startup to hydrate from a peer.

@@ -10,7 +10,7 @@
 function clearPersistedData<T>(storage, crossTabOptions?): Promise<void>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:699](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/persistence-applier.ts#L699)
+Defined in: [persistence/src/persistence-applier.ts:699](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/persistence-applier.ts#L699)
 
 Clears all persisted data from the given storage backend and optionally
 notifies other tabs via BroadcastChannel.

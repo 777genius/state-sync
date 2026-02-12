@@ -13,8 +13,9 @@ Get state-sync running in under 5 minutes.
 npm install @statesync/core
 
 # Pick a framework adapter
-npm install @statesync/pinia    # Vue + Pinia
+npm install @statesync/redux    # React + Redux / RTK
 npm install @statesync/zustand  # React + Zustand
+npm install @statesync/pinia    # Vue + Pinia
 npm install @statesync/valtio   # React + Valtio
 npm install @statesync/svelte   # Svelte
 npm install @statesync/vue      # Vue (reactive/ref)
@@ -100,6 +101,31 @@ const sync = createRevisionSync({
   applier: createPiniaSnapshotApplier(store, {
     mode: 'patch',
     omitKeys: ['isLoading'], // Don't sync UI state
+  }),
+});
+
+await sync.start();
+```
+
+## With Redux (React)
+
+```typescript
+import { createRevisionSync } from '@statesync/core';
+import { createReduxSnapshotApplier, withSnapshotHandling } from '@statesync/redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from './store';
+
+const store = configureStore({
+  reducer: withSnapshotHandling(rootReducer),
+});
+
+const sync = createRevisionSync({
+  topic: 'settings',
+  subscriber: mySubscriber,
+  provider: myProvider,
+  applier: createReduxSnapshotApplier(store, {
+    mode: 'patch',
+    omitKeys: ['isLoading'],
   }),
 });
 

@@ -6,7 +6,7 @@
 
 # Interface: RetryReportingOptions
 
-Defined in: [retry.ts:159](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L159)
+Defined in: [retry.ts:159](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L159)
 
 Options for [withRetryReporting](../functions/withRetryReporting.md), which combines retry logic
 with structured logging and error reporting.
@@ -19,7 +19,7 @@ with structured logging and error reporting.
 optional logger: Logger;
 ```
 
-Defined in: [retry.ts:174](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L174)
+Defined in: [retry.ts:174](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L174)
 
 Logger instance for emitting structured retry warnings.
 When provided, a `warn`-level message is logged for each retry attempt.
@@ -32,7 +32,7 @@ When provided, a `warn`-level message is logged for each retry attempt.
 optional onError: (ctx) => void;
 ```
 
-Defined in: [retry.ts:188](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L188)
+Defined in: [retry.ts:188](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L188)
 
 Optional error hook invoked on each retry attempt.
 
@@ -63,7 +63,7 @@ If this callback itself throws, the error is caught and logged
 optional policy: RetryPolicy;
 ```
 
-Defined in: [retry.ts:168](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L168)
+Defined in: [retry.ts:168](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L168)
 
 Retry policy configuration. When omitted, the default [RetryPolicy](RetryPolicy.md) values are used.
 
@@ -75,6 +75,6 @@ Retry policy configuration. When omitted, the default [RetryPolicy](RetryPolicy.
 topic: string;
 ```
 
-Defined in: [retry.ts:163](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/retry.ts#L163)
+Defined in: [retry.ts:163](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L163)
 
 The topic associated with this provider, used for log context and error reporting.

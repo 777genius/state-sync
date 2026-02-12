@@ -6,7 +6,7 @@
 
 # Interface: InvalidationSubscriber
 
-Defined in: [types.ts:125](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L125)
+Defined in: [types.ts:125](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L125)
 
 A transport-agnostic contract for subscribing to invalidation events.
 
@@ -33,7 +33,7 @@ const subscriber: InvalidationSubscriber = {
 subscribe(handler): Promise<Unsubscribe>;
 ```
 
-Defined in: [types.ts:132](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L132)
+Defined in: [types.ts:132](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L132)
 
 Registers a handler that will be called for each incoming invalidation event.
 

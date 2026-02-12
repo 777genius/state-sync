@@ -10,7 +10,7 @@
 type ZustandApplyMode = "patch" | "replace";
 ```
 
-Defined in: [zustand.ts:56](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/zustand/src/zustand.ts#L56)
+Defined in: [zustand.ts:56](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/zustand/src/zustand.ts#L56)
 
 The strategy used to apply incoming snapshot data to the Zustand store.
 

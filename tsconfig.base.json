@@ -7,6 +7,7 @@
       "@statesync/pinia": ["packages/pinia/src/index.ts"],
       "@statesync/electron": ["packages/electron/src/index.ts"],
       "@statesync/tauri": ["packages/tauri/src/index.ts"],
+      "@statesync/redux": ["packages/redux/src/index.ts"],
       "@statesync/zustand": ["packages/zustand/src/index.ts"],
       "@statesync/valtio": ["packages/valtio/src/index.ts"],
       "@statesync/svelte": ["packages/svelte/src/index.ts"],

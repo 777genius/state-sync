@@ -26,7 +26,7 @@ type VueReactiveSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [vue.ts:69](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/vue/src/vue.ts#L69)
+Defined in: [vue.ts:69](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/vue/src/vue.ts#L69)
 
 Configuration options for a Vue **reactive** snapshot applier.
 

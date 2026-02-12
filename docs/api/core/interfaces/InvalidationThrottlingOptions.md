@@ -6,7 +6,7 @@
 
 # Interface: InvalidationThrottlingOptions
 
-Defined in: [throttle.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/throttle.ts#L37)
+Defined in: [throttle.ts:37](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/throttle.ts#L37)
 
 Configuration options for controlling invalidation-driven refresh rate.
 
@@ -41,7 +41,7 @@ const opts: InvalidationThrottlingOptions = {
 optional debounceMs: number;
 ```
 
-Defined in: [throttle.ts:45](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/throttle.ts#L45)
+Defined in: [throttle.ts:45](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/throttle.ts#L45)
 
 Debounce delay in milliseconds.
 
@@ -57,7 +57,7 @@ is applied first within the throttle window.
 optional leading: boolean;
 ```
 
-Defined in: [throttle.ts:63](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/throttle.ts#L63)
+Defined in: [throttle.ts:63](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/throttle.ts#L63)
 
 Whether to fire immediately on the leading edge of the throttle window.
 
@@ -76,7 +76,7 @@ Only applies when `throttleMs` is set.
 optional throttleMs: number;
 ```
 
-Defined in: [throttle.ts:53](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/throttle.ts#L53)
+Defined in: [throttle.ts:53](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/throttle.ts#L53)
 
 Throttle interval in milliseconds.
 
@@ -91,7 +91,7 @@ maximum rate of refresh calls regardless of how many triggers arrive.
 optional trailing: boolean;
 ```
 
-Defined in: [throttle.ts:74](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/throttle.ts#L74)
+Defined in: [throttle.ts:74](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/throttle.ts#L74)
 
 Whether to fire on the trailing edge after the throttle window ends.
 

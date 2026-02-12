@@ -131,7 +131,39 @@ it('applies snapshot to a mock zustand store', () => {
 });
 ```
 
-Works the same for other adapters:
+Works the same for other adapters — including Redux:
+
+```typescript
+import { createReduxSnapshotApplier, withSnapshotHandling } from '@statesync/redux';
+import type { Revision } from '@statesync/core';
+
+it('applies snapshot to a mock redux store', () => {
+  const reducer = (state = { count: 0, name: 'test' }, action: any) => {
+    return state;
+  };
+  const wrapped = withSnapshotHandling(reducer);
+  let state = { count: 0, name: 'test' };
+  const mockStore = {
+    getState: () => state,
+    dispatch: (action: any) => { state = wrapped(state, action); return action; },
+  };
+
+  const applier = createReduxSnapshotApplier(mockStore, {
+    mode: 'patch',
+    omitKeys: ['name'],
+  });
+
+  applier.apply({
+    revision: '1' as Revision,
+    data: { count: 42, name: 'ignored' },
+  });
+
+  expect(state.count).toBe(42);
+  expect(state.name).toBe('test'); // omitKeys preserved
+});
+```
+
+More structural interface examples:
 
 ```typescript
 import { createPiniaSnapshotApplier } from '@statesync/pinia';

@@ -6,7 +6,7 @@
 
 # Interface: ElectronStateSyncBridge
 
-Defined in: [types.ts:116](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L116)
+Defined in: [types.ts:116](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L116)
 
 The bridge object exposed to the renderer via `contextBridge.exposeInMainWorld()`.
 
@@ -39,7 +39,7 @@ const sync = createElectronRevisionSync({ bridge, topic: 'todos', ... });
 invoke: ElectronInvoke;
 ```
 
-Defined in: [types.ts:129](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L129)
+Defined in: [types.ts:129](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L129)
 
 Invokes a main-process IPC handler on the given channel and returns the result.
 
@@ -55,7 +55,7 @@ Invokes a main-process IPC handler on the given channel and returns the result.
 on: ElectronListen;
 ```
 
-Defined in: [types.ts:122](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L122)
+Defined in: [types.ts:122](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L122)
 
 Subscribes to IPC events on the given channel and returns an unsubscribe function.
 

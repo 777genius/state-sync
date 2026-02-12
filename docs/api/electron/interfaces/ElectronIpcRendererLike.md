@@ -6,7 +6,7 @@
 
 # Interface: ElectronIpcRendererLike
 
-Defined in: [types.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L30)
+Defined in: [types.ts:30](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L30)
 
 Structural type matching the subset of Electron's `ipcRenderer` API
 required by [createElectronBridge](../functions/createElectronBridge.md).
@@ -34,7 +34,7 @@ const bridge = createElectronBridge(ipcRenderer);
 invoke(channel, ...args): Promise<unknown>;
 ```
 
-Defined in: [types.ts:58](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L58)
+Defined in: [types.ts:58](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L58)
 
 Sends an IPC message to the main process and asynchronously returns the response.
 
@@ -59,7 +59,7 @@ A promise resolving to the value returned by the main-process handler.
 on(channel, listener): unknown;
 ```
 
-Defined in: [types.ts:40](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L40)
 
 Registers a listener for messages on the given IPC channel.
 
@@ -84,7 +84,7 @@ Implementation-defined (the return value is not used by state-sync).
 removeListener(channel, listener): unknown;
 ```
 
-Defined in: [types.ts:49](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L49)
+Defined in: [types.ts:49](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L49)
 
 Removes a previously registered listener for the given IPC channel.
 

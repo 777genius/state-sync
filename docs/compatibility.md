@@ -16,6 +16,7 @@ title: Compatibility
 
 | Adapter | Peer dependency |
 |---------|----------------|
+| `@statesync/redux` | None (structural typing) |
 | `@statesync/zustand` | None (structural typing) |
 | `@statesync/pinia` | None (structural typing) |
 | `@statesync/vue` | None (structural typing) |
@@ -23,7 +24,7 @@ title: Compatibility
 | `@statesync/svelte` | None (structural typing) |
 | `@statesync/tauri` | `@tauri-apps/api >= 2` |
 
-All adapters use structural interfaces (e.g., `ZustandStoreLike`, `PiniaStoreLike`) instead of importing framework types directly. This means they work with any compatible version of the framework without version lock-in.
+All adapters use structural interfaces (e.g., `ReduxStoreLike`, `ZustandStoreLike`, `PiniaStoreLike`) instead of importing framework types directly. This means they work with any compatible version of the framework without version lock-in.
 
 ## Module formats
 

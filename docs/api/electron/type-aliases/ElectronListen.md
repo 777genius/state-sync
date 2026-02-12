@@ -10,7 +10,7 @@
 type ElectronListen = (channel, handler) => () => void;
 ```
 
-Defined in: [types.ts:79](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L79)
+Defined in: [types.ts:79](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L79)
 
 Function signature for subscribing to IPC events from the renderer process,
 returning a synchronous unsubscribe callback.

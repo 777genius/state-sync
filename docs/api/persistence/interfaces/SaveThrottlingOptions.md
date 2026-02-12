@@ -6,7 +6,7 @@
 
 # Interface: SaveThrottlingOptions
 
-Defined in: [persistence/src/types.ts:575](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L575)
+Defined in: [persistence/src/types.ts:575](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L575)
 
 Options for controlling how frequently snapshots are saved to storage.
 
@@ -31,7 +31,7 @@ const throttling: SaveThrottlingOptions = {
 optional debounceMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:583](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L583)
+Defined in: [persistence/src/types.ts:583](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L583)
 
 Debounce delay in milliseconds. The save is postponed until no new
 snapshots arrive for this duration ("wait for silence").
@@ -47,7 +47,7 @@ Best for high-frequency updates where only the final state matters
 optional leading: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:600](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L600)
+Defined in: [persistence/src/types.ts:600](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L600)
 
 If `true`, the very first update triggers an immediate save before
 the debounce/throttle timer starts.
@@ -64,7 +64,7 @@ the debounce/throttle timer starts.
 optional maxWaitMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:609](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L609)
+Defined in: [persistence/src/types.ts:609](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L609)
 
 Maximum time in milliseconds to wait before forcing a save, even if
 debounce keeps resetting. Prevents indefinite delay during continuous
@@ -80,7 +80,7 @@ Only meaningful when [debounceMs](#debouncems) is also set.
 optional throttleMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:592](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L592)
+Defined in: [persistence/src/types.ts:592](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L592)
 
 Throttle interval in milliseconds. At most one save will occur per
 interval, regardless of how many snapshots arrive.

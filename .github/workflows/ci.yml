@@ -36,6 +36,8 @@ jobs:
           node -e "const m = require('./packages/pinia/dist/index.cjs'); console.log('pinia CJS OK:', Object.keys(m))"
           node -e "import('./packages/tauri/dist/index.js').then(m => console.log('tauri ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/tauri/dist/index.cjs'); console.log('tauri CJS OK:', Object.keys(m))"
+          node -e "import('./packages/redux/dist/index.js').then(m => console.log('redux ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/redux/dist/index.cjs'); console.log('redux CJS OK:', Object.keys(m))"
           node -e "import('./packages/zustand/dist/index.js').then(m => console.log('zustand ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/zustand/dist/index.cjs'); console.log('zustand CJS OK:', Object.keys(m))"
           node -e "import('./packages/valtio/dist/index.js').then(m => console.log('valtio ESM OK:', Object.keys(m)))"

@@ -1,6 +1,6 @@
 ---
-title: "How to Sync State Across Electron Windows (Zustand, Pinia, Vue, Svelte)"
-description: "Sync state across Electron windows using IPC — main process as source of truth, revision-gated invalidation, any state manager. Step-by-step guide with Zustand, Pinia, Valtio, Svelte, and Vue examples."
+title: "How to Sync State Across Electron Windows (Redux, Zustand, Pinia, Vue, Svelte)"
+description: "Sync state across Electron windows using IPC — main process as source of truth, revision-gated invalidation, any state manager. Step-by-step guide with Redux, Zustand, Pinia, Valtio, Svelte, and Vue examples."
 ---
 
 # How to Sync State Across Electron Windows
@@ -37,7 +37,7 @@ your-electron-app/
 npm install @statesync/electron @statesync/core
 ```
 
-Plus the adapter for your state manager (e.g. `@statesync/zustand`, `@statesync/pinia`, etc.).
+Plus the adapter for your state manager (e.g. `@statesync/redux`, `@statesync/zustand`, `@statesync/pinia`, etc.).
 
 ## Architecture
 
@@ -160,6 +160,27 @@ app.on('will-quit', () => { // [!code focus]
 This is where it gets interesting. The renderer setup is **identical** regardless of the state manager — only the `applier` line changes.
 
 ::: code-group
+
+```typescript [Redux]
+// renderer.ts — Redux
+import { createElectronRevisionSync } from '@statesync/electron';
+import { createReduxSnapshotApplier, withSnapshotHandling } from '@statesync/redux';
+import { store } from './store'; // configureStore({ reducer: withSnapshotHandling(rootReducer) })
+
+const sync = createElectronRevisionSync({
+  topic: 'settings',
+  bridge: window.statesync,
+  applier: createReduxSnapshotApplier(store, { omitKeys: ['isLoading'] }), // [!code highlight]
+  onError(ctx) { // [!code focus]
+    console.error(`[sync] phase=${ctx.phase}`, ctx.error); // [!code focus]
+  }, // [!code focus]
+});
+
+await sync.start();
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => sync.stop()); // [!code focus]
+```
 
 ```typescript [Zustand]
 // renderer.ts — Zustand
@@ -331,7 +352,7 @@ Open DevTools in both windows to observe the sync cycle. The revision gate dedup
 
 2. **Main is source of truth**: State lives in the main process; renderers pull snapshots for reads and send commands via IPC for writes
 
-3. **Any state manager**: Swap the `applier` one-liner — Zustand, Pinia, Valtio, Svelte, or Vue
+3. **Any state manager**: Swap the `applier` one-liner — Redux, Zustand, Pinia, Valtio, Svelte, or Vue
 
 4. **Window lifecycle safe**: `createElectronBroadcaster` handles destroyed `webContents` gracefully — no crashes if a window closes mid-broadcast
 
@@ -382,6 +403,7 @@ All three libraries use a centralized main process as source of truth — which 
 ## See also
 
 - [@statesync/electron](/packages/electron) — transport adapter API
+- [@statesync/redux](/packages/redux) — Redux adapter
 - [@statesync/zustand](/packages/zustand) — Zustand adapter
 - [@statesync/pinia](/packages/pinia) — Pinia adapter
 - [@statesync/valtio](/packages/valtio) — Valtio adapter

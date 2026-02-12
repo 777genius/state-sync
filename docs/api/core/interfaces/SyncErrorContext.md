@@ -6,7 +6,7 @@
 
 # Interface: SyncErrorContext
 
-Defined in: [types.ts:273](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L273)
+Defined in: [types.ts:273](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L273)
 
 Structured error context passed to the [RevisionSyncOptions.onError](RevisionSyncOptions.md#onerror) callback.
 
@@ -34,7 +34,7 @@ function handleSyncError(ctx: SyncErrorContext) {
 optional attempt: number;
 ```
 
-Defined in: [types.ts:304](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L304)
+Defined in: [types.ts:304](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L304)
 
 The current retry attempt number (1-based).
 Present when the error is reported by the retry wrapper.
@@ -47,7 +47,7 @@ Present when the error is reported by the retry wrapper.
 error: unknown;
 ```
 
-Defined in: [types.ts:279](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L279)
+Defined in: [types.ts:279](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L279)
 
 The error value. May be an `Error` instance or any thrown value.
 
@@ -59,7 +59,7 @@ The error value. May be an `Error` instance or any thrown value.
 optional eventRevision: Revision;
 ```
 
-Defined in: [types.ts:293](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L293)
+Defined in: [types.ts:293](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L293)
 
 The revision from the invalidation event that triggered the refresh, if applicable.
 
@@ -71,7 +71,7 @@ The revision from the invalidation event that triggered the refresh, if applicab
 optional localRevision: Revision;
 ```
 
-Defined in: [types.ts:289](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L289)
+Defined in: [types.ts:289](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L289)
 
 The local revision at the time of the error.
 Helpful for triage and metrics.
@@ -84,7 +84,7 @@ Helpful for triage and metrics.
 optional nextDelayMs: number;
 ```
 
-Defined in: [types.ts:313](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L313)
+Defined in: [types.ts:313](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L313)
 
 The delay in milliseconds before the next retry attempt.
 Present when [willRetry](#willretry) is `true`.
@@ -97,7 +97,7 @@ Present when [willRetry](#willretry) is `true`.
 phase: SyncPhase;
 ```
 
-Defined in: [types.ts:275](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L275)
+Defined in: [types.ts:275](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L275)
 
 The sync lifecycle phase where the error occurred.
 
@@ -109,7 +109,7 @@ The sync lifecycle phase where the error occurred.
 optional snapshotRevision: Revision;
 ```
 
-Defined in: [types.ts:297](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L297)
+Defined in: [types.ts:297](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L297)
 
 The revision from the snapshot that was being processed when the error occurred.
 
@@ -121,7 +121,7 @@ The revision from the snapshot that was being processed when the error occurred.
 optional sourceEvent: unknown;
 ```
 
-Defined in: [types.ts:284](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L284)
+Defined in: [types.ts:284](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L284)
 
 Raw event payload when applicable (transport-specific).
 Intentionally `unknown` to keep core transport-agnostic.
@@ -134,7 +134,7 @@ Intentionally `unknown` to keep core transport-agnostic.
 optional sourceId: string;
 ```
 
-Defined in: [types.ts:299](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L299)
+Defined in: [types.ts:299](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L299)
 
 The source identifier from the invalidation event, if available.
 
@@ -146,7 +146,7 @@ The source identifier from the invalidation event, if available.
 optional topic: string;
 ```
 
-Defined in: [types.ts:277](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L277)
+Defined in: [types.ts:277](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L277)
 
 The topic associated with this sync loop, if available.
 
@@ -158,6 +158,6 @@ The topic associated with this sync loop, if available.
 optional willRetry: boolean;
 ```
 
-Defined in: [types.ts:308](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L308)
+Defined in: [types.ts:308](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L308)
 
 Whether the engine or retry wrapper will attempt another try after this error.

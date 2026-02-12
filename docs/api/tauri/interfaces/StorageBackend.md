@@ -6,7 +6,7 @@
 
 # Interface: StorageBackend\<T\>
 
-Defined in: [persistence.ts:23](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L23)
+Defined in: [persistence.ts:23](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L23)
 
 Abstract storage backend interface for persisting snapshot envelopes.
 
@@ -28,7 +28,7 @@ re-declared here so that `@statesync/tauri` does not require
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence.ts:46](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L46)
+Defined in: [persistence.ts:46](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L46)
 
 Remove any persisted snapshot from the backing store.
 
@@ -48,7 +48,7 @@ A promise that resolves when the data has been removed.
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L37)
+Defined in: [persistence.ts:37](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L37)
 
 Load the most recently saved snapshot envelope from the backing store.
 
@@ -66,7 +66,7 @@ The stored snapshot, or `null` if no snapshot has been saved yet.
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L30)
+Defined in: [persistence.ts:30](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L30)
 
 Persist a snapshot envelope to the backing store.
 

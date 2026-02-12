@@ -6,7 +6,7 @@
 
 # Interface: MemoryStorageBackendOptions
 
-Defined in: [persistence/src/storage/memory-storage.ts:12](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L12)
+Defined in: [persistence/src/storage/memory-storage.ts:12](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L12)
 
 Configuration options for the in-memory storage backend.
 
@@ -23,7 +23,7 @@ where deterministic control over storage behavior is required.
 optional errorMessage: string;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:59](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L59)
+Defined in: [persistence/src/storage/memory-storage.ts:59](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L59)
 
 Custom error message used when [failOnSave](#failonsave) or [failOnLoad](#failonload) is enabled.
 
@@ -41,7 +41,7 @@ Custom error message used when [failOnSave](#failonsave) or [failOnLoad](#failon
 optional failOnLoad: boolean;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:52](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L52)
+Defined in: [persistence/src/storage/memory-storage.ts:52](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L52)
 
 When `true`, all load operations will throw an error with the configured
 [errorMessage](#errormessage).
@@ -62,7 +62,7 @@ false
 optional failOnSave: boolean;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:42](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L42)
+Defined in: [persistence/src/storage/memory-storage.ts:42](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L42)
 
 When `true`, all save operations will throw an error with the configured
 [errorMessage](#errormessage).
@@ -83,7 +83,7 @@ false
 optional initialSnapshot: SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:20](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L20)
+Defined in: [persistence/src/storage/memory-storage.ts:20](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L20)
 
 An initial snapshot to pre-populate the storage with on creation.
 
@@ -99,7 +99,7 @@ uncompressed) is generated automatically.
 optional latencyMs: number;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:32](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L32)
+Defined in: [persistence/src/storage/memory-storage.ts:32](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L32)
 
 Simulated latency in milliseconds applied to every storage operation.
 
@@ -122,7 +122,7 @@ handling in consuming code.
 optional maxSizeBytes: number;
 ```
 
-Defined in: [persistence/src/storage/memory-storage.ts:68](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/memory-storage.ts#L68)
+Defined in: [persistence/src/storage/memory-storage.ts:68](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/memory-storage.ts#L68)
 
 Maximum allowed storage size in bytes, simulating a storage quota.
 

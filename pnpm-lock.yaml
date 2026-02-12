@@ -127,6 +127,12 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/redux:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/svelte:
     devDependencies:
       '@statesync/core':

@@ -6,7 +6,7 @@
 
 # Interface: PersistenceStats
 
-Defined in: [persistence/src/types.ts:489](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L489)
+Defined in: [persistence/src/types.ts:489](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L489)
 
 Cumulative statistics about persistence operations.
 
@@ -21,7 +21,7 @@ monitoring, logging, and performance tuning of throttle/debounce settings.
 lastSaveAt: number | null;
 ```
 
-Defined in: [persistence/src/types.ts:509](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L509)
+Defined in: [persistence/src/types.ts:509](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L509)
 
 Timestamp of the most recent successful save (ms since epoch),
 or `null` if no save has completed yet.
@@ -34,7 +34,7 @@ or `null` if no save has completed yet.
 lastSaveDurationMs: number | null;
 ```
 
-Defined in: [persistence/src/types.ts:515](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L515)
+Defined in: [persistence/src/types.ts:515](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L515)
 
 Duration of the most recent successful save in milliseconds,
 or `null` if no save has completed yet.
@@ -47,7 +47,7 @@ or `null` if no save has completed yet.
 saveCount: number;
 ```
 
-Defined in: [persistence/src/types.ts:493](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L493)
+Defined in: [persistence/src/types.ts:493](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L493)
 
 Total number of successful save operations since the applier was created.
 
@@ -59,7 +59,7 @@ Total number of successful save operations since the applier was created.
 saveErrorCount: number;
 ```
 
-Defined in: [persistence/src/types.ts:498](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L498)
+Defined in: [persistence/src/types.ts:498](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L498)
 
 Total number of save operations that failed (threw an error).
 
@@ -71,7 +71,7 @@ Total number of save operations that failed (threw an error).
 throttledCount: number;
 ```
 
-Defined in: [persistence/src/types.ts:521](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L521)
+Defined in: [persistence/src/types.ts:521](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L521)
 
 Number of save invocations that were skipped because the throttle/debounce
 handler determined a save was already scheduled or too recent.
@@ -84,6 +84,6 @@ handler determined a save was already scheduled or too recent.
 totalBytesSaved: number;
 ```
 
-Defined in: [persistence/src/types.ts:503](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L503)
+Defined in: [persistence/src/types.ts:503](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L503)
 
 Cumulative size in bytes of all data saved (measured before compression).

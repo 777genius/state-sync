@@ -6,7 +6,7 @@
 
 # Interface: MigrationHandler\<T\>
 
-Defined in: [persistence/src/types.ts:345](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L345)
+Defined in: [persistence/src/types.ts:345](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L345)
 
 Configuration for schema-versioned data migration.
 
@@ -42,7 +42,7 @@ const handler: MigrationHandler<AppStateV3> = {
 currentVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:352](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L352)
+Defined in: [persistence/src/types.ts:352](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L352)
 
 The schema version that the current application code expects.
 
@@ -57,7 +57,7 @@ be migrated up to this version during load.
 migrations: Record<number, MigrationFn<any, unknown>>;
 ```
 
-Defined in: [persistence/src/types.ts:369](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L369)
+Defined in: [persistence/src/types.ts:369](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L369)
 
 A record of migration functions keyed by **source** version number.
 
@@ -81,7 +81,7 @@ migrations: {
 optional validate: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:380](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L380)
+Defined in: [persistence/src/types.ts:380](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L380)
 
 Optional type-guard function to validate the fully migrated data.
 

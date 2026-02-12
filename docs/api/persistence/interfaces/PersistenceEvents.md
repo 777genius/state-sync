@@ -6,7 +6,7 @@
 
 # Interface: PersistenceEvents\<T\>
 
-Defined in: [persistence/src/types.ts:428](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L428)
+Defined in: [persistence/src/types.ts:428](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L428)
 
 Map of persistence lifecycle event names to their handler signatures.
 
@@ -27,7 +27,7 @@ observe save/load activity, errors, and cache management events.
 cleared: () => void;
 ```
 
-Defined in: [persistence/src/types.ts:480](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L480)
+Defined in: [persistence/src/types.ts:480](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L480)
 
 Emitted when persisted data is cleared from storage.
 
@@ -43,7 +43,7 @@ Emitted when persisted data is cleared from storage.
 expired: (snapshot, age) => void;
 ```
 
-Defined in: [persistence/src/types.ts:468](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L468)
+Defined in: [persistence/src/types.ts:468](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L468)
 
 Emitted when a cached snapshot is discarded because its TTL has expired.
 
@@ -66,7 +66,7 @@ Emitted when a cached snapshot is discarded because its TTL has expired.
 loadComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:460](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L460)
+Defined in: [persistence/src/types.ts:460](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L460)
 
 Emitted when a load operation completes (successfully or with no data).
 
@@ -89,7 +89,7 @@ Emitted when a load operation completes (successfully or with no data).
 migrated: (result) => void;
 ```
 
-Defined in: [persistence/src/types.ts:475](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L475)
+Defined in: [persistence/src/types.ts:475](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L475)
 
 Emitted when persisted data is successfully migrated to a newer schema version.
 
@@ -111,7 +111,7 @@ Emitted when persisted data is successfully migrated to a newer schema version.
 saveComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L442)
+Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L442)
 
 Emitted when a save operation completes successfully.
 
@@ -134,7 +134,7 @@ Emitted when a save operation completes successfully.
 saveError: (error, snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:452](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L452)
+Defined in: [persistence/src/types.ts:452](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L452)
 
 Emitted when a save operation fails.
 
@@ -159,7 +159,7 @@ The inner applier still receives the snapshot -- only persistence is affected.
 saveStart: (snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:434](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L434)
+Defined in: [persistence/src/types.ts:434](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L434)
 
 Emitted when a save operation begins, before data is written to storage.
 

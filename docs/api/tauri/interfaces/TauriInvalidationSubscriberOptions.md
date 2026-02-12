@@ -6,7 +6,7 @@
 
 # Interface: TauriInvalidationSubscriberOptions
 
-Defined in: [transport.ts:74](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L74)
+Defined in: [transport.ts:74](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L74)
 
 Configuration for [createTauriInvalidationSubscriber](../functions/createTauriInvalidationSubscriber.md).
 
@@ -18,7 +18,7 @@ Configuration for [createTauriInvalidationSubscriber](../functions/createTauriIn
 eventName: string;
 ```
 
-Defined in: [transport.ts:92](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L92)
+Defined in: [transport.ts:92](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L92)
 
 The Tauri event name to listen on.
 
@@ -39,7 +39,7 @@ Must match the event name used by the Rust backend when calling
 listen: TauriListen;
 ```
 
-Defined in: [transport.ts:82](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L82)
+Defined in: [transport.ts:82](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L82)
 
 A Tauri-compatible `listen` function used to subscribe to backend events.
 

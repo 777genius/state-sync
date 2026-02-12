@@ -322,7 +322,7 @@ const applier = createPiniaSnapshotApplier(piniaStore);
 const applier = createZustandSnapshotApplier(zustandStore);
 ```
 
-Five framework adapters are available: **Pinia**, **Zustand**, **Valtio**, **Svelte**, and **Vue** (reactive + ref). The Tauri transport adapter handles event subscription and snapshot fetching.
+Six framework adapters are available: **Redux**, **Pinia**, **Zustand**, **Valtio**, **Svelte**, and **Vue** (reactive + ref). The Tauri transport adapter handles event subscription and snapshot fetching.
 
 The core engine is **~3 KB gzipped**. Each adapter adds **~0.8 KB**.
 

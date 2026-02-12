@@ -25,7 +25,7 @@ features:
     linkText: Learn about protocol
   - icon: 🧩
     title: Multi-framework
-    details: Official adapters for Pinia, Zustand, Valtio, Svelte, and Vue. Works with any state management.
+    details: Official adapters for Redux, Zustand, Pinia, Valtio, Svelte, and Vue. Works with any state management.
     link: /packages/
     linkText: Browse packages
   - icon: 💾
@@ -97,8 +97,9 @@ yarn add @statesync/core
 npm install @statesync/persistence
 
 # Framework adapter (pick one)
-npm install @statesync/pinia    # Vue + Pinia
+npm install @statesync/redux    # React + Redux / RTK
 npm install @statesync/zustand  # React + Zustand
+npm install @statesync/pinia    # Vue + Pinia
 npm install @statesync/valtio   # React + Valtio
 npm install @statesync/svelte   # Svelte
 npm install @statesync/vue      # Vue (reactive/ref)

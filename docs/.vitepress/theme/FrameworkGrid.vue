@@ -2,6 +2,7 @@
 import { withBase } from 'vitepress';
 
 const frameworks = [
+  { name: 'Redux', link: '/packages/redux', color: '#764abc' },
   { name: 'Zustand', link: '/packages/zustand', color: '#433e38' },
   { name: 'Pinia', link: '/packages/pinia', color: '#ffd859' },
   { name: 'Valtio', link: '/packages/valtio', color: '#764abc' },
@@ -21,8 +22,15 @@ const frameworks = [
       class="framework-card"
     >
       <span class="framework-logo">
+        <!-- Redux (atom / orbit) -->
+        <svg v-if="fw.name === 'Redux'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="2.5" :fill="fw.color" class="icon-fill"/>
+          <ellipse cx="12" cy="12" rx="10" ry="3.5" fill="none" :stroke="fw.color" stroke-width="1.3" class="icon-stroke"/>
+          <ellipse cx="12" cy="12" rx="10" ry="3.5" fill="none" :stroke="fw.color" stroke-width="1.3" transform="rotate(60 12 12)" class="icon-stroke"/>
+          <ellipse cx="12" cy="12" rx="10" ry="3.5" fill="none" :stroke="fw.color" stroke-width="1.3" transform="rotate(120 12 12)" class="icon-stroke"/>
+        </svg>
         <!-- Zustand (bear paw) -->
-        <svg v-if="fw.name === 'Zustand'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg v-else-if="fw.name === 'Zustand'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="7" cy="6" r="2.5" :fill="fw.color" class="icon-fill"/>
           <circle cx="17" cy="6" r="2.5" :fill="fw.color" class="icon-fill"/>
           <circle cx="4" cy="12" r="2" :fill="fw.color" class="icon-fill"/>

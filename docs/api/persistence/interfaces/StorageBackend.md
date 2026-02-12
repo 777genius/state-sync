@@ -6,7 +6,7 @@
 
 # Interface: StorageBackend\<T\>
 
-Defined in: [persistence/src/types.ts:167](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L167)
+Defined in: [persistence/src/types.ts:167](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L167)
 
 Abstract storage backend for persisting snapshots.
 
@@ -43,7 +43,7 @@ const storage: StorageBackend<MyState> = createLocalStorageBackend({
 optional clear(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:190](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L190)
+Defined in: [persistence/src/types.ts:190](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L190)
 
 Remove all persisted data from this backend's storage key.
 
@@ -63,7 +63,7 @@ A promise that resolves when the data has been removed.
 load(): Promise<SnapshotEnvelope<T> | null>;
 ```
 
-Defined in: [persistence/src/types.ts:181](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L181)
+Defined in: [persistence/src/types.ts:181](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L181)
 
 Load the most recent snapshot from persistent storage.
 
@@ -81,7 +81,7 @@ The stored snapshot, or `null` if no snapshot has been persisted yet.
 save(snapshot): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:174](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L174)
+Defined in: [persistence/src/types.ts:174](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L174)
 
 Save a snapshot to persistent storage.
 

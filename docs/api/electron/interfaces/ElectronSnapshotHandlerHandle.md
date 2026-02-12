@@ -6,7 +6,7 @@
 
 # Interface: ElectronSnapshotHandlerHandle
 
-Defined in: [main.ts:192](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L192)
+Defined in: [main.ts:192](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L192)
 
 Handle returned by [createElectronSnapshotHandler](../functions/createElectronSnapshotHandler.md) for managing the
 lifecycle of a snapshot IPC handler.
@@ -21,7 +21,7 @@ lifecycle of a snapshot IPC handler.
 readonly topic: string;
 ```
 
-Defined in: [main.ts:194](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L194)
+Defined in: [main.ts:194](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L194)
 
 The sync topic this handler is bound to.
 
@@ -33,7 +33,7 @@ The sync topic this handler is bound to.
 dispose(): void;
 ```
 
-Defined in: [main.ts:202](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L202)
+Defined in: [main.ts:202](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L202)
 
 Removes the `ipcMain.handle()` registration for this topic's snapshot channel.
 

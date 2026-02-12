@@ -10,7 +10,7 @@
 type Topic = string;
 ```
 
-Defined in: [types.ts:28](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L28)
+Defined in: [types.ts:28](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L28)
 
 A stable identifier for a synchronized domain or resource.
 

@@ -6,7 +6,7 @@
 
 # Interface: ElectronSnapshotHandlerOptions\<T\>
 
-Defined in: [main.ts:145](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L145)
+Defined in: [main.ts:145](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L145)
 
 Configuration options for [createElectronSnapshotHandler](../functions/createElectronSnapshotHandler.md).
 
@@ -24,7 +24,7 @@ Configuration options for [createElectronSnapshotHandler](../functions/createEle
 optional channel: string;
 ```
 
-Defined in: [main.ts:183](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L183)
+Defined in: [main.ts:183](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L183)
 
 Override the default IPC channel name for snapshot requests.
 
@@ -38,7 +38,7 @@ Defaults to `statesync:<topic>:snapshot` (produced by [snapshotChannel](../funct
 getSnapshot: () => SnapshotEnvelope<T> | Promise<SnapshotEnvelope<T>>;
 ```
 
-Defined in: [main.ts:158](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L158)
+Defined in: [main.ts:158](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L158)
 
 Returns the current snapshot envelope for the given topic.
 
@@ -60,7 +60,7 @@ The current snapshot, synchronously or as a promise.
 handle: ElectronIpcMainHandle;
 ```
 
-Defined in: [main.ts:167](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L167)
+Defined in: [main.ts:167](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L167)
 
 The `ipcMain.handle` function (or a compatible mock).
 
@@ -78,7 +78,7 @@ Used to register the snapshot request handler on the IPC channel.
 removeHandler: ElectronIpcMainRemoveHandler;
 ```
 
-Defined in: [main.ts:176](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L176)
+Defined in: [main.ts:176](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L176)
 
 The `ipcMain.removeHandler` function (or a compatible mock).
 
@@ -96,6 +96,6 @@ Used by [ElectronSnapshotHandlerHandle.dispose](ElectronSnapshotHandlerHandle.md
 topic: string;
 ```
 
-Defined in: [main.ts:147](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L147)
+Defined in: [main.ts:147](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/main.ts#L147)
 
 The sync topic identifier (e.g. `"user-profile"`).

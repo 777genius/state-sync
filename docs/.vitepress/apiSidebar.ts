@@ -12,6 +12,7 @@ const PACKAGE_ORDER = [
   'core',
   'persistence',
   'pinia',
+  'redux',
   'zustand',
   'valtio',
   'svelte',

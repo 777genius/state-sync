@@ -6,7 +6,7 @@
 
 # Interface: TauriSnapshotProviderOptions
 
-Defined in: [transport.ts:146](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L146)
+Defined in: [transport.ts:146](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L146)
 
 Configuration for [createTauriSnapshotProvider](../functions/createTauriSnapshotProvider.md).
 
@@ -18,7 +18,7 @@ Configuration for [createTauriSnapshotProvider](../functions/createTauriSnapshot
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [transport.ts:175](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L175)
+Defined in: [transport.ts:175](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L175)
 
 Optional additional arguments forwarded to the Tauri command on every call.
 
@@ -39,7 +39,7 @@ backend knows which slice of state to return.
 commandName: string;
 ```
 
-Defined in: [transport.ts:162](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L162)
+Defined in: [transport.ts:162](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L162)
 
 The name of the Tauri command that returns the current snapshot.
 
@@ -60,7 +60,7 @@ The Rust command must return a JSON object matching
 invoke: TauriInvoke;
 ```
 
-Defined in: [transport.ts:152](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L152)
+Defined in: [transport.ts:152](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L152)
 
 A Tauri-compatible `invoke` function used to call Rust commands.
 

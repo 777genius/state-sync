@@ -6,7 +6,7 @@
 
 # Interface: RevisionSyncHandle
 
-Defined in: [engine.ts:116](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/engine.ts#L116)
+Defined in: [engine.ts:116](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/engine.ts#L116)
 
 A handle for controlling a running revision-based sync loop.
 
@@ -35,7 +35,7 @@ handle.stop();
 getLocalRevision(): Revision;
 ```
 
-Defined in: [engine.ts:152](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/engine.ts#L152)
+Defined in: [engine.ts:152](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/engine.ts#L152)
 
 Returns the most recently applied local revision.
 
@@ -55,7 +55,7 @@ The current local [Revision](../type-aliases/Revision.md).
 refresh(): Promise<void>;
 ```
 
-Defined in: [engine.ts:144](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/engine.ts#L144)
+Defined in: [engine.ts:144](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/engine.ts#L144)
 
 Manually triggers a snapshot fetch and apply cycle.
 
@@ -79,7 +79,7 @@ If the snapshot fetch or apply fails.
 start(): Promise<void>;
 ```
 
-Defined in: [engine.ts:127](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/engine.ts#L127)
+Defined in: [engine.ts:127](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/engine.ts#L127)
 
 Starts the sync loop: subscribes to invalidation events and performs
 the initial snapshot fetch.
@@ -104,7 +104,7 @@ If subscription fails or the initial snapshot fetch fails.
 stop(): void;
 ```
 
-Defined in: [engine.ts:134](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/engine.ts#L134)
+Defined in: [engine.ts:134](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/engine.ts#L134)
 
 Stops the sync loop: unsubscribes from invalidation events, cancels
 pending throttled/debounced refreshes, and marks the handle as stopped.

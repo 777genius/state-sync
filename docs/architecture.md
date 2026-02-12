@@ -33,6 +33,7 @@ graph LR
   Tauri["@statesync/tauri"]
 
   Pinia["@statesync/pinia"]
+  Redux["@statesync/redux"]
   Zustand["@statesync/zustand"]
   Valtio["@statesync/valtio"]
   VueAdapter["@statesync/vue"]
@@ -41,6 +42,7 @@ graph LR
   Core --> Persistence
   Core --> Tauri
   Core --> Pinia
+  Core --> Redux
   Core --> Zustand
   Core --> Valtio
   Core --> VueAdapter
@@ -48,6 +50,7 @@ graph LR
 
   subgraph Framework["Framework Adapters"]
     Pinia
+    Redux
     Zustand
     Valtio
     VueAdapter

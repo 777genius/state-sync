@@ -10,7 +10,7 @@
 function createSessionStorageBackend<T>(options): StorageBackend<T>;
 ```
 
-Defined in: [persistence/src/storage/session-storage.ts:94](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/session-storage.ts#L94)
+Defined in: [persistence/src/storage/session-storage.ts:94](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/session-storage.ts#L94)
 
 Creates a [StorageBackend](../interfaces/StorageBackend.md) that persists snapshot data using the browser's
 `sessionStorage` API.

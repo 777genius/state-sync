@@ -6,7 +6,7 @@
 
 # Interface: SvelteStoreLike\<State\>
 
-Defined in: [svelte.ts:27](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/svelte/src/svelte.ts#L27)
+Defined in: [svelte.ts:27](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/svelte/src/svelte.ts#L27)
 
 Minimal structural interface for a Svelte writable store.
 
@@ -44,7 +44,7 @@ const myStore: SvelteStoreLike<AppState> = writable({ count: 0, name: '' });
 set(value): void;
 ```
 
-Defined in: [svelte.ts:33](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/svelte/src/svelte.ts#L33)
+Defined in: [svelte.ts:33](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/svelte/src/svelte.ts#L33)
 
 Replaces the store value with the given value, triggering all subscribers.
 
@@ -66,7 +66,7 @@ Replaces the store value with the given value, triggering all subscribers.
 update(updater): void;
 ```
 
-Defined in: [svelte.ts:39](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/svelte/src/svelte.ts#L39)
+Defined in: [svelte.ts:39](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/svelte/src/svelte.ts#L39)
 
 Derives the next store value from the current one using the provided updater function.
 

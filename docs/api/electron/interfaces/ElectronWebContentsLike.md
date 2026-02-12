@@ -6,7 +6,7 @@
 
 # Interface: ElectronWebContentsLike
 
-Defined in: [types.ts:147](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L147)
+Defined in: [types.ts:147](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L147)
 
 Structural type matching a subset of Electron's `WebContents` API
 used by the main-process broadcaster to send invalidation events to renderers.
@@ -31,7 +31,7 @@ const targets: ElectronWebContentsLike[] = BrowserWindow.getAllWindows()
 isDestroyed(): boolean;
 ```
 
-Defined in: [types.ts:154](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L154)
+Defined in: [types.ts:154](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L154)
 
 Returns `true` if the underlying native web contents has been destroyed.
 Used as a guard before calling [send](#send) to avoid runtime errors.
@@ -50,7 +50,7 @@ Whether the web contents instance has been destroyed.
 send(channel, ...args): void;
 ```
 
-Defined in: [types.ts:163](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L163)
+Defined in: [types.ts:163](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/electron/src/types.ts#L163)
 
 Sends an asynchronous IPC message to the renderer process associated
 with this web contents instance.

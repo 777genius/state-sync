@@ -10,7 +10,7 @@
 function createTauriFileBackend<T>(options): StorageBackend<T>;
 ```
 
-Defined in: [persistence.ts:171](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L171)
+Defined in: [persistence.ts:171](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/persistence.ts#L171)
 
 Creates a [StorageBackend](../interfaces/StorageBackend.md) that delegates all persistence operations
 to Tauri commands, enabling secure native file-system access from the

@@ -6,7 +6,7 @@
 
 # Interface: Logger
 
-Defined in: [types.ts:206](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L206)
+Defined in: [types.ts:206](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L206)
 
 A minimal structured logging interface used by the sync engine.
 
@@ -29,7 +29,7 @@ any serializable data can be passed through.
 debug(msg, extra?): void;
 ```
 
-Defined in: [types.ts:213](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L213)
+Defined in: [types.ts:213](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L213)
 
 Logs a debug-level message. Typically used for tracing sync lifecycle events.
 
@@ -52,7 +52,7 @@ Logs a debug-level message. Typically used for tracing sync lifecycle events.
 error(msg, extra?): void;
 ```
 
-Defined in: [types.ts:227](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L227)
+Defined in: [types.ts:227](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L227)
 
 Logs an error-level message. Used for failures in the sync pipeline.
 
@@ -75,7 +75,7 @@ Logs an error-level message. Used for failures in the sync pipeline.
 warn(msg, extra?): void;
 ```
 
-Defined in: [types.ts:220](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/types.ts#L220)
+Defined in: [types.ts:220](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L220)
 
 Logs a warning-level message. Used for non-fatal issues such as retry attempts.
 

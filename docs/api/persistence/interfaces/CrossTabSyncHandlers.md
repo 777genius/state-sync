@@ -6,7 +6,7 @@
 
 # Interface: CrossTabSyncHandlers\<T\>
 
-Defined in: [persistence/src/cross-tab.ts:116](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L116)
+Defined in: [persistence/src/cross-tab.ts:116](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L116)
 
 Configuration and event handlers for [createCrossTabSync](../functions/createCrossTabSync.md).
 
@@ -31,7 +31,7 @@ type of cross-tab message.
 optional broadcastSaves: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L747)
+Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L747)
 
 Whether this tab should broadcast its saves to other tabs.
 
@@ -51,7 +51,7 @@ Whether this tab should broadcast its saves to other tabs.
 channelName: string;
 ```
 
-Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L733)
+Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L733)
 
 The name of the BroadcastChannel used for inter-tab communication.
 
@@ -70,7 +70,7 @@ Convention: `'state-sync:<topic>'`.
 optional onClear: (fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:138](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L138)
+Defined in: [persistence/src/cross-tab.ts:138](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L138)
 
 Called when another tab notifies that it has cleared its storage.
 
@@ -92,7 +92,7 @@ Called when another tab notifies that it has cleared its storage.
 optional onSnapshot: (snapshot, fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:123](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L123)
+Defined in: [persistence/src/cross-tab.ts:123](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L123)
 
 Called when a snapshot is received from another tab.
 
@@ -115,7 +115,7 @@ Called when a snapshot is received from another tab.
 optional onSyncRequest: (fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:131](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L131)
+Defined in: [persistence/src/cross-tab.ts:131](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L131)
 
 Called when another tab sends a sync request, asking this tab to
 broadcast its latest state.
@@ -138,7 +138,7 @@ broadcast its latest state.
 optional receiveUpdates: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L740)
+Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L740)
 
 Whether this tab should apply snapshots received from other tabs.
 

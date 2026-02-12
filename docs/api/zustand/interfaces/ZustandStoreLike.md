@@ -6,7 +6,7 @@
 
 # Interface: ZustandStoreLike\<State\>
 
-Defined in: [zustand.ts:18](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/zustand/src/zustand.ts#L18)
+Defined in: [zustand.ts:18](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/zustand/src/zustand.ts#L18)
 
 Minimal structural interface that a Zustand store satisfies.
 
@@ -34,7 +34,7 @@ The real Zustand store implements at minimum:
 getState(): State;
 ```
 
-Defined in: [zustand.ts:27](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/zustand/src/zustand.ts#L27)
+Defined in: [zustand.ts:27](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/zustand/src/zustand.ts#L27)
 
 Returns the current state snapshot of the store.
 
@@ -55,7 +55,7 @@ The current state object.
 setState(partial, replace?): void;
 ```
 
-Defined in: [zustand.ts:41](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/zustand/src/zustand.ts#L41)
+Defined in: [zustand.ts:41](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/zustand/src/zustand.ts#L41)
 
 Updates the store's state.
 

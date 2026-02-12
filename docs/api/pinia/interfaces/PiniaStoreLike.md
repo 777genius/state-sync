@@ -6,7 +6,7 @@
 
 # Interface: PiniaStoreLike\<State\>
 
-Defined in: [pinia.ts:18](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/pinia/src/pinia.ts#L18)
+Defined in: [pinia.ts:18](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/pinia/src/pinia.ts#L18)
 
 Minimal structural interface that a Pinia store satisfies.
 
@@ -34,7 +34,7 @@ The real Pinia store implements at minimum:
 optional $id: string;
 ```
 
-Defined in: [pinia.ts:25](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/pinia/src/pinia.ts#L25)
+Defined in: [pinia.ts:25](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/pinia/src/pinia.ts#L25)
 
 Optional store identifier exposed by Pinia as `$id`.
 
@@ -49,7 +49,7 @@ convenience.
 $state: State;
 ```
 
-Defined in: [pinia.ts:33](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/pinia/src/pinia.ts#L33)
+Defined in: [pinia.ts:33](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/pinia/src/pinia.ts#L33)
 
 The current reactive state of the store.
 
@@ -64,7 +64,7 @@ be deleted when the incoming snapshot no longer contains them.
 $patch(patch): void;
 ```
 
-Defined in: [pinia.ts:46](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/pinia/src/pinia.ts#L46)
+Defined in: [pinia.ts:46](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/pinia/src/pinia.ts#L46)
 
 Applies a partial state update or a mutator function to the store.
 

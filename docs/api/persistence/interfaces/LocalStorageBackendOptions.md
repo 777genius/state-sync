@@ -6,7 +6,7 @@
 
 # Interface: LocalStorageBackendOptions
 
-Defined in: [persistence/src/storage/local-storage.ts:10](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/local-storage.ts#L10)
+Defined in: [persistence/src/storage/local-storage.ts:10](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/local-storage.ts#L10)
 
 Configuration options for the localStorage storage backend.
 
@@ -21,7 +21,7 @@ used when persisting snapshot data to the browser's `localStorage` API.
 optional deserialize: (data) => SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/local-storage.ts#L37)
+Defined in: [persistence/src/storage/local-storage.ts:37](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/local-storage.ts#L37)
 
 Custom deserialization function for converting a stored string back into
 a snapshot envelope.
@@ -52,7 +52,7 @@ JSON.parse
 key: string;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:17](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/local-storage.ts#L17)
+Defined in: [persistence/src/storage/local-storage.ts:17](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/local-storage.ts#L17)
 
 The key under which snapshot data is stored in `localStorage`.
 
@@ -67,7 +67,7 @@ with other data stored in the same origin's `localStorage`.
 optional serialize: (snapshot) => string;
 ```
 
-Defined in: [persistence/src/storage/local-storage.ts:27](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/local-storage.ts#L27)
+Defined in: [persistence/src/storage/local-storage.ts:27](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/storage/local-storage.ts#L27)
 
 Custom serialization function for converting a snapshot envelope into a string
 suitable for `localStorage` storage.
