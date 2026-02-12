@@ -243,6 +243,59 @@ pinia.use(PiniaSharedState({ enable: true }))
 
 ---
 
+### Technical Architecture Ranking
+
+Engineering-only comparison: protocol design, correctness guarantees, IPC efficiency, security model. Does not factor in adoption, community size, or maintenance activity.
+
+| # | Library | Score | Key technical advantage |
+|---|---------|:-----:|------------------------|
+| 1 | **state-sync** | **9.5** | Revision ordering + coalescing O(2) + pluggable transport |
+| 2 | **@zubridge/electron** | **7.0** | Reliable hub-and-spoke + 7 structured error types + middleware |
+| 3 | **reduxtron** | **6.0** | Cleanest security model + zero runtime dependencies (~1.2 KB) |
+| 4 | **electron-shared-state** | **5.0** | Delta sync via Immer patches — only library with true differential updates |
+| 5 | **electron-redux** | **4.5** | Composable StoreEnhancer pattern (good concept, incomplete execution) |
+
+```mermaid
+quadrantChart
+    title IPC Efficiency vs Correctness Guarantees
+    x-axis Low Correctness --> High Correctness
+    y-axis Low IPC Efficiency --> High IPC Efficiency
+    quadrant-1 Correct and Efficient
+    quadrant-2 Efficient but Unordered
+    quadrant-3 Basic
+    quadrant-4 Correct but Verbose
+    state-sync: [0.9, 0.85]
+    electron-shared-state: [0.25, 0.9]
+    zubridge: [0.45, 0.35]
+    reduxtron: [0.55, 0.35]
+    electron-redux: [0.4, 0.55]
+```
+
+::: details Scoring breakdown (8 criteria, weighted)
+
+Criteria weighted by engineering importance for a state sync library:
+- **High weight (×2):** consistency model, IPC efficiency, security architecture
+- **Medium weight (×1.5):** error resilience, modularity
+- **Standard weight (×1):** type system, cross-platform, bundle efficiency
+
+| Criteria | state-sync | zubridge | reduxtron | shared-state | electron-redux |
+|----------|:----------:|:--------:|:---------:|:------------:|:--------------:|
+| Consistency model | 10 | 5 | 6 | 5 | 5 |
+| IPC efficiency | 9.5 | 5 | 5 | **10** | 5 |
+| Security architecture | 10 | 8.5 | **10** | 2 | 3 |
+| Error resilience | 10 | 7 | 2 | 3 | 2 |
+| Modularity | 10 | 7 | 5 | 4 | 6 |
+| Type system | 9 | 8 | 7 | 7 | 5 |
+| Cross-platform | 10 | 7 | 2 | 2 | 2 |
+| Bundle efficiency | 9 | 7 | **10** | 5 | 7 |
+
+**Why electron-shared-state scores low despite having the best IPC efficiency:** its Immer patch mechanism is technically brilliant (the only delta sync in the ecosystem), but requiring `nodeIntegration: true` is a fundamental architectural limitation — not a missing feature, but a design constraint that makes it incompatible with modern Electron's process isolation. Security architecture carries high weight because it reflects core protocol design decisions.
+
+state-sync is the author of this page. Verify claims using the raw data in the [Feature Matrix](#electron-feature-matrix) above.
+:::
+
+---
+
 ### Architecture Overview
 
 How each library moves state between Electron's main and renderer processes.
@@ -335,59 +388,6 @@ sequenceDiagram
 ```
 
 Actions are forwarded to main and replayed in all renderers. Each process maintains its own Redux store. v1 depends on deprecated `electron.remote`.
-
----
-
-### Technical Architecture Ranking
-
-Engineering-only comparison: protocol design, correctness guarantees, IPC efficiency, security model. Does not factor in adoption, community size, or maintenance activity.
-
-| # | Library | Score | Key technical advantage |
-|---|---------|:-----:|------------------------|
-| 1 | **state-sync** | **9.5** | Revision ordering + coalescing O(2) + pluggable transport |
-| 2 | **@zubridge/electron** | **7.0** | Reliable hub-and-spoke + 7 structured error types + middleware |
-| 3 | **reduxtron** | **6.0** | Cleanest security model + zero runtime dependencies (~1.2 KB) |
-| 4 | **electron-shared-state** | **5.0** | Delta sync via Immer patches — only library with true differential updates |
-| 5 | **electron-redux** | **4.5** | Composable StoreEnhancer pattern (good concept, incomplete execution) |
-
-```mermaid
-quadrantChart
-    title IPC Efficiency vs Correctness Guarantees
-    x-axis Low Correctness --> High Correctness
-    y-axis Low IPC Efficiency --> High IPC Efficiency
-    quadrant-1 Correct and Efficient
-    quadrant-2 Efficient but Unordered
-    quadrant-3 Basic
-    quadrant-4 Correct but Verbose
-    state-sync: [0.9, 0.85]
-    electron-shared-state: [0.25, 0.9]
-    zubridge: [0.45, 0.35]
-    reduxtron: [0.55, 0.35]
-    electron-redux: [0.4, 0.55]
-```
-
-::: details Scoring breakdown (8 criteria, weighted)
-
-Criteria weighted by engineering importance for a state sync library:
-- **High weight (×2):** consistency model, IPC efficiency, security architecture
-- **Medium weight (×1.5):** error resilience, modularity
-- **Standard weight (×1):** type system, cross-platform, bundle efficiency
-
-| Criteria | state-sync | zubridge | reduxtron | shared-state | electron-redux |
-|----------|:----------:|:--------:|:---------:|:------------:|:--------------:|
-| Consistency model | 10 | 5 | 6 | 5 | 5 |
-| IPC efficiency | 9.5 | 5 | 5 | **10** | 5 |
-| Security architecture | 10 | 8.5 | **10** | 2 | 3 |
-| Error resilience | 10 | 7 | 2 | 3 | 2 |
-| Modularity | 10 | 7 | 5 | 4 | 6 |
-| Type system | 9 | 8 | 7 | 7 | 5 |
-| Cross-platform | 10 | 7 | 2 | 2 | 2 |
-| Bundle efficiency | 9 | 7 | **10** | 5 | 7 |
-
-**Why electron-shared-state scores low despite having the best IPC efficiency:** its Immer patch mechanism is technically brilliant (the only delta sync in the ecosystem), but requiring `nodeIntegration: true` is a fundamental architectural limitation — not a missing feature, but a design constraint that makes it incompatible with modern Electron's process isolation. Security architecture carries high weight because it reflects core protocol design decisions.
-
-state-sync is the author of this page. Verify claims using the raw data in the [Feature Matrix](#electron-feature-matrix) above.
-:::
 
 ---
 
