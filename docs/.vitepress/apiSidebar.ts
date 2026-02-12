@@ -14,6 +14,8 @@ const PACKAGE_ORDER = [
   'pinia',
   'redux',
   'zustand',
+  'jotai',
+  'mobx',
   'valtio',
   'svelte',
   'vue',

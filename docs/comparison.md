@@ -208,7 +208,7 @@ pinia.use(PiniaSharedState({ enable: true }))
 | **Source of truth** | Main process | Main process | Main process | Every process | Main process |
 | **Multi-window** | ✅ | ✅ Auto-tracked | ⚠️ Manual wiring | ✅ Auto | ✅ Broadcast all |
 | **Framework** | Any | Zustand / Redux / Custom | Redux | Agnostic | Redux only |
-| **State lib adapters** | Redux, Zustand, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
+| **State lib adapters** | Redux, Zustand, Jotai, MobX, Pinia, Vue, Valtio, Svelte | Zustand, Redux | Redux, Zustand adapter | None | Redux |
 | **Delta sync** | ❌ Full snapshot | ❌ Full state | ❌ Full state | ✅ Immer patches | ❌ Full actions |
 | **Sync mechanism** | Pull (invalidation events) | Push (full state) | Push (full state) | Push (Immer patches) | Push (action replay) |
 | **Selective sync** | Per-topic | Per-key subscriptions | ❌ Full state | ❌ Full patches | ❌ All actions |
@@ -473,7 +473,7 @@ sharedStore.setState((state) => { state.count++; });
 - **Rapid updates** — coalescing prevents IPC flood (100 events → 2 fetches)
 - **Need retry** — exponential backoff on IPC failures
 - **Want structure** — phase-based errors, not just try/catch
-- **Multiple frameworks** — Redux, Zustand, Pinia, Vue, Valtio, Svelte adapters
+- **Multiple frameworks** — Redux, Zustand, Jotai, MobX, Pinia, Vue, Valtio, Svelte adapters
 - **Cross-platform** — same core for Tauri and Electron
 - **Persistence with migrations** — versioned state upgrades via `@statesync/persistence`
 

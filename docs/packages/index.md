@@ -16,6 +16,8 @@ Each adapter applies snapshots to a specific state container. All adapters suppo
 - [`@statesync/pinia`](/packages/pinia) — applier for Pinia stores (`$patch`).
 - [`@statesync/redux`](/packages/redux) — applier for Redux stores via HOF reducer wrapping.
 - [`@statesync/zustand`](/packages/zustand) — applier for Zustand stores (`setState`).
+- [`@statesync/jotai`](/packages/jotai) — applier for Jotai atoms via store (`get`/`set`).
+- [`@statesync/mobx`](/packages/mobx) — applier for MobX observables (in-place mutation).
 - [`@statesync/valtio`](/packages/valtio) — applier for Valtio proxies (in-place mutation).
 - [`@statesync/svelte`](/packages/svelte) — applier for Svelte writable stores (new reference on each apply).
 - [`@statesync/vue`](/packages/vue) — applier for Vue `reactive()`/`ref()` values.

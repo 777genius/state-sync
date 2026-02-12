@@ -112,6 +112,18 @@ importers:
         specifier: workspace:*
         version: link:../core
 
+  packages/jotai:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/mobx:
+    devDependencies:
+      '@statesync/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/persistence:
     devDependencies:
       '@statesync/core':

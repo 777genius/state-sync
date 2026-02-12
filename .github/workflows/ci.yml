@@ -44,6 +44,10 @@ jobs:
           node -e "const m = require('./packages/valtio/dist/index.cjs'); console.log('valtio CJS OK:', Object.keys(m))"
           node -e "import('./packages/svelte/dist/index.js').then(m => console.log('svelte ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/svelte/dist/index.cjs'); console.log('svelte CJS OK:', Object.keys(m))"
+          node -e "import('./packages/jotai/dist/index.js').then(m => console.log('jotai ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/jotai/dist/index.cjs'); console.log('jotai CJS OK:', Object.keys(m))"
+          node -e "import('./packages/mobx/dist/index.js').then(m => console.log('mobx ESM OK:', Object.keys(m)))"
+          node -e "const m = require('./packages/mobx/dist/index.cjs'); console.log('mobx CJS OK:', Object.keys(m))"
           node -e "import('./packages/vue/dist/index.js').then(m => console.log('vue ESM OK:', Object.keys(m)))"
           node -e "const m = require('./packages/vue/dist/index.cjs'); console.log('vue CJS OK:', Object.keys(m))"
 

@@ -15,6 +15,8 @@ npm install @statesync/core
 # Pick a framework adapter
 npm install @statesync/redux    # React + Redux / RTK
 npm install @statesync/zustand  # React + Zustand
+npm install @statesync/jotai    # React + Jotai
+npm install @statesync/mobx     # MobX
 npm install @statesync/pinia    # Vue + Pinia
 npm install @statesync/valtio   # React + Valtio
 npm install @statesync/svelte   # Svelte

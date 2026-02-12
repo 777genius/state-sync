@@ -4,6 +4,8 @@ import { withBase } from 'vitepress';
 const frameworks = [
   { name: 'Redux', link: '/packages/redux', color: '#764abc' },
   { name: 'Zustand', link: '/packages/zustand', color: '#433e38' },
+  { name: 'Jotai', link: '/packages/jotai', color: '#000000' },
+  { name: 'MobX', link: '/packages/mobx', color: '#e05415' },
   { name: 'Pinia', link: '/packages/pinia', color: '#ffd859' },
   { name: 'Valtio', link: '/packages/valtio', color: '#764abc' },
   { name: 'Svelte', link: '/packages/svelte', color: '#ff3e00' },
@@ -44,6 +46,21 @@ const frameworks = [
           <path d="M12 3C9.5 3 7.5 5 7.5 7.5V8C6 8 5 9.5 5 11.5C5 14 6.5 16 8 17.5C9.5 19 11 20 12 21C13 20 14.5 19 16 17.5C17.5 16 19 14 19 11.5C19 9.5 18 8 16.5 8V7.5C16.5 5 14.5 3 12 3Z" fill="#42b883"/>
           <path d="M12 3C10.5 3 9 4 8.5 5.5C9.5 4.5 10.7 4 12 4C13.3 4 14.5 4.5 15.5 5.5C15 4 13.5 3 12 3Z" fill="#35495e"/>
           <path d="M10 1.5C10.5 0.5 11 0 12 0C13 0 13.5 0.5 14 1.5L13 3H11L10 1.5Z" fill="#42b883" opacity="0.7"/>
+        </svg>
+        <!-- Jotai (atom) -->
+        <svg v-else-if="fw.name === 'Jotai'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="4" :fill="fw.color" class="icon-fill"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" fill="none" :stroke="fw.color" stroke-width="1.2" class="icon-stroke"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" fill="none" :stroke="fw.color" stroke-width="1.2" transform="rotate(60 12 12)" class="icon-stroke"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" fill="none" :stroke="fw.color" stroke-width="1.2" transform="rotate(-60 12 12)" class="icon-stroke"/>
+        </svg>
+        <!-- MobX (tree / observable graph) -->
+        <svg v-else-if="fw.name === 'MobX'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="5" r="3" :fill="fw.color" class="icon-fill"/>
+          <circle cx="5" cy="18" r="3" :fill="fw.color" class="icon-fill"/>
+          <circle cx="19" cy="18" r="3" :fill="fw.color" class="icon-fill"/>
+          <line x1="12" y1="8" x2="5" y2="15" :stroke="fw.color" stroke-width="1.5" class="icon-stroke"/>
+          <line x1="12" y1="8" x2="19" y2="15" :stroke="fw.color" stroke-width="1.5" class="icon-stroke"/>
         </svg>
         <!-- Valtio (proxy/crystal ball) -->
         <svg v-else-if="fw.name === 'Valtio'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

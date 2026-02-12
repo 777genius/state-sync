@@ -1,6 +1,6 @@
 # state-sync
 
-Scalable, transport-agnostic state synchronization for multi-window and multi-process apps -- fully typed TypeScript with framework adapters for Redux, Pinia, Zustand, Valtio, Svelte, and Vue.
+Scalable, transport-agnostic state synchronization for multi-window and multi-process apps -- fully typed TypeScript with framework adapters for Redux, Zustand, Jotai, MobX, Pinia, Valtio, Svelte, and Vue.
 
 **[Documentation](https://777genius.github.io/state-sync/)** | **[Comparison](https://777genius.github.io/state-sync/comparison)** | **[GitHub](https://github.com/777genius/state-sync)**
 
@@ -45,7 +45,7 @@ Non-goals:
 
 - **Tiny footprint.** The core engine is **3.1 KB gzipped**; each framework adapter adds roughly **0.8 KB**.
 - **No vendor lock-in.** Works with any transport (Tauri events, BroadcastChannel, WebSocket, custom IPC) and any state library.
-- **One API for every framework.** The same `createRevisionSync` call works with Redux, Pinia, Zustand, Valtio, Svelte, and Vue -- swap one line to switch adapters.
+- **One API for every framework.** The same `createRevisionSync` call works with Redux, Zustand, Jotai, MobX, Pinia, Valtio, Svelte, and Vue -- swap one line to switch adapters.
 
 See the [full comparison with alternatives](https://777genius.github.io/state-sync/comparison) for details.
 
@@ -71,6 +71,8 @@ If invalidations come in fast (or the transport drops/duplicates), the engine ai
 | [`@statesync/redux`](packages/redux/) | Redux snapshot applier adapter (HOF reducer wrapping) |
 | [`@statesync/pinia`](packages/pinia/) | Pinia snapshot applier adapter |
 | [`@statesync/zustand`](packages/zustand/) | Zustand snapshot applier adapter |
+| [`@statesync/jotai`](packages/jotai/) | Jotai snapshot applier adapter (atom-based) |
+| [`@statesync/mobx`](packages/mobx/) | MobX snapshot applier adapter (in-place mutation) |
 | [`@statesync/valtio`](packages/valtio/) | Valtio snapshot applier adapter |
 | [`@statesync/svelte`](packages/svelte/) | Svelte snapshot applier adapter |
 | [`@statesync/vue`](packages/vue/) | Vue (reactive/ref) snapshot applier adapter |
@@ -89,6 +91,8 @@ npm install @statesync/persistence  # localStorage, IndexedDB, cross-tab sync
 npm install @statesync/redux    # Redux / RTK
 npm install @statesync/pinia    # Pinia
 npm install @statesync/zustand  # Zustand
+npm install @statesync/jotai    # Jotai
+npm install @statesync/mobx     # MobX
 npm install @statesync/valtio   # Valtio
 npm install @statesync/svelte   # Svelte
 npm install @statesync/vue      # Vue (reactive / ref)
@@ -105,6 +109,8 @@ npm install @statesync/tauri    # Tauri v2
 [![npm @statesync/svelte](https://img.shields.io/npm/v/@statesync/svelte?label=%40statesync%2Fsvelte)](https://www.npmjs.com/package/@statesync/svelte)
 [![npm @statesync/vue](https://img.shields.io/npm/v/@statesync/vue?label=%40statesync%2Fvue)](https://www.npmjs.com/package/@statesync/vue)
 [![npm @statesync/redux](https://img.shields.io/npm/v/@statesync/redux?label=%40statesync%2Fredux)](https://www.npmjs.com/package/@statesync/redux)
+[![npm @statesync/jotai](https://img.shields.io/npm/v/@statesync/jotai?label=%40statesync%2Fjotai)](https://www.npmjs.com/package/@statesync/jotai)
+[![npm @statesync/mobx](https://img.shields.io/npm/v/@statesync/mobx?label=%40statesync%2Fmobx)](https://www.npmjs.com/package/@statesync/mobx)
 [![npm @statesync/tauri](https://img.shields.io/npm/v/@statesync/tauri?label=%40statesync%2Ftauri)](https://www.npmjs.com/package/@statesync/tauri)
 [![CI](https://github.com/777genius/state-sync/actions/workflows/ci.yml/badge.svg)](https://github.com/777genius/state-sync/actions/workflows/ci.yml)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/@statesync/core?label=core%20gzip)](https://bundlephobia.com/package/@statesync/core)
@@ -177,7 +183,7 @@ const applier = createPiniaSnapshotApplier(myPiniaStore, {
 });
 ```
 
-Every framework adapter follows the same pattern -- swap `createPiniaSnapshotApplier` for `createReduxSnapshotApplier`, `createZustandSnapshotApplier`, `createValtioSnapshotApplier`, `createSvelteSnapshotApplier`, or `createVueSnapshotApplier`. See the [adapter documentation](https://777genius.github.io/state-sync/guide/adapters) for full examples of each.
+Every framework adapter follows the same pattern -- swap `createPiniaSnapshotApplier` for `createReduxSnapshotApplier`, `createZustandSnapshotApplier`, `createJotaiSnapshotApplier`, `createMobXSnapshotApplier`, `createValtioSnapshotApplier`, `createSvelteSnapshotApplier`, or `createVueSnapshotApplier`. See the [adapter documentation](https://777genius.github.io/state-sync/guide/adapters) for full examples of each.
 
 ### Adapter options (shared across all adapters)
 

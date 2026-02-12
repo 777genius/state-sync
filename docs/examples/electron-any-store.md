@@ -1,6 +1,6 @@
 ---
-title: "How to Sync State Across Electron Windows (Redux, Zustand, Pinia, Vue, Svelte)"
-description: "Sync state across Electron windows using IPC — main process as source of truth, revision-gated invalidation, any state manager. Step-by-step guide with Redux, Zustand, Pinia, Valtio, Svelte, and Vue examples."
+title: "How to Sync State Across Electron Windows (Redux, Zustand, Jotai, MobX, Pinia, Vue, Svelte)"
+description: "Sync state across Electron windows using IPC — main process as source of truth, revision-gated invalidation, any state manager. Step-by-step guide with Redux, Zustand, Jotai, MobX, Pinia, Valtio, Svelte, and Vue examples."
 ---
 
 # How to Sync State Across Electron Windows
@@ -37,7 +37,7 @@ your-electron-app/
 npm install @statesync/electron @statesync/core
 ```
 
-Plus the adapter for your state manager (e.g. `@statesync/redux`, `@statesync/zustand`, `@statesync/pinia`, etc.).
+Plus the adapter for your state manager (e.g. `@statesync/redux`, `@statesync/zustand`, `@statesync/jotai`, `@statesync/mobx`, `@statesync/pinia`, etc.).
 
 ## Architecture
 
@@ -352,7 +352,7 @@ Open DevTools in both windows to observe the sync cycle. The revision gate dedup
 
 2. **Main is source of truth**: State lives in the main process; renderers pull snapshots for reads and send commands via IPC for writes
 
-3. **Any state manager**: Swap the `applier` one-liner — Redux, Zustand, Pinia, Valtio, Svelte, or Vue
+3. **Any state manager**: Swap the `applier` one-liner — Redux, Zustand, Jotai, MobX, Pinia, Valtio, Svelte, or Vue
 
 4. **Window lifecycle safe**: `createElectronBroadcaster` handles destroyed `webContents` gracefully — no crashes if a window closes mid-broadcast
 
