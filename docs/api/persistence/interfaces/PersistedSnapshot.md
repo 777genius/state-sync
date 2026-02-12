@@ -6,15 +6,19 @@
 
 # Interface: PersistedSnapshot\<T\>
 
-Defined in: [persistence/src/types.ts:79](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L79)
+Defined in: [persistence/src/types.ts:140](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L140)
 
-Wrapper that includes metadata with the snapshot.
+A persisted snapshot bundled with its associated metadata.
+
+This is the unit of storage for backends that support metadata
+([StorageBackendWithMetadata](StorageBackendWithMetadata.md)). It pairs the actual state envelope
+with bookkeeping information (timestamps, schema version, compression flag, etc.).
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state. |
 
 ## Properties
 
@@ -24,7 +28,9 @@ Wrapper that includes metadata with the snapshot.
 metadata: PersistedSnapshotMetadata;
 ```
 
-Defined in: [persistence/src/types.ts:81](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L81)
+Defined in: [persistence/src/types.ts:145](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L145)
+
+Metadata describing when and how the snapshot was persisted.
 
 ***
 
@@ -34,4 +40,6 @@ Defined in: [persistence/src/types.ts:81](https://github.com/777genius/state-syn
 snapshot: SnapshotEnvelope<T>;
 ```
 
-Defined in: [persistence/src/types.ts:80](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L80)
+Defined in: [persistence/src/types.ts:142](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L142)
+
+The snapshot envelope containing the revision and state data.

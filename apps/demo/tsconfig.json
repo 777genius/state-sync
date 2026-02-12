@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@statesync/core": ["../../packages/core/src/index.ts"],
+      "@statesync/tauri": ["../../packages/tauri/src/index.ts"]
+    },
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "jsx": "preserve"
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"]
+}

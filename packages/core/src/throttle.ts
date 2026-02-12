@@ -2,63 +2,142 @@
  * Invalidation throttling utilities for state-sync.
  *
  * Provides debounce and throttle mechanisms to control the rate of
- * refresh calls triggered by rapid invalidation events.
+ * refresh calls triggered by rapid invalidation events. This prevents
+ * excessive network requests when many invalidation events arrive in
+ * quick succession.
+ *
+ * @module
  */
 
+/**
+ * Configuration options for controlling invalidation-driven refresh rate.
+ *
+ * Supports three modes of operation:
+ * - **Debounce only** (`debounceMs`): Waits for a quiet period before refreshing.
+ * - **Throttle only** (`throttleMs`): Limits refresh to at most once per interval.
+ * - **Combined** (both set): Debounce is applied first, then throttle limits the output rate.
+ *
+ * When neither option is set, refresh calls are passed through immediately.
+ *
+ * @example
+ * ```ts
+ * // Debounce: wait 200ms of silence before refreshing
+ * const opts: InvalidationThrottlingOptions = { debounceMs: 200 };
+ *
+ * // Throttle: at most 1 refresh per second
+ * const opts: InvalidationThrottlingOptions = { throttleMs: 1000 };
+ *
+ * // Combined: debounce 100ms, then throttle to 1/sec
+ * const opts: InvalidationThrottlingOptions = {
+ *   debounceMs: 100,
+ *   throttleMs: 1000,
+ * };
+ * ```
+ */
 export interface InvalidationThrottlingOptions {
   /**
    * Debounce delay in milliseconds.
-   * Waits until N ms of "silence" before triggering refresh.
-   * If both debounceMs and throttleMs are set, debounce is applied first.
+   *
+   * Waits until this many milliseconds of "silence" (no new triggers) before
+   * firing a refresh. If both `debounceMs` and `throttleMs` are set, debounce
+   * is applied first within the throttle window.
    */
   debounceMs?: number;
 
   /**
    * Throttle interval in milliseconds.
-   * Ensures at most 1 refresh per N ms.
+   *
+   * Ensures at most one refresh per this many milliseconds. Controls the
+   * maximum rate of refresh calls regardless of how many triggers arrive.
    */
   throttleMs?: number;
 
   /**
-   * Fire immediately on the first event (default: true).
-   * Only applies when throttleMs is set.
+   * Whether to fire immediately on the leading edge of the throttle window.
+   *
+   * When `true`, the first trigger in a new throttle window fires immediately.
+   * Only applies when `throttleMs` is set.
+   *
+   * @defaultValue `true`
    */
   leading?: boolean;
 
   /**
-   * Fire after the quiet period ends (default: true).
-   * Only applies when throttleMs is set.
+   * Whether to fire on the trailing edge after the throttle window ends.
+   *
+   * When `true`, a final refresh is scheduled after the quiet period if any
+   * triggers arrived during the throttle window. Only applies when `throttleMs`
+   * is set.
+   *
+   * @defaultValue `true`
    */
   trailing?: boolean;
 }
 
+/**
+ * Handle returned by {@link createThrottledHandler} that provides controlled
+ * access to a throttled/debounced refresh callback.
+ *
+ * Callers use {@link ThrottledHandler.trigger | trigger()} to signal that a refresh is
+ * desired. The handler decides when to actually invoke the underlying callback
+ * based on its throttling configuration.
+ */
 export interface ThrottledHandler {
   /**
-   * Trigger a refresh. The actual refresh call may be delayed
-   * based on the throttling configuration.
+   * Signal that a refresh is desired.
+   *
+   * The actual refresh callback may be invoked immediately or delayed depending
+   * on the throttling/debounce configuration. Multiple rapid calls to `trigger()`
+   * may result in fewer actual refresh invocations.
    */
   trigger(): void;
 
   /**
-   * Cleanup all pending timers and reset state.
-   * Should be called when the sync handle is stopped.
+   * Cancel all pending timers and reset internal state.
+   *
+   * Must be called when the sync handle is stopped to prevent stale
+   * callbacks from firing after disposal. After calling `dispose()`,
+   * the handler should not be used again.
    */
   dispose(): void;
 
   /**
-   * Returns true if there's a pending refresh scheduled.
+   * Check whether there is a pending refresh scheduled but not yet executed.
+   *
+   * @returns `true` if a refresh is queued via debounce or trailing-edge timer,
+   *          `false` otherwise.
    */
   hasPending(): boolean;
 }
 
 /**
- * Creates a throttled handler that controls refresh rate.
+ * Creates a {@link ThrottledHandler} that controls the rate of refresh calls.
  *
- * Behavior:
- * - No options: passthrough (immediate call)
- * - debounceMs only: classic debounce
- * - throttleMs only: classic throttle with leading/trailing edges
- * - Both: debounce within throttle window
+ * The handler adapts its behavior based on the provided options:
+ * - **No options (or all zero):** Passthrough — `trigger()` calls `onRefresh` immediately.
+ * - **`debounceMs` only:** Classic debounce — waits for a quiet period before calling `onRefresh`.
+ * - **`throttleMs` only:** Classic throttle with configurable leading/trailing edges.
+ * - **Both `debounceMs` and `throttleMs`:** Debounce is applied first, then the result is throttled.
+ *
+ * @param onRefresh - The callback to invoke when a refresh should occur. This is the actual
+ *                    refresh function that fetches a new snapshot.
+ * @param options - Optional throttling/debounce configuration. When omitted or empty,
+ *                  the handler acts as a passthrough.
+ * @returns A {@link ThrottledHandler} that wraps `onRefresh` with the configured rate limiting.
+ *
+ * @example
+ * ```ts
+ * import { createThrottledHandler } from '@statesync/core';
+ *
+ * const handler = createThrottledHandler(
+ *   () => console.log('refresh!'),
+ *   { debounceMs: 200, throttleMs: 1000 },
+ * );
+ *
+ * handler.trigger(); // May fire immediately or be delayed
+ * handler.hasPending(); // true if a delayed refresh is scheduled
+ * handler.dispose(); // Cleanup when done
+ * ```
  */
 export function createThrottledHandler(
   onRefresh: () => void,

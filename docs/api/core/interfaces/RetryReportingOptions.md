@@ -6,7 +6,10 @@
 
 # Interface: RetryReportingOptions
 
-Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L66)
+Defined in: [retry.ts:159](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L159)
+
+Options for [withRetryReporting](../functions/withRetryReporting.md), which combines retry logic
+with structured logging and error reporting.
 
 ## Properties
 
@@ -16,7 +19,10 @@ Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/48102438d
 optional logger: Logger;
 ```
 
-Defined in: [retry.ts:69](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L69)
+Defined in: [retry.ts:174](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L174)
+
+Logger instance for emitting structured retry warnings.
+When provided, a `warn`-level message is logged for each retry attempt.
 
 ***
 
@@ -26,11 +32,18 @@ Defined in: [retry.ts:69](https://github.com/777genius/state-sync/blob/48102438d
 optional onError: (ctx) => void;
 ```
 
-Defined in: [retry.ts:75](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L75)
+Defined in: [retry.ts:188](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L188)
 
-Optional error hook. This reports retry attempts with:
-- phase = 'getSnapshot'
-- willRetry = true
+Optional error hook invoked on each retry attempt.
+
+The callback receives a [SyncErrorContext](SyncErrorContext.md) with:
+- `phase` set to `'getSnapshot'`
+- `willRetry` set to `true`
+- `attempt` indicating which retry this is (1-based)
+- `nextDelayMs` indicating the backoff delay before the next attempt
+
+If this callback itself throws, the error is caught and logged
+(it does not affect the retry flow).
 
 #### Parameters
 
@@ -50,7 +63,9 @@ Optional error hook. This reports retry attempts with:
 optional policy: RetryPolicy;
 ```
 
-Defined in: [retry.ts:68](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L68)
+Defined in: [retry.ts:168](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L168)
+
+Retry policy configuration. When omitted, the default [RetryPolicy](RetryPolicy.md) values are used.
 
 ***
 
@@ -60,4 +75,6 @@ Defined in: [retry.ts:68](https://github.com/777genius/state-sync/blob/48102438d
 topic: string;
 ```
 
-Defined in: [retry.ts:67](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L67)
+Defined in: [retry.ts:163](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L163)
+
+The topic associated with this provider, used for log context and error reporting.

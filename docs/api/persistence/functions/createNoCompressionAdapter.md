@@ -10,11 +10,15 @@
 function createNoCompressionAdapter(): CompressionAdapter;
 ```
 
-Defined in: [persistence/src/compression.ts:220](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/compression.ts#L220)
+Defined in: [persistence/src/compression.ts:261](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L261)
 
-Identity compression adapter (no compression).
-Useful for testing or when compression is not needed.
+Creates a no-op [CompressionAdapter](../interfaces/CompressionAdapter.md) that passes data through unchanged.
+
+Useful for testing, debugging, or when compression overhead is not worth the
+storage savings. The algorithm name is `'none'`.
 
 ## Returns
 
 [`CompressionAdapter`](../interfaces/CompressionAdapter.md)
+
+A compression adapter that performs no compression or decompression.

@@ -10,30 +10,38 @@
 function createPersistenceApplier<T>(options): DisposablePersistenceApplier<T>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:253](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/persistence-applier.ts#L253)
+Defined in: [persistence/src/persistence-applier.ts:264](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/persistence-applier.ts#L264)
 
-Wraps an applier with automatic persistence.
+Creates a [DisposablePersistenceApplier](../interfaces/DisposablePersistenceApplier.md) that wraps an inner applier
+with automatic persistence to a storage backend.
 
-On every apply(), the snapshot is saved to storage (with optional throttle/debounce).
-The inner applier is always called, even if persistence fails.
+On every `apply()` call, the snapshot is forwarded to the inner applier
+**and** scheduled for saving to storage (with optional throttle/debounce).
+The inner applier is always called, even if the persistence write fails.
 
-IMPORTANT: Call dispose() when stopping sync to clean up pending timers.
+**Lifecycle:** Call [dispose()](../interfaces/DisposablePersistenceApplier.md#dispose)
+when stopping sync to clean up pending timers, event listeners, and
+BroadcastChannel connections. Optionally call
+[flush()](../interfaces/DisposablePersistenceApplier.md#flush) first to ensure
+pending data is saved.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state being persisted. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`PersistenceApplierOptions`](../interfaces/PersistenceApplierOptions.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`PersistenceApplierOptions`](../interfaces/PersistenceApplierOptions.md)\<`T`\> | Configuration for the persistence applier including storage backend, inner applier, throttling, compression, and cross-tab sync settings. |
 
 ## Returns
 
 [`DisposablePersistenceApplier`](../interfaces/DisposablePersistenceApplier.md)\<`T`\>
+
+A disposable persistence applier with event subscription and stats.
 
 ## Example
 

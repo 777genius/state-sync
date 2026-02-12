@@ -4,12 +4,12 @@ title: Custom transports
 
 # Custom transports
 
-state-sync is transport-agnostic. You provide two things:
+state-sync is transport-agnostic. You provide two interfaces:
 
-| Part | Interface | What it does |
-|------|-----------|-------------|
-| **Subscriber** | `{ subscribe(handler) → unsubscribe }` | Listens for invalidation events |
-| **Provider** | `{ getSnapshot() → SnapshotEnvelope }` | Fetches current state |
+| Part | Signature | Role |
+|------|-----------|------|
+| **Subscriber** | `subscribe(handler: (e: InvalidationEvent) => void): Promise<Unsubscribe>` | Delivers invalidation events |
+| **Provider** | `getSnapshot(): Promise<SnapshotEnvelope<T>>` | Returns the latest snapshot |
 
 ## WebSocket
 
@@ -98,18 +98,17 @@ const subscriber = {
 
 ## Handling reconnection
 
-state-sync does not manage transport connections. If your WebSocket reconnects, call `sync.refresh()` to re-fetch the latest snapshot:
+state-sync does not manage transport connections. After a reconnect, call `sync.refresh()` to re-fetch the latest snapshot:
 
 ```typescript
 ws.onopen = () => {
-  // Re-sync after reconnect
   sync.refresh();
 };
 ```
 
 ## Filtering events with shouldRefresh
 
-Skip unnecessary refreshes by providing a `shouldRefresh` callback:
+Skip unnecessary refreshes via the `shouldRefresh` callback:
 
 ```typescript
 const sync = createRevisionSync({
@@ -118,9 +117,30 @@ const sync = createRevisionSync({
   provider,
   applier,
   shouldRefresh(event) {
-    // Skip if this window originated the change // [!code focus]
     return event.sourceId !== myWindowId; // [!code focus]
   },
+});
+```
+
+The callback receives a validated `InvalidationEvent` with `topic`, `revision`, and optional `sourceId` / `timestampMs`.
+
+## Retrying failed snapshots
+
+Wrap the provider with `withRetry` for automatic retries with exponential backoff:
+
+```typescript
+import { createRevisionSync, withRetry } from '@statesync/core';
+
+const sync = createRevisionSync({
+  topic: 'settings',
+  subscriber,
+  provider: withRetry(provider, {
+    maxAttempts: 3,
+    initialDelayMs: 500,
+    backoffMultiplier: 2,
+    maxDelayMs: 10_000,
+  }),
+  applier,
 });
 ```
 

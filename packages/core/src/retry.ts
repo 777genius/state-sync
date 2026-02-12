@@ -1,16 +1,75 @@
+/**
+ * Retry utilities for state-sync snapshot providers.
+ *
+ * Provides retry-with-backoff wrappers for {@link SnapshotProvider} instances,
+ * allowing transient failures (network errors, temporary unavailability) to be
+ * retried automatically before surfacing the error to the sync engine.
+ *
+ * @module
+ */
+
 import type { Logger, SnapshotEnvelope, SnapshotProvider, SyncErrorContext, Topic } from './types';
 
+/**
+ * Configuration for retry behavior with exponential backoff.
+ *
+ * All fields are optional and fall back to sensible defaults when omitted.
+ * The delay between retries grows exponentially: `initialDelayMs * backoffMultiplier ^ attempt`,
+ * capped at `maxDelayMs`.
+ *
+ * @example
+ * ```ts
+ * const policy: RetryPolicy = {
+ *   maxAttempts: 5,
+ *   initialDelayMs: 1000,
+ *   backoffMultiplier: 1.5,
+ *   maxDelayMs: 30_000,
+ * };
+ * ```
+ */
 export interface RetryPolicy {
-  /** Max attempts (including the first try). Default: 3 */
+  /**
+   * Maximum number of attempts including the initial try.
+   *
+   * For example, `maxAttempts: 3` means 1 initial try + 2 retries.
+   *
+   * @defaultValue `3`
+   */
   maxAttempts?: number;
-  /** Initial delay in ms. Default: 500 */
+
+  /**
+   * Delay in milliseconds before the first retry attempt.
+   *
+   * Subsequent retries are scaled by {@link RetryPolicy.backoffMultiplier | backoffMultiplier}.
+   *
+   * @defaultValue `500`
+   */
   initialDelayMs?: number;
-  /** Exponential backoff multiplier. Default: 2 */
+
+  /**
+   * Multiplier applied to the delay for each successive retry attempt.
+   *
+   * The delay for attempt N is: `initialDelayMs * backoffMultiplier ^ N`.
+   * Set to `1` for fixed-interval retries (no exponential growth).
+   *
+   * @defaultValue `2`
+   */
   backoffMultiplier?: number;
-  /** Max delay in ms. Default: 10000 */
+
+  /**
+   * Upper bound for the computed delay in milliseconds.
+   *
+   * Prevents the exponential backoff from growing unboundedly.
+   *
+   * @defaultValue `10_000`
+   */
   maxDelayMs?: number;
 }
 
+/**
+ * Default retry policy values used when individual fields are not specified.
+ * @internal
+ */
 const DEFAULT_POLICY: Required<RetryPolicy> = {
   maxAttempts: 3,
   initialDelayMs: 500,
@@ -28,10 +87,40 @@ function computeDelay(attempt: number, policy: Required<RetryPolicy>): number {
 }
 
 /**
- * Wraps a SnapshotProvider with retries using exponential backoff.
+ * Wraps a {@link SnapshotProvider} with automatic retries using exponential backoff.
  *
- * On each failed attempt, `onRetry` is called (if provided) — you can use it for
- * logging or cancellation.
+ * On each failed attempt (except the last), the `onRetry` callback is invoked
+ * before the delay. This can be used for logging, metrics, or to inspect the error.
+ * After all attempts are exhausted, the last error is re-thrown.
+ *
+ * The returned provider has the same interface as the original, so it can be used
+ * as a drop-in replacement anywhere a `SnapshotProvider` is expected.
+ *
+ * @typeParam T - The snapshot data type carried inside the {@link SnapshotEnvelope}.
+ *
+ * @param provider - The original snapshot provider to wrap with retry logic.
+ * @param policy - Optional retry configuration. Uses {@link RetryPolicy} defaults when omitted.
+ * @param onRetry - Optional callback invoked after each failed attempt (before the backoff delay).
+ *                  Receives an object with:
+ *                  - `attempt`: The retry attempt number (1-based; 1 = first retry after initial failure).
+ *                  - `error`: The error thrown by the provider.
+ *                  - `nextDelayMs`: The delay in ms before the next attempt.
+ * @returns A new {@link SnapshotProvider} that retries on failure according to the given policy.
+ *
+ * @throws The last error from the provider if all attempts are exhausted.
+ *
+ * @example
+ * ```ts
+ * import { withRetry } from '@statesync/core';
+ *
+ * const resilientProvider = withRetry(
+ *   originalProvider,
+ *   { maxAttempts: 5, initialDelayMs: 1000 },
+ *   ({ attempt, error, nextDelayMs }) => {
+ *     console.warn(`Retry ${attempt}, next delay: ${nextDelayMs}ms`, error);
+ *   },
+ * );
+ * ```
  */
 export function withRetry<T>(
   provider: SnapshotProvider<T>,
@@ -63,24 +152,74 @@ export function withRetry<T>(
   };
 }
 
+/**
+ * Options for {@link withRetryReporting}, which combines retry logic
+ * with structured logging and error reporting.
+ */
 export interface RetryReportingOptions {
-  topic: Topic;
-  policy?: RetryPolicy;
-  logger?: Logger;
   /**
-   * Optional error hook. This reports retry attempts with:
-   * - phase = 'getSnapshot'
-   * - willRetry = true
+   * The topic associated with this provider, used for log context and error reporting.
+   */
+  topic: Topic;
+
+  /**
+   * Retry policy configuration. When omitted, the default {@link RetryPolicy} values are used.
+   */
+  policy?: RetryPolicy;
+
+  /**
+   * Logger instance for emitting structured retry warnings.
+   * When provided, a `warn`-level message is logged for each retry attempt.
+   */
+  logger?: Logger;
+
+  /**
+   * Optional error hook invoked on each retry attempt.
+   *
+   * The callback receives a {@link SyncErrorContext} with:
+   * - `phase` set to `'getSnapshot'`
+   * - `willRetry` set to `true`
+   * - `attempt` indicating which retry this is (1-based)
+   * - `nextDelayMs` indicating the backoff delay before the next attempt
+   *
+   * If this callback itself throws, the error is caught and logged
+   * (it does not affect the retry flow).
    */
   onError?: (ctx: SyncErrorContext) => void;
 }
 
 /**
- * Convenience wrapper: retries a provider and reports retry attempts via logger/onError.
+ * Wraps a {@link SnapshotProvider} with retries and reports each intermediate
+ * retry attempt via the provided logger and/or `onError` callback.
  *
- * Note: the final failure is still thrown by the provider; the engine will emit its own
- * `getSnapshot` error on that final failure. This wrapper is mainly for visibility into
- * intermediate retry attempts.
+ * This is a convenience wrapper around {@link withRetry} that integrates with
+ * the state-sync error reporting pipeline. On each retry attempt, it:
+ * 1. Logs a `warn`-level message via the logger (if provided).
+ * 2. Calls the `onError` hook (if provided) with a {@link SyncErrorContext}.
+ *
+ * The **final** failure (when all retries are exhausted) is still thrown and
+ * will be caught by the sync engine, which emits its own `getSnapshot` error.
+ * This wrapper provides visibility into the intermediate retry attempts only.
+ *
+ * @typeParam T - The snapshot data type carried inside the {@link SnapshotEnvelope}.
+ *
+ * @param provider - The original snapshot provider to wrap with retry and reporting logic.
+ * @param options - Configuration for retry behavior, logging, and error hooks.
+ * @returns A new {@link SnapshotProvider} with retry and reporting behavior.
+ *
+ * @throws The last error from the provider if all retry attempts are exhausted.
+ *
+ * @example
+ * ```ts
+ * import { withRetryReporting } from '@statesync/core';
+ *
+ * const provider = withRetryReporting(originalProvider, {
+ *   topic: 'user-profile',
+ *   policy: { maxAttempts: 5 },
+ *   logger: consoleLogger,
+ *   onError: (ctx) => metrics.increment('sync.retry', { topic: ctx.topic }),
+ * });
+ * ```
  */
 export function withRetryReporting<T>(
   provider: SnapshotProvider<T>,

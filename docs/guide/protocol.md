@@ -4,43 +4,45 @@ title: Protocol (mental model)
 
 # How state-sync works
 
-This page explains the invalidation-pull protocol that keeps state consistent across windows.
+The invalidation-pull protocol that keeps state consistent across windows, tabs, and processes.
 
 ## The pattern
 
-1. **Invalidation event** — a lightweight signal meaning "this state may have changed". It carries only a `topic` and `revision`, not the full data.
-2. The receiver does a **pull**: `provider.getSnapshot()`
-3. The engine applies the snapshot only if it is **newer** (revision gate).
+1. **Invalidation event** — a lightweight signal carrying `topic` and `revision` (not the full data).
+2. The engine **pulls** the latest snapshot: `provider.getSnapshot()`.
+3. The snapshot is applied only if its revision is **newer** than the local one.
 
 Why this works:
 - Events can arrive **out of order** — the revision gate rejects stale ones
 - Events can be **lost** — the pull always fetches the latest
-- The snapshot remains the **source of truth**
+- The snapshot is the **single source of truth**
 
 ## Key terms
 
 | Term | Meaning |
 |------|---------|
-| **Topic** | Unique string identifier for a piece of state (e.g., `'settings'`, `'cart'`) |
-| **Revision** | Monotonic counter (canonical decimal `u64` string: `"0"`, `"42"`, no leading zeros) |
-| **Invalidation** | Signal that says "state may have changed" — carries topic + revision only |
-| **Coalescing** | If multiple invalidation events arrive while a refresh is in progress, only one additional refresh is queued — not one per event |
-| **Snapshot** | Full state fetched from the provider (`{ revision, data }`) |
+| **Topic** | Non-empty string identifier for a piece of state (e.g., `'settings'`, `'cart'`) |
+| **Revision** | Monotonic counter — canonical decimal `u64` string (`"0"`, `"42"`, no leading zeros) |
+| **Invalidation** | Signal carrying `topic` + `revision`, optionally `sourceId` and `timestampMs` |
+| **Coalescing** | Multiple events during an in-flight refresh collapse into one queued refresh |
+| **Snapshot** | Full state from the provider: `{ revision, data }` |
 
 ## Contracts
 
 | Type | Fields |
 |------|--------|
-| `InvalidationEvent` | `topic: string`, `revision: Revision` |
+| `InvalidationEvent` | `topic: string`, `revision: Revision`, `sourceId?: string`, `timestampMs?: number` |
 | `SnapshotEnvelope<T>` | `revision: Revision`, `data: T` |
 
-`Revision` is a canonical decimal `u64` string (e.g. `"0"`, `"42"`, `"18446744073709551615"`).
+`Revision` is a branded `string` (`string & { __brand: 'Revision' }`). Valid values: canonical decimal `u64` — `"0"`, `"42"`, up to `"18446744073709551615"`. No leading zeros except `"0"` itself.
 
-## What is a protocol error
+## Protocol errors
 
-The engine reports `phase='protocol'` when:
-- `topic` is empty / not a string
-- `revision` is not canonical (`"01"`, `"abc"`, etc.)
+The engine emits `phase='protocol'` when:
+- `topic` is empty or not a string
+- `revision` is not canonical (`"01"`, `"abc"`, negative, exceeds u64 max)
+
+These checks apply to both invalidation events and snapshot envelopes.
 
 ## See also
 

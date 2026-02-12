@@ -20,7 +20,7 @@ Shopping cart that stays in sync across multiple browser tabs. When user adds it
 // stores/cart.ts
 import { create } from 'zustand';
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
   price: number;
@@ -80,25 +80,26 @@ export const useCartStore = create<CartState>((set, get) => ({
 ```typescript
 // sync/cart-sync.ts
 import { createRevisionSync, createConsoleLogger } from '@statesync/core';
+import type { Revision } from '@statesync/core';
 import { createZustandSnapshotApplier } from '@statesync/zustand';
 import {
   createPersistenceApplier,
   createLocalStorageBackend,
   loadPersistedSnapshot,
 } from '@statesync/persistence';
-import { useCartStore } from '../stores/cart';
+import { useCartStore, type CartItem } from '../stores/cart';
 
 // Revision tracking
 let currentRevision = 0;
 
-function getRevision(): string {
-  return currentRevision.toString();
+function getRevision(): Revision {
+  return currentRevision.toString() as Revision;
 }
 
-function incrementRevision(): string {
+function incrementRevision(): Revision {
   currentRevision++;
   localStorage.setItem('cart:revision', currentRevision.toString());
-  return currentRevision.toString();
+  return currentRevision.toString() as Revision;
 }
 
 // Initialize revision from localStorage
@@ -193,6 +194,7 @@ export async function initCartSync() {
 
 // Cleanup
 export function stopCartSync() {
+  applier.dispose();
   cartSync.stop();
   channel.close();
 }

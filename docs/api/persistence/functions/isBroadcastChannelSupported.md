@@ -10,10 +10,15 @@
 function isBroadcastChannelSupported(): boolean;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:93](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/cross-tab.ts#L93)
+Defined in: [persistence/src/cross-tab.ts:156](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L156)
 
-Check if BroadcastChannel is available.
+Checks whether the BroadcastChannel API is available in the current environment.
+
+Returns `false` in Node.js, Web Workers without BroadcastChannel support,
+and other restricted environments.
 
 ## Returns
 
 `boolean`
+
+`true` if `BroadcastChannel` is defined globally.

@@ -10,19 +10,25 @@
 function createMigrationBuilder<TFinal>(): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:116](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/migration.ts#L116)
+Defined in: [persistence/src/migration.ts:139](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L139)
 
-Builder for creating migration handlers with type safety.
+Creates a fluent builder for constructing [MigrationHandler](../interfaces/MigrationHandler.md) instances
+with full type safety across migration steps.
+
+The builder pattern ensures each migration step is explicitly typed,
+making it harder to introduce schema mismatches.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `TFinal` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `TFinal` | The shape of the application state in the final (current) schema version. |
 
 ## Returns
 
 [`MigrationBuilder`](../interfaces/MigrationBuilder.md)\<`TFinal`\>
+
+A new [MigrationBuilder](../interfaces/MigrationBuilder.md) instance with no migrations registered.
 
 ## Example
 

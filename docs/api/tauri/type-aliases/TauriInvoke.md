@@ -10,19 +10,23 @@
 type TauriInvoke = <T>(commandName, args?) => Promise<T>;
 ```
 
-Defined in: [transport.ts:28](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L28)
+Defined in: [transport.ts:69](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L69)
 
-Minimal structural type for Tauri `invoke`.
+Minimal structural type matching the Tauri `invoke` function signature.
+
+Accepts any function that:
+1. Takes a Tauri command name and an optional args record.
+2. Returns a promise resolving to the command's return value.
 
 Consumers can pass:
-- `invoke` from `@tauri-apps/api/core`
-- or any compatible function (for testing/mocking).
+- `invoke` from `@tauri-apps/api/core` (production)
+- A custom stub with the same shape (testing / mocking)
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The return type of the invoked Tauri command. |
 
 ## Parameters
 
@@ -34,3 +38,12 @@ Consumers can pass:
 ## Returns
 
 `Promise`\<`T`\>
+
+## Example
+
+```typescript
+import { invoke } from '@tauri-apps/api/core';
+
+// `invoke` satisfies TauriInvoke out of the box:
+const tauriInvoke: TauriInvoke = invoke;
+```

@@ -6,13 +6,28 @@
 
 # Interface: SnapshotApplier\<T\>
 
-Defined in: [types.ts:55](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L55)
+Defined in: [types.ts:181](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L181)
+
+Applies a fetched snapshot to local state.
+
+The engine calls [apply](#apply) after successfully
+fetching a snapshot that is newer than the current local revision.
+
+## Example
+
+```ts
+const applier: SnapshotApplier<UserProfile> = {
+  apply({ revision, data }) {
+    store.setState({ profile: data });
+  },
+};
+```
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Methods
 
@@ -22,14 +37,23 @@ Defined in: [types.ts:55](https://github.com/777genius/state-sync/blob/48102438d
 apply(snapshot): void | Promise<void>;
 ```
 
-Defined in: [types.ts:56](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L56)
+Defined in: [types.ts:191](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L191)
+
+Applies the given snapshot to local state.
+
+May be synchronous or asynchronous. If it returns a promise, the engine
+will await it before advancing the local revision.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | [`SnapshotEnvelope`](SnapshotEnvelope.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | [`SnapshotEnvelope`](SnapshotEnvelope.md)\<`T`\> | The [SnapshotEnvelope](SnapshotEnvelope.md) containing the revision and payload to apply. |
 
 #### Returns
 
 `void` \| `Promise`\<`void`\>
+
+#### Throws
+
+If the local state update fails.

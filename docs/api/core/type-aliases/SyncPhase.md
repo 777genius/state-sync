@@ -18,4 +18,18 @@ type SyncPhase =
   | "throttle";
 ```
 
-Defined in: [types.ts:65](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L65)
+Defined in: [types.ts:245](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L245)
+
+Identifies the phase of the sync lifecycle where an error occurred.
+
+Used in [SyncErrorContext](../interfaces/SyncErrorContext.md) to let error handlers categorize and
+route errors (e.g. alerting on `'protocol'` errors, retrying on `'getSnapshot'`).
+
+- `'start'`         - Error during initial engine startup.
+- `'subscribe'`     - Error while subscribing to invalidation events.
+- `'invalidation'`  - Error while processing an incoming invalidation event.
+- `'refresh'`       - General error during a refresh cycle.
+- `'getSnapshot'`   - Error while fetching the snapshot from the provider.
+- `'apply'`         - Error while applying the snapshot to local state.
+- `'protocol'`      - Protocol-level error (e.g. non-canonical revision, empty topic).
+- `'throttle'`      - Error in the throttling/debounce layer.

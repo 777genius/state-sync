@@ -10,27 +10,36 @@
 function withCrossTabSync<T>(storage, options): object;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:238](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/cross-tab.ts#L238)
+Defined in: [persistence/src/cross-tab.ts:335](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/cross-tab.ts#L335)
 
-Wrapper to add cross-tab sync to a storage backend.
+Wraps a storage backend's `save` method to automatically broadcast
+snapshots to other tabs after each successful save.
+
+This is a lower-level utility for cases where you want cross-tab sync
+without using the full [createPersistenceApplier](createPersistenceApplier.md). The returned
+object exposes both the wrapped `save` function and the underlying
+[CrossTabSync](../interfaces/CrossTabSync.md) instance for manual control.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `storage` | \{ `save`: `Promise`\<`void`\>; \} |
-| `storage.save` |
-| `options` | [`CrossTabSyncHandlers`](../interfaces/CrossTabSyncHandlers.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `storage` | \{ `save`: `Promise`\<`void`\>; \} | Any object with a `save` method (typically a [StorageBackend](../interfaces/StorageBackend.md)). |
+| `storage.save` | - |
+| `options` | [`CrossTabSyncHandlers`](../interfaces/CrossTabSyncHandlers.md)\<`T`\> | Cross-tab sync configuration and event handlers. |
 
 ## Returns
 
 `object`
+
+An object with a `save` method (broadcasts after writing) and
+  a `crossTab` property for direct access to the sync manager.
 
 ### crossTab
 
@@ -57,11 +66,14 @@ save(snapshot): Promise<void>;
 ## Example
 
 ```typescript
-const storage = withCrossTabSync(
+const { save, crossTab } = withCrossTabSync(
   createLocalStorageBackend({ key: 'my-state' }),
   {
     channelName: 'my-app-state',
     onSnapshot: (snapshot) => applier.apply(snapshot),
   },
 );
+
+await save(snapshot); // Saves to storage AND broadcasts to other tabs
+crossTab.dispose();   // Cleanup when done
 ```

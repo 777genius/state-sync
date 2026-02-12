@@ -220,12 +220,23 @@ function createEventEmitter<T>(): {
 // =============================================================================
 
 /**
- * Wraps an applier with automatic persistence.
+ * Creates a {@link DisposablePersistenceApplier} that wraps an inner applier
+ * with automatic persistence to a storage backend.
  *
- * On every apply(), the snapshot is saved to storage (with optional throttle/debounce).
- * The inner applier is always called, even if persistence fails.
+ * On every `apply()` call, the snapshot is forwarded to the inner applier
+ * **and** scheduled for saving to storage (with optional throttle/debounce).
+ * The inner applier is always called, even if the persistence write fails.
  *
- * IMPORTANT: Call dispose() when stopping sync to clean up pending timers.
+ * **Lifecycle:** Call {@link DisposablePersistenceApplier.dispose | dispose()}
+ * when stopping sync to clean up pending timers, event listeners, and
+ * BroadcastChannel connections. Optionally call
+ * {@link DisposablePersistenceApplier.flush | flush()} first to ensure
+ * pending data is saved.
+ *
+ * @typeParam T - The shape of the application state being persisted.
+ * @param options - Configuration for the persistence applier including storage
+ *   backend, inner applier, throttling, compression, and cross-tab sync settings.
+ * @returns A disposable persistence applier with event subscription and stats.
  *
  * @example
  * ```typescript
@@ -416,16 +427,35 @@ export function createPersistenceApplier<T>(
 // =============================================================================
 
 /**
- * Loads a persisted snapshot and applies it.
+ * Loads a persisted snapshot from storage, validates it, optionally migrates it,
+ * and applies it to the given applier.
  *
- * Use this to hydrate state before starting sync.
- * Returns the loaded snapshot, or null if none exists or if validation fails.
+ * Use this function to hydrate application state from cache **before** starting
+ * a live sync connection. The function performs several checks in order:
  *
- * Features:
- * - Revision validation
- * - Schema migration
- * - TTL expiration check
- * - Optional integrity verification
+ * 1. **Load** -- reads the snapshot (with metadata if the backend supports it)
+ * 2. **TTL check** -- discards expired snapshots unless `ignoreTTL` is set
+ * 3. **Integrity check** -- verifies hash if `verifyHash` is set and a hash exists
+ * 4. **Revision validation** -- ensures the revision string is canonical
+ * 5. **Migration** -- upgrades the data if the stored schema version is outdated
+ * 6. **Custom validation** -- runs the user-supplied validator (if any)
+ * 7. **Apply** -- delegates to the applier
+ *
+ * Returns the loaded snapshot on success, or `null` if nothing was stored,
+ * validation failed, the cache expired, or any other error occurred.
+ *
+ * This function supports two call signatures for backward compatibility:
+ * - `loadPersistedSnapshot(storage, applier, options)` -- preferred
+ * - `loadPersistedSnapshot(storage, applier, onError, options)` -- legacy
+ *
+ * @typeParam T - The shape of the application state.
+ * @param storage - The storage backend to load from.
+ * @param applier - An object with an `apply` method to receive the loaded snapshot.
+ * @param onErrorOrOptions - Either a {@link LoadOptions} object (preferred) or an
+ *   error callback function (legacy signature).
+ * @param loadOptions - Load options when the third argument is an error callback
+ *   (legacy signature only).
+ * @returns The loaded and applied snapshot, or `null` if loading/validation failed.
  *
  * @example
  * ```typescript
@@ -601,7 +631,19 @@ function isStorageWithMetadata<T>(
 // =============================================================================
 
 /**
- * Creates a persistence applier with common defaults.
+ * Creates a {@link DisposablePersistenceApplier} with sensible defaults
+ * pre-configured.
+ *
+ * Defaults applied:
+ * - **Throttling:** `debounceMs: 100`, `maxWaitMs: 2000` (if not provided)
+ * - **Cross-tab sync:** Enabled when `enableCrossTab` is `true` and a `topic`
+ *   is provided; the channel name defaults to `state-sync:<topic>`
+ *
+ * @typeParam T - The shape of the application state being persisted.
+ * @param options - All standard {@link PersistenceApplierOptions} plus:
+ *   - `topic` -- optional topic string used to derive the BroadcastChannel name
+ *   - `enableCrossTab` -- if `true` and `topic` is set, cross-tab sync is enabled
+ * @returns A disposable persistence applier configured with defaults.
  *
  * @example
  * ```typescript
@@ -614,7 +656,14 @@ function isStorageWithMetadata<T>(
  */
 export function createPersistenceApplierWithDefaults<T>(
   options: PersistenceApplierOptions<T> & {
+    /** Optional topic string used to derive the BroadcastChannel name (`state-sync:<topic>`). */
     topic?: string;
+    /**
+     * If `true` and {@link topic} is provided, cross-tab synchronization is
+     * automatically enabled using the derived channel name.
+     *
+     * @defaultValue `false`
+     */
     enableCrossTab?: boolean;
   },
 ): DisposablePersistenceApplier<T> {
@@ -630,7 +679,22 @@ export function createPersistenceApplierWithDefaults<T>(
 }
 
 /**
- * Clear persisted data from storage.
+ * Clears all persisted data from the given storage backend and optionally
+ * notifies other tabs via BroadcastChannel.
+ *
+ * If the storage backend does not implement `clear()`, this is a no-op for
+ * the storage part. Cross-tab notification is still sent if options are provided.
+ *
+ * @typeParam T - The shape of the application state.
+ * @param storage - The storage backend to clear.
+ * @param crossTabOptions - If provided, a temporary BroadcastChannel is opened
+ *   to notify other tabs that storage was cleared, then immediately disposed.
+ * @returns A promise that resolves when the storage has been cleared.
+ *
+ * @example
+ * ```typescript
+ * await clearPersistedData(storage, { channelName: 'state-sync:settings' });
+ * ```
  */
 export async function clearPersistedData<T>(
   storage: StorageBackend<T>,

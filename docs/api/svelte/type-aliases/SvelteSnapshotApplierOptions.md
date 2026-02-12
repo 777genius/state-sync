@@ -8,155 +8,21 @@
 
 ```ts
 type SvelteSnapshotApplierOptions<State, Data> = 
-  | {
-  mode?: "patch";
-  omitKeys?: ReadonlyArray<keyof State>;
-  pickKeys?: ReadonlyArray<keyof State>;
-  strict?: boolean;
-  toState?: (data, ctx) => Partial<State>;
-}
-  | {
-  mode: "replace";
-  omitKeys?: ReadonlyArray<keyof State>;
-  pickKeys?: ReadonlyArray<keyof State>;
-  strict?: boolean;
-  toState?: (data, ctx) => State;
-};
+  | SvelteStoreSnapshotApplierOptions<State, Data>
+| SvelteStateSnapshotApplierOptions<State, Data>;
 ```
 
-Defined in: [svelte.ts:26](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/svelte/src/svelte.ts#L26)
+Defined in: [svelte.ts:252](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/svelte/src/svelte.ts#L252)
+
+Union of all Svelte snapshot applier option shapes.
+
+Discriminated by the `target` field:
+- `'store'` (or omitted) -- [SvelteStoreSnapshotApplierOptions](SvelteStoreSnapshotApplierOptions.md)
+- `'state'` -- [SvelteStateSnapshotApplierOptions](SvelteStateSnapshotApplierOptions.md)
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `State` *extends* `Record`\<`string`, `unknown`\> |
-| `Data` |
-
-## Type Declaration
-
-```ts
-{
-  mode?: "patch";
-  omitKeys?: ReadonlyArray<keyof State>;
-  pickKeys?: ReadonlyArray<keyof State>;
-  strict?: boolean;
-  toState?: (data, ctx) => Partial<State>;
-}
-```
-
-### mode?
-
-```ts
-optional mode: "patch";
-```
-
-Default: 'patch'
-
-- 'patch': calls `store.update(current => ({ ...current, ...filteredPatch }))`
-  Spread merge creates a new reference (Svelte reactivity requires new reference).
-- 'replace': builds a new state keeping omitted keys from current,
-  assigns allowed keys from snapshot. Always creates a new reference.
-
-### omitKeys?
-
-```ts
-optional omitKeys: ReadonlyArray<keyof State>;
-```
-
-### pickKeys?
-
-```ts
-optional pickKeys: ReadonlyArray<keyof State>;
-```
-
-Limit which top-level keys are allowed to be updated by snapshots.
-
-Use this to keep ephemeral/local-only fields (like UI flags) isolated.
-
-### strict?
-
-```ts
-optional strict: boolean;
-```
-
-If true, throws when `toState` returns a non-object value.
-Default: true
-
-### toState()?
-
-```ts
-optional toState: (data, ctx) => Partial<State>;
-```
-
-Maps snapshot data to a state patch.
-
-Default: identity cast (treats `data` as `Partial<State>`).
-
-#### Parameters
-
-| Parameter | Type |
+| Type Parameter | Description |
 | ------ | ------ |
-| `data` | `Data` |
-| `ctx` | \{ `store`: [`SvelteStoreLike`](../interfaces/SvelteStoreLike.md)\<`State`\>; \} |
-| `ctx.store` | [`SvelteStoreLike`](../interfaces/SvelteStoreLike.md)\<`State`\> |
-
-#### Returns
-
-`Partial`\<`State`\>
-
-```ts
-{
-  mode: "replace";
-  omitKeys?: ReadonlyArray<keyof State>;
-  pickKeys?: ReadonlyArray<keyof State>;
-  strict?: boolean;
-  toState?: (data, ctx) => State;
-}
-```
-
-### mode
-
-```ts
-mode: "replace";
-```
-
-### omitKeys?
-
-```ts
-optional omitKeys: ReadonlyArray<keyof State>;
-```
-
-### pickKeys?
-
-```ts
-optional pickKeys: ReadonlyArray<keyof State>;
-```
-
-### strict?
-
-```ts
-optional strict: boolean;
-```
-
-### toState()?
-
-```ts
-optional toState: (data, ctx) => State;
-```
-
-Maps snapshot data to a full next state.
-
-When using 'replace', prefer returning the full state to avoid leaving stale keys.
-
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `Data` |
-| `ctx` | \{ `store`: [`SvelteStoreLike`](../interfaces/SvelteStoreLike.md)\<`State`\>; \} |
-| `ctx.store` | [`SvelteStoreLike`](../interfaces/SvelteStoreLike.md)\<`State`\> |
-
-#### Returns
-
-`State`
+| `State` *extends* `Record`\<`string`, `unknown`\> | The shape of the Svelte store or `$state` proxy. Must be a plain object. |
+| `Data` | The snapshot payload type received from the sync engine. |

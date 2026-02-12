@@ -6,15 +6,18 @@
 
 # Interface: PersistenceEvents\<T\>
 
-Defined in: [persistence/src/types.ts:221](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L221)
+Defined in: [persistence/src/types.ts:428](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L428)
 
-Persistence event handlers.
+Map of persistence lifecycle event names to their handler signatures.
+
+Subscribe to these events via [DisposablePersistenceApplier.on](DisposablePersistenceApplier.md#on) to
+observe save/load activity, errors, and cache management events.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state. |
 
 ## Properties
 
@@ -24,9 +27,9 @@ Persistence event handlers.
 cleared: () => void;
 ```
 
-Defined in: [persistence/src/types.ts:255](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L255)
+Defined in: [persistence/src/types.ts:480](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L480)
 
-Emitted when storage is cleared.
+Emitted when persisted data is cleared from storage.
 
 #### Returns
 
@@ -40,16 +43,16 @@ Emitted when storage is cleared.
 expired: (snapshot, age) => void;
 ```
 
-Defined in: [persistence/src/types.ts:245](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L245)
+Defined in: [persistence/src/types.ts:468](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L468)
 
-Emitted when cache expires due to TTL.
+Emitted when a cached snapshot is discarded because its TTL has expired.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
-| `age` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The expired snapshot. |
+| `age` | `number` | How old the snapshot was in milliseconds when it expired. |
 
 #### Returns
 
@@ -63,16 +66,16 @@ Emitted when cache expires due to TTL.
 loadComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:240](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L240)
+Defined in: [persistence/src/types.ts:460](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L460)
 
-Emitted when load completes.
+Emitted when a load operation completes (successfully or with no data).
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> \| `null` |
-| `durationMs` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> \| `null` | The loaded snapshot, or `null` if nothing was stored. |
+| `durationMs` | `number` | Wall-clock time the load took, in milliseconds. |
 
 #### Returns
 
@@ -86,15 +89,15 @@ Emitted when load completes.
 migrated: (result) => void;
 ```
 
-Defined in: [persistence/src/types.ts:250](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L250)
+Defined in: [persistence/src/types.ts:475](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L475)
 
-Emitted when data is migrated.
+Emitted when persisted data is successfully migrated to a newer schema version.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `result` | [`MigrationResult`](MigrationResult.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `result` | [`MigrationResult`](MigrationResult.md)\<`T`\> | The migration result including source/target versions and migrated data. |
 
 #### Returns
 
@@ -108,16 +111,16 @@ Emitted when data is migrated.
 saveComplete: (snapshot, durationMs) => void;
 ```
 
-Defined in: [persistence/src/types.ts:230](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L230)
+Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L442)
 
-Emitted when save completes successfully.
+Emitted when a save operation completes successfully.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
-| `durationMs` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The snapshot that was persisted. |
+| `durationMs` | `number` | Wall-clock time the save took, in milliseconds. |
 
 #### Returns
 
@@ -131,16 +134,18 @@ Emitted when save completes successfully.
 saveError: (error, snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:235](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L235)
+Defined in: [persistence/src/types.ts:452](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L452)
 
-Emitted when save fails.
+Emitted when a save operation fails.
+
+The inner applier still receives the snapshot -- only persistence is affected.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `error` | `unknown` |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `error` | `unknown` | The error thrown by the storage backend. |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The snapshot that failed to persist. |
 
 #### Returns
 
@@ -154,15 +159,15 @@ Emitted when save fails.
 saveStart: (snapshot) => void;
 ```
 
-Defined in: [persistence/src/types.ts:225](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L225)
+Defined in: [persistence/src/types.ts:434](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L434)
 
-Emitted when save starts.
+Emitted when a save operation begins, before data is written to storage.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The snapshot about to be persisted. |
 
 #### Returns
 

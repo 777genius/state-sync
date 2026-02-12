@@ -14,11 +14,15 @@ npm install @statesync/zustand @statesync/core
 
 ## API
 
-- `createZustandSnapshotApplier(store, options?)`
-  - `mode: 'patch' | 'replace'`
-  - `pickKeys` / `omitKeys` — protect local/ephemeral fields
-  - `toState(data, ctx)` — map snapshot data to state shape
-  - `strict` — throw on invalid mapping (default: `true`)
+`createZustandSnapshotApplier(store, options?)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `mode` | `'patch' \| 'replace'` | `'patch'` | Apply strategy (see below) |
+| `pickKeys` | `ReadonlyArray<keyof State>` | — | Only update these keys (mutually exclusive with `omitKeys`) |
+| `omitKeys` | `ReadonlyArray<keyof State>` | — | Protect these keys from updates |
+| `toState` | `(data, ctx) => Partial<State>` | identity | Map snapshot data to state shape. `ctx` contains `{ store }` |
+| `strict` | `boolean` | `true` | Throw if `toState` returns a non-object |
 
 ## Store interface
 
@@ -43,25 +47,46 @@ Any Zustand store created via `create()` satisfies this interface automatically.
 | `'patch'` (default) | `store.setState(filteredPatch)` — shallow merge |
 | `'replace'` | Builds new state keeping omitted keys, then `store.setState(rebuilt, true)` — atomic swap |
 
+::: tip Replace mode details
+In replace mode: reads current state, preserves `omitKeys`, merges snapshot, calls `setState(rebuilt, true)`. This ensures omitted keys survive while stale keys are removed.
+:::
+
 ## Example
 
 ```ts
 import { createRevisionSync } from '@statesync/core';
 import { createZustandSnapshotApplier } from '@statesync/zustand';
+import { useCartStore } from './stores/cart';
 
-const applier = createZustandSnapshotApplier(useMyStore, {
+const applier = createZustandSnapshotApplier(useCartStore, {
   mode: 'patch',
-  omitKeys: ['localUiFlag'],
+  omitKeys: ['isCheckingOut'],
 });
 
 const sync = createRevisionSync({
-  topic: 'app-config',
-  subscriber,  // see Quickstart for setup
-  provider,    // see Quickstart for setup
+  topic: 'cart',
+  subscriber,
+  provider,
   applier,
 });
 
 await sync.start();
+```
+
+### With toState mapping
+
+```ts
+interface CartDTO {
+  items: Array<{ sku: string; qty: number }>;
+  total: number;
+}
+
+const applier = createZustandSnapshotApplier(useCartStore, {
+  toState: (data: CartDTO, { store }) => ({
+    items: data.items,
+    totalPrice: data.total,
+  }),
+});
 ```
 
 ## See also
@@ -69,8 +94,3 @@ await sync.start();
 - [Quickstart](/guide/quickstart) — full wiring example
 - [React + Zustand example](/examples/react-zustand) — shopping cart synced across tabs
 - [Multi-window patterns](/guide/multi-window) — cross-tab architecture
-```
-
-::: tip Replace mode details
-In replace mode: reads current state → preserves `omitKeys` → merges snapshot → calls `setState(rebuilt, true)`. This ensures omitted keys survive while stale keys are removed.
-:::

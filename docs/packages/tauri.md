@@ -222,9 +222,10 @@ pub fn clear_settings_file(app: AppHandle) -> Result<(), String> {
 | `eventName` | `string` | Yes | Event name for invalidation |
 | `commandName` | `string` | Yes | Command name for getting snapshot |
 | `applier` | `SnapshotApplier` | Yes | Applier to update local state |
-| `args` | `object` | No | Extra args passed to invoke |
-| `throttling` | `object` | No | Throttling options |
-| `onError` | `function` | No | Error callback |
+| `args` | `Record<string, unknown>` | No | Extra args passed to invoke |
+| `shouldRefresh` | `(event: InvalidationEvent) => boolean` | No | Filter invalidation events |
+| `throttling` | `InvalidationThrottlingOptions` | No | Control refresh rate |
+| `onError` | `(ctx: SyncErrorContext) => void` | No | Error callback with phase context |
 | `logger` | `Logger` | No | Logger instance |
 
 ## Rust crate API {#rust-crate-api}

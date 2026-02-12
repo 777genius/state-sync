@@ -10,16 +10,28 @@
 function lzDecompress(compressed): string;
 ```
 
-Defined in: [persistence/src/compression.ts:63](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/compression.ts#L63)
+Defined in: [persistence/src/compression.ts:86](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L86)
 
-Decompress a string compressed with lzCompress.
+Decompress a string that was previously compressed with [lzCompress](lzCompress.md).
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `compressed` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `compressed` | `string` | The compressed string to decompress. Returns an empty string if input is falsy. |
 
 ## Returns
 
 `string`
+
+The original uncompressed string.
+
+## Throws
+
+If the compressed data is invalid or corrupt.
+
+## Example
+
+```typescript
+const original = lzDecompress(compressed);
+```

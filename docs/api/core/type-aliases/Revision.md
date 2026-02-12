@@ -10,7 +10,7 @@
 type Revision = string & object;
 ```
 
-Defined in: [types.ts:31](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L31)
+Defined in: [types.ts:41](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L41)
 
 Canonical decimal u64 string.
 

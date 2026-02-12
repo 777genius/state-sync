@@ -1,76 +1,195 @@
 import type { SnapshotApplier, SnapshotEnvelope } from '@statesync/core';
 
 /**
- * Minimal structural interface a Pinia store satisfies.
+ * Minimal structural interface that a Pinia store satisfies.
  *
  * We intentionally avoid importing `pinia` types here so this adapter stays
- * dependency-free (from Pinia) and can be used in environments where the adapter
- * code is not imported.
+ * dependency-free (from Pinia) and can be used in environments where the
+ * `pinia` package is not installed. Any object that structurally matches this
+ * interface — including a real `StoreGeneric` — can be passed to
+ * {@link createPiniaSnapshotApplier}.
  *
- * The real Pinia store implements:
- * - `$state`
- * - `$patch(partial | mutator)`
+ * The real Pinia store implements at minimum:
+ * - `$state` — reactive state object
+ * - `$patch(partial | mutator)` — the preferred way to batch-update state
+ *
+ * @typeParam State - The shape of the store's reactive state object.
  */
 export interface PiniaStoreLike<State extends Record<string, unknown>> {
   /**
-   * Optional store id (Pinia exposes `$id`). Useful only for debugging.
+   * Optional store identifier exposed by Pinia as `$id`.
+   *
+   * Not used by the adapter at runtime; included for debugging and logging
+   * convenience.
    */
   $id?: string;
+
+  /**
+   * The current reactive state of the store.
+   *
+   * Read by the adapter in `'replace'` mode to determine which keys need to
+   * be deleted when the incoming snapshot no longer contains them.
+   */
   $state: State;
+
+  /**
+   * Applies a partial state update or a mutator function to the store.
+   *
+   * In `'patch'` mode the adapter passes a plain partial object.
+   * In `'replace'` mode the adapter passes a mutator callback that deletes
+   * stale keys and assigns new ones.
+   *
+   * @param patch - Either a `Partial<State>` object whose keys will be
+   *   shallowly merged into the store, or a mutator function that receives
+   *   the current state and may mutate it directly.
+   */
   $patch(patch: Partial<State> | ((state: State) => void)): void;
 }
 
+/**
+ * The strategy used to apply incoming snapshot data to the Pinia store.
+ *
+ * - `'patch'` — Non-destructive shallow merge via `store.$patch(partial)`.
+ *   Existing keys not present in the snapshot are left untouched.
+ * - `'replace'` — Full top-level replacement via a `$patch` mutator callback.
+ *   Keys present in the store but absent from the snapshot are deleted.
+ */
 export type PiniaApplyMode = 'patch' | 'replace';
 
+/**
+ * Internal discriminated union constraining `pickKeys` / `omitKeys` to be
+ * mutually exclusive. At most one of the two may be provided.
+ *
+ * @typeParam State - The shape of the store's reactive state object.
+ * @internal
+ */
 type PickOrOmitKeys<State extends Record<string, unknown>> =
   | { pickKeys?: ReadonlyArray<keyof State>; omitKeys?: never }
   | { pickKeys?: never; omitKeys?: ReadonlyArray<keyof State> }
   | { pickKeys?: never; omitKeys?: never };
 
+/**
+ * Configuration options for {@link createPiniaSnapshotApplier}.
+ *
+ * This is a discriminated union on the {@link PiniaApplyMode | mode} field:
+ *
+ * - When `mode` is `'patch'` (or omitted), `toState` is expected to return
+ *   `Partial<State>`.
+ * - When `mode` is `'replace'`, `toState` is expected to return the full
+ *   `State`.
+ *
+ * @typeParam State - The shape of the Pinia store's reactive state object.
+ * @typeParam Data  - The snapshot payload type received from the sync engine.
+ *                    Defaults to `State` when the snapshot data matches the
+ *                    store shape directly.
+ */
 export type PiniaSnapshotApplierOptions<State extends Record<string, unknown>, Data> =
   | {
       /**
-       * Default: 'patch'
+       * The apply strategy. Defaults to `'patch'`.
        *
-       * - 'patch': calls `store.$patch(partial)` (non-destructive)
-       * - 'replace': applies a top-level replace using `$patch((state) => ...)`:
+       * - `'patch'`: calls `store.$patch(partial)` — non-destructive shallow
+       *   merge. Existing keys not present in the snapshot are left untouched.
+       * - `'replace'`: applies a top-level replacement using
+       *   `$patch((state) => ...)`:
        *   - deletes keys not present in `nextState`
        *   - assigns keys present in `nextState`
        *
        * Why not `store.$state = nextState`?
-       * Pinia documents that assigning `$state` internally calls `$patch()`, so it
-       * does not reliably remove stale keys on its own.
+       * Pinia documents that assigning `$state` internally calls `$patch()`,
+       * so it does not reliably remove stale keys on its own.
+       *
+       * @defaultValue `'patch'`
        */
       mode?: 'patch';
+
       /**
-       * Maps snapshot data to a state patch.
+       * Maps raw snapshot data to a state patch object.
        *
-       * Default: identity cast (treats `data` as `Partial<State>`).
+       * Use this when the snapshot payload shape differs from the store state
+       * shape, or when you need to derive state from the payload plus current
+       * store state.
+       *
+       * @param data - The raw snapshot payload from the sync engine.
+       * @param ctx  - Context object providing access to the target store.
+       * @returns A partial state object to be shallow-merged into the store.
+       *
+       * @defaultValue Identity cast — treats `data` as `Partial<State>`.
        */
       toState?: (data: Data, ctx: { store: PiniaStoreLike<State> }) => Partial<State>;
+
       /**
-       * Limit which top-level keys are allowed to be updated by snapshots.
+       * An allowlist of top-level state keys that the applier is permitted to
+       * update. All other keys are left untouched.
        *
-       * Use this to keep ephemeral/local-only fields (like UI flags) isolated.
+       * Mutually exclusive with {@link omitKeys}.
+       *
+       * Use this to keep ephemeral or local-only fields (such as UI flags)
+       * isolated from remote synchronization.
        */
       pickKeys?: ReadonlyArray<keyof State>;
-      omitKeys?: ReadonlyArray<keyof State>;
+
       /**
-       * If true, throws when `toState` returns a non-object value.
-       * Default: true
+       * A denylist of top-level state keys that the applier must never update.
+       * All other keys are eligible for synchronization.
+       *
+       * Mutually exclusive with {@link pickKeys}.
+       */
+      omitKeys?: ReadonlyArray<keyof State>;
+
+      /**
+       * When `true`, the applier throws if `toState` returns a non-plain-object
+       * value (e.g., `null`, an array, or a primitive). When `false`, such
+       * values are silently ignored.
+       *
+       * @defaultValue `true`
        */
       strict?: boolean;
     }
   | {
-      mode: 'replace';
       /**
-       * Maps snapshot data to a full next state.
+       * Use `'replace'` mode for a full top-level state swap. Keys in the
+       * store that are not present in the incoming snapshot will be deleted
+       * (subject to key filtering).
+       */
+      mode: 'replace';
+
+      /**
+       * Maps raw snapshot data to the full next state.
        *
-       * When using 'replace', prefer returning the full state to avoid leaving stale keys.
+       * When using `'replace'` mode, prefer returning the complete state
+       * object to avoid accidentally leaving stale keys behind.
+       *
+       * @param data - The raw snapshot payload from the sync engine.
+       * @param ctx  - Context object providing access to the target store.
+       * @returns The full next state to replace the current store state with.
+       *
+       * @defaultValue Identity cast — treats `data` as `State`.
        */
       toState?: (data: Data, ctx: { store: PiniaStoreLike<State> }) => State;
+
+      /**
+       * An allowlist of top-level state keys that the applier is permitted to
+       * update. All other keys are left untouched.
+       *
+       * Mutually exclusive with {@link omitKeys}.
+       */
       pickKeys?: ReadonlyArray<keyof State>;
+
+      /**
+       * A denylist of top-level state keys that the applier must never update.
+       * All other keys are eligible for synchronization.
+       *
+       * Mutually exclusive with {@link pickKeys}.
+       */
       omitKeys?: ReadonlyArray<keyof State>;
+
+      /**
+       * When `true`, the applier throws if `toState` returns a non-plain-object
+       * value. When `false`, such values are silently ignored.
+       *
+       * @defaultValue `true`
+       */
       strict?: boolean;
     };
 
@@ -110,11 +229,78 @@ function filterTopLevelKeys<State extends Record<string, unknown>>(
 }
 
 /**
- * Creates a SnapshotApplier that applies snapshots into a Pinia store.
+ * Creates a {@link SnapshotApplier} that applies incoming snapshots into a
+ * Pinia store.
  *
- * This is a framework adapter: it only focuses on *how to apply a snapshot*
- * into a concrete state container. It does not fetch snapshots and does not
- * listen to invalidation events.
+ * This is a framework adapter: it only focuses on **how to apply a snapshot**
+ * into a concrete Pinia state container. It does not fetch snapshots and does
+ * not subscribe to invalidation events — those concerns belong to the sync
+ * engine (`@statesync/core`).
+ *
+ * **How state updates propagate:**
+ *
+ * 1. The sync engine receives an invalidation event and fetches a new
+ *    snapshot from the server.
+ * 2. The engine calls `applier.apply(envelope)` with the snapshot data.
+ * 3. This adapter maps the snapshot data to a state patch (via `toState`),
+ *    filters keys (via `pickKeys` / `omitKeys`), and applies the result
+ *    to the Pinia store through `$patch`.
+ * 4. Vue's reactivity system automatically re-renders any components that
+ *    depend on the updated state.
+ *
+ * @typeParam State - The shape of the Pinia store's reactive state object.
+ * @typeParam Data  - The snapshot payload type received from the sync engine.
+ *   Defaults to `State` when the snapshot data matches the store shape
+ *   directly.
+ *
+ * @param store   - The Pinia store (or any object satisfying
+ *   {@link PiniaStoreLike}) to apply snapshots into.
+ * @param options - Configuration for apply mode, key filtering, data mapping,
+ *   and strict validation. See {@link PiniaSnapshotApplierOptions}.
+ * @returns A {@link SnapshotApplier} whose `apply` method writes snapshot
+ *   data into the Pinia store.
+ *
+ * @throws {Error} When `strict` is `true` (the default) and `toState` returns
+ *   a non-plain-object value.
+ *
+ * @example Basic usage with a Pinia store (patch mode)
+ * ```ts
+ * import { defineStore } from 'pinia';
+ * import { createPiniaSnapshotApplier } from '@statesync/pinia';
+ * import { createRevisionSync } from '@statesync/core';
+ *
+ * const useProfileStore = defineStore('profile', {
+ *   state: () => ({ name: '', email: '', age: 0 }),
+ * });
+ *
+ * const store = useProfileStore();
+ * const applier = createPiniaSnapshotApplier(store);
+ *
+ * // Wire into the sync engine:
+ * const sync = createRevisionSync({
+ *   topic: 'user-profile',
+ *   subscriber: mySubscriber,
+ *   provider: mySnapshotProvider,
+ *   applier,
+ * });
+ * ```
+ *
+ * @example Replace mode with key filtering
+ * ```ts
+ * const applier = createPiniaSnapshotApplier(store, {
+ *   mode: 'replace',
+ *   omitKeys: ['localUiFlag'],
+ * });
+ * ```
+ *
+ * @example Custom data mapping
+ * ```ts
+ * interface ApiResponse { user: { name: string; email: string } }
+ *
+ * const applier = createPiniaSnapshotApplier<ProfileState, ApiResponse>(store, {
+ *   toState: (data) => data.user,
+ * });
+ * ```
  */
 export function createPiniaSnapshotApplier<State extends Record<string, unknown>, Data = State>(
   store: PiniaStoreLike<State>,

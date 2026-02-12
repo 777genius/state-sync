@@ -10,14 +10,37 @@
 function isCanonicalRevision(value): value is Revision;
 ```
 
-Defined in: [revision.ts:9](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/revision.ts#L9)
+Defined in: [revision.ts:57](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/revision.ts#L57)
+
+Checks whether a value is a valid canonical revision string.
+
+A canonical revision must:
+- Be a string
+- Match the pattern `^(0|[1-9][0-9]*)$` (no leading zeros except bare "0")
+- Represent a value within the unsigned 64-bit integer range (0 to 2^64 - 1)
+
+This is a TypeScript type guard that narrows the input to [Revision](../type-aliases/Revision.md).
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `value` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `unknown` | The value to validate. Can be of any type. |
 
 ## Returns
 
 `value is Revision`
+
+`true` if the value is a valid canonical revision string, `false` otherwise.
+
+## Example
+
+```ts
+import { isCanonicalRevision } from '@statesync/core';
+
+isCanonicalRevision('42');    // true
+isCanonicalRevision('0');     // true
+isCanonicalRevision('007');   // false (leading zeros)
+isCanonicalRevision(-1);      // false (not a string)
+isCanonicalRevision('abc');   // false (non-numeric)
+```

@@ -6,11 +6,13 @@
 
 # Interface: DisposablePersistenceApplier\<T\>
 
-Defined in: [persistence/src/types.ts:12](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L12)
+Defined in: [persistence/src/types.ts:16](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L16)
 
-Extended SnapshotApplier with dispose capability.
+Extended SnapshotApplier with lifecycle management for persistence.
 
-Call dispose() when stopping sync to clean up pending debounce timers.
+Wraps a standard applier with automatic save-to-storage behavior, throttling/debouncing,
+event subscriptions, and cross-tab synchronization. Call [dispose](#dispose) when stopping
+sync to clean up pending debounce timers, event listeners, and BroadcastChannel connections.
 
 ## Extends
 
@@ -18,9 +20,9 @@ Call dispose() when stopping sync to clean up pending debounce timers.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state being persisted. |
 
 ## Methods
 
@@ -30,17 +32,26 @@ Call dispose() when stopping sync to clean up pending debounce timers.
 apply(snapshot): void | Promise<void>;
 ```
 
-Defined in: [core/src/types.ts:56](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L56)
+Defined in: [core/src/types.ts:191](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L191)
+
+Applies the given snapshot to local state.
+
+May be synchronous or asynchronous. If it returns a promise, the engine
+will await it before advancing the local revision.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The SnapshotEnvelope containing the revision and payload to apply. |
 
 #### Returns
 
 `void` \| `Promise`\<`void`\>
+
+#### Throws
+
+If the local state update fails.
 
 #### Inherited from
 
@@ -56,10 +67,15 @@ SnapshotApplier.apply
 dispose(): void;
 ```
 
-Defined in: [persistence/src/types.ts:17](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L17)
+Defined in: [persistence/src/types.ts:26](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L26)
 
-Cancels any pending debounced save operations.
-Should be called when sync is stopped.
+Cancels any pending debounced/throttled save operations and releases all
+internal resources (timers, event listeners, BroadcastChannel).
+
+After calling dispose, the applier becomes inert -- subsequent calls to
+[apply](#apply), [flush](#flush), and event subscriptions are no-ops.
+
+Should be called when sync is stopped to prevent memory leaks.
 
 #### Returns
 
@@ -73,14 +89,18 @@ Should be called when sync is stopped.
 flush(): Promise<void>;
 ```
 
-Defined in: [persistence/src/types.ts:28](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L28)
+Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L44)
 
-Forces an immediate save of the last snapshot (if any pending).
-Useful before dispose() if you want to ensure data is saved.
+Forces an immediate save of the most recently queued snapshot (if any).
+
+Useful before calling [dispose](#dispose) to ensure no data is lost.
+Resolves immediately if there is no pending save.
 
 #### Returns
 
 `Promise`\<`void`\>
+
+A promise that resolves when the flush completes (or immediately if nothing is pending).
 
 ***
 
@@ -90,13 +110,16 @@ Useful before dispose() if you want to ensure data is saved.
 getStats(): PersistenceStats;
 ```
 
-Defined in: [persistence/src/types.ts:38](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L38)
+Defined in: [persistence/src/types.ts:71](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L71)
 
-Get current persistence statistics.
+Returns a snapshot of the current persistence statistics.
 
 #### Returns
 
 [`PersistenceStats`](PersistenceStats.md)
+
+A copy of the current [PersistenceStats](PersistenceStats.md) including save counts,
+  error counts, byte totals, and throttle metrics.
 
 ***
 
@@ -106,13 +129,16 @@ Get current persistence statistics.
 hasPendingSave(): boolean;
 ```
 
-Defined in: [persistence/src/types.ts:22](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L22)
+Defined in: [persistence/src/types.ts:34](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L34)
 
-Returns true if there's a pending save operation.
+Returns `true` if there is a pending save operation that has been scheduled
+but not yet written to storage.
 
 #### Returns
 
 `boolean`
+
+Whether a save is currently queued by the throttle/debounce handler.
 
 ***
 
@@ -122,9 +148,9 @@ Returns true if there's a pending save operation.
 on<K>(event, handler): () => void;
 ```
 
-Defined in: [persistence/src/types.ts:33](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/types.ts#L33)
+Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/types.ts#L63)
 
-Subscribe to persistence events.
+Subscribe to a persistence lifecycle event.
 
 #### Type Parameters
 
@@ -134,12 +160,14 @@ Subscribe to persistence events.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `event` | `K` |
-| `handler` | [`PersistenceEvents`](PersistenceEvents.md)\<`T`\>\[`K`\] |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `event` | `K` | The event name to listen for (e.g., `'saveComplete'`, `'saveError'`). |
+| `handler` | [`PersistenceEvents`](PersistenceEvents.md)\<`T`\>\[`K`\] | The callback invoked when the event fires. |
 
 #### Returns
+
+An unsubscribe function. Call it to remove the listener.
 
 ```ts
 (): void;
@@ -148,3 +176,14 @@ Subscribe to persistence events.
 ##### Returns
 
 `void`
+
+#### Example
+
+```typescript
+const unsub = applier.on('saveComplete', (snapshot, durationMs) => {
+  console.log(`Saved revision ${snapshot.revision} in ${durationMs}ms`);
+});
+
+// Later:
+unsub();
+```

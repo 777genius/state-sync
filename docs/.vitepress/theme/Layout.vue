@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
+import { useCodeblockCollapse } from 'vitepress-codeblock-collapse';
 import { computed, nextTick, provide } from 'vue';
-import { useCodeblockCollapse } from './codeblockCollapse';
+import 'vitepress-codeblock-collapse/style.css';
+import { useMermaidZoom } from 'vitepress-mermaid-zoom';
 import HeroVideo from './HeroVideo.vue';
-import { useMermaidZoom } from './mermaidZoom';
+import { useNavIcons } from './useNavIcons';
+import 'vitepress-mermaid-zoom/style.css';
 
 const { Layout } = DefaultTheme;
 const { isDark, page } = useData();
@@ -12,6 +15,7 @@ const { isDark, page } = useData();
 const pagePath = computed(() => page.value.relativePath);
 useCodeblockCollapse(pagePath);
 useMermaidZoom(pagePath);
+useNavIcons();
 
 const enableTransitions = () =>
   'startViewTransition' in document &&

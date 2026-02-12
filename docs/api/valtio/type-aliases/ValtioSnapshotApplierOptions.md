@@ -24,14 +24,23 @@ type ValtioSnapshotApplierOptions<State, Data> =
 };
 ```
 
-Defined in: [valtio.ts:18](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/valtio/src/valtio.ts#L18)
+Defined in: [valtio.ts:58](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/valtio/src/valtio.ts#L58)
+
+Configuration options for [createValtioSnapshotApplier](../functions/createValtioSnapshotApplier.md).
+
+This is a discriminated union on the [mode](ValtioApplyMode.md) field:
+
+- When `mode` is `'patch'` (or omitted), `toState` is expected to return
+  `Partial<State>`.
+- When `mode` is `'replace'`, `toState` is expected to return the full
+  `State`.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `State` *extends* `Record`\<`string`, `unknown`\> |
-| `Data` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `State` *extends* `Record`\<`string`, `unknown`\> | The shape of the Valtio proxy's state object. |
+| `Data` | The snapshot payload type received from the sync engine. Defaults to `State` when the snapshot data matches the proxy shape directly. |
 
 ## Type Declaration
 
@@ -51,11 +60,18 @@ Defined in: [valtio.ts:18](https://github.com/777genius/state-sync/blob/48102438
 optional mode: "patch";
 ```
 
-Default: 'patch'
+The apply strategy. Defaults to `'patch'`.
 
-- 'patch': iterates filtered keys and assigns `proxy[key] = value`
-- 'replace': first deletes allowed keys not in new state, then assigns
-  keys present in new state. The proxy reference stays the same.
+- `'patch'`: iterates filtered keys and assigns each one directly
+  on the proxy (`proxy[key] = value`). Keys not in the snapshot are
+  left untouched.
+- `'replace'`: first deletes allowed keys not present in the new
+  state, then assigns keys present in the new state. The proxy
+  reference remains the same throughout.
+
+#### Default Value
+
+`'patch'`
 
 ### omitKeys?
 
@@ -63,11 +79,24 @@ Default: 'patch'
 optional omitKeys: ReadonlyArray<keyof State>;
 ```
 
+A denylist of top-level state keys that the applier must never update.
+All other keys are eligible for synchronization.
+
+Mutually exclusive with pickKeys.
+
 ### pickKeys?
 
 ```ts
 optional pickKeys: ReadonlyArray<keyof State>;
 ```
+
+An allowlist of top-level state keys that the applier is permitted to
+update. All other keys are left untouched.
+
+Mutually exclusive with omitKeys.
+
+Use this to keep ephemeral or local-only fields (such as UI flags)
+isolated from remote synchronization.
 
 ### strict?
 
@@ -75,8 +104,13 @@ optional pickKeys: ReadonlyArray<keyof State>;
 optional strict: boolean;
 ```
 
-If true, throws when `toState` returns a non-object value.
-Default: true
+When `true`, the applier throws if `toState` returns a non-plain-object
+value (e.g., `null`, an array, or a primitive). When `false`, such
+values are silently ignored.
+
+#### Default Value
+
+`true`
 
 ### toState()?
 
@@ -84,21 +118,30 @@ Default: true
 optional toState: (data, ctx) => Partial<State>;
 ```
 
-Maps snapshot data to a state patch.
+Maps raw snapshot data to a state patch object.
 
-Default: identity cast (treats `data` as `Partial<State>`).
+Use this when the snapshot payload shape differs from the proxy state
+shape, or when you need to derive state from the payload plus current
+proxy state.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `Data` |
-| `ctx` | \{ `proxy`: [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\>; \} |
-| `ctx.proxy` | [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `Data` | The raw snapshot payload from the sync engine. |
+| `ctx` | \{ `proxy`: [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\>; \} | Context object providing access to the target proxy. |
+| `ctx.proxy` | [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\> | - |
 
 #### Returns
 
 `Partial`\<`State`\>
+
+A partial state object whose keys will be assigned to the
+  proxy.
+
+#### Default Value
+
+Identity cast — treats `data` as `Partial<State>`.
 
 ```ts
 {
@@ -116,11 +159,20 @@ Default: identity cast (treats `data` as `Partial<State>`).
 mode: "replace";
 ```
 
+Use `'replace'` mode for a full top-level state swap on the proxy.
+Allowed keys not present in the incoming snapshot are deleted; the
+proxy reference itself is never replaced.
+
 ### omitKeys?
 
 ```ts
 optional omitKeys: ReadonlyArray<keyof State>;
 ```
+
+A denylist of top-level state keys that the applier must never update.
+All other keys are eligible for synchronization.
+
+Mutually exclusive with pickKeys.
 
 ### pickKeys?
 
@@ -128,11 +180,23 @@ optional omitKeys: ReadonlyArray<keyof State>;
 optional pickKeys: ReadonlyArray<keyof State>;
 ```
 
+An allowlist of top-level state keys that the applier is permitted to
+update. All other keys are left untouched.
+
+Mutually exclusive with omitKeys.
+
 ### strict?
 
 ```ts
 optional strict: boolean;
 ```
+
+When `true`, the applier throws if `toState` returns a non-plain-object
+value. When `false`, such values are silently ignored.
+
+#### Default Value
+
+`true`
 
 ### toState()?
 
@@ -140,18 +204,25 @@ optional strict: boolean;
 optional toState: (data, ctx) => State;
 ```
 
-Maps snapshot data to a full next state.
+Maps raw snapshot data to the full next state.
 
-When using 'replace', prefer returning the full state to avoid leaving stale keys.
+When using `'replace'` mode, prefer returning the complete state
+object to avoid accidentally leaving stale keys behind.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `Data` |
-| `ctx` | \{ `proxy`: [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\>; \} |
-| `ctx.proxy` | [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `Data` | The raw snapshot payload from the sync engine. |
+| `ctx` | \{ `proxy`: [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\>; \} | Context object providing access to the target proxy. |
+| `ctx.proxy` | [`ValtioProxyLike`](ValtioProxyLike.md)\<`State`\> | - |
 
 #### Returns
 
 `State`
+
+The full next state to apply onto the proxy.
+
+#### Default Value
+
+Identity cast — treats `data` as `State`.

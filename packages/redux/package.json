@@ -1,0 +1,51 @@
+{
+  "name": "@statesync/redux",
+  "version": "2.0.0",
+  "description": "Redux adapter for state-sync — automatic store synchronization via HOF reducer wrapping",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "author": "777genius <iliyazelenkog@gmail.com>",
+  "keywords": [
+    "state-sync",
+    "redux",
+    "react",
+    "state",
+    "synchronization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/777genius/state-sync.git",
+    "directory": "packages/redux"
+  },
+  "bugs": "https://github.com/777genius/state-sync/issues",
+  "homepage": "https://github.com/777genius/state-sync#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@statesync/core": "^1.1.0"
+  },
+  "devDependencies": {
+    "@statesync/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}

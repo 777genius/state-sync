@@ -10,16 +10,18 @@
 function createLZCompressionAdapter(): CompressionAdapter;
 ```
 
-Defined in: [persistence/src/compression.ts:162](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/compression.ts#L162)
+Defined in: [persistence/src/compression.ts:187](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L187)
 
-Creates a compression adapter using built-in LZ compression.
+Creates a [CompressionAdapter](../interfaces/CompressionAdapter.md) using the built-in LZW compression.
 
-Typically achieves 40-70% compression on JSON data.
-No external dependencies required.
+This is a zero-dependency adapter that typically achieves 40-70% compression
+on JSON data. Suitable for most use cases where external libraries are undesirable.
 
 ## Returns
 
 [`CompressionAdapter`](../interfaces/CompressionAdapter.md)
+
+A compression adapter with algorithm name `'lz'`.
 
 ## Example
 

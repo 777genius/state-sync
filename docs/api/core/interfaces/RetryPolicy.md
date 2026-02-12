@@ -6,7 +6,24 @@
 
 # Interface: RetryPolicy
 
-Defined in: [retry.ts:3](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L3)
+Defined in: [retry.ts:30](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L30)
+
+Configuration for retry behavior with exponential backoff.
+
+All fields are optional and fall back to sensible defaults when omitted.
+The delay between retries grows exponentially: `initialDelayMs * backoffMultiplier ^ attempt`,
+capped at `maxDelayMs`.
+
+## Example
+
+```ts
+const policy: RetryPolicy = {
+  maxAttempts: 5,
+  initialDelayMs: 1000,
+  backoffMultiplier: 1.5,
+  maxDelayMs: 30_000,
+};
+```
 
 ## Properties
 
@@ -16,9 +33,16 @@ Defined in: [retry.ts:3](https://github.com/777genius/state-sync/blob/48102438d6
 optional backoffMultiplier: number;
 ```
 
-Defined in: [retry.ts:9](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L9)
+Defined in: [retry.ts:57](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L57)
 
-Exponential backoff multiplier. Default: 2
+Multiplier applied to the delay for each successive retry attempt.
+
+The delay for attempt N is: `initialDelayMs * backoffMultiplier ^ N`.
+Set to `1` for fixed-interval retries (no exponential growth).
+
+#### Default Value
+
+`2`
 
 ***
 
@@ -28,9 +52,15 @@ Exponential backoff multiplier. Default: 2
 optional initialDelayMs: number;
 ```
 
-Defined in: [retry.ts:7](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L7)
+Defined in: [retry.ts:47](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L47)
 
-Initial delay in ms. Default: 500
+Delay in milliseconds before the first retry attempt.
+
+Subsequent retries are scaled by [backoffMultiplier](#backoffmultiplier).
+
+#### Default Value
+
+`500`
 
 ***
 
@@ -40,9 +70,15 @@ Initial delay in ms. Default: 500
 optional maxAttempts: number;
 ```
 
-Defined in: [retry.ts:5](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L5)
+Defined in: [retry.ts:38](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L38)
 
-Max attempts (including the first try). Default: 3
+Maximum number of attempts including the initial try.
+
+For example, `maxAttempts: 3` means 1 initial try + 2 retries.
+
+#### Default Value
+
+`3`
 
 ***
 
@@ -52,6 +88,12 @@ Max attempts (including the first try). Default: 3
 optional maxDelayMs: number;
 ```
 
-Defined in: [retry.ts:11](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/retry.ts#L11)
+Defined in: [retry.ts:66](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/retry.ts#L66)
 
-Max delay in ms. Default: 10000
+Upper bound for the computed delay in milliseconds.
+
+Prevents the exponential backoff from growing unboundedly.
+
+#### Default Value
+
+`10_000`

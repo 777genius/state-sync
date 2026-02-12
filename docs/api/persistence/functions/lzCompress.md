@@ -10,17 +10,29 @@
 function lzCompress(input): string;
 ```
 
-Defined in: [persistence/src/compression.ts:18](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/compression.ts#L18)
+Defined in: [persistence/src/compression.ts:32](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L32)
 
-Compress a string using LZ-based compression.
-Returns a UTF-16 safe string for localStorage.
+Compress a string using a built-in LZW-based algorithm.
+
+The output is a UTF-16 safe string suitable for direct storage in
+localStorage or any string-based backend. The dictionary size is capped
+at 0xFFFE entries to stay within the BMP (Basic Multilingual Plane).
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `input` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `input` | `string` | The raw string to compress. Returns an empty string if input is falsy. |
 
 ## Returns
 
 `string`
+
+The compressed string representation.
+
+## Example
+
+```typescript
+const compressed = lzCompress(JSON.stringify(myState));
+const restored = JSON.parse(lzDecompress(compressed));
+```

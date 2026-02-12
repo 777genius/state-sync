@@ -6,13 +6,32 @@
 
 # Interface: CreateTauriRevisionSyncOptions\<T\>
 
-Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L15)
+Defined in: [sync.ts:46](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L46)
+
+Configuration for [createTauriRevisionSync](../functions/createTauriRevisionSync.md).
+
+Merges Tauri-specific transport options (event name, command name, IPC
+functions) with the core engine options (applier, logger, error handler,
+throttling) into a single flat object for ergonomic one-call setup.
+
+## Example
+
+```typescript
+const options: CreateTauriRevisionSyncOptions<MyState> = {
+  topic: 'my-state',
+  listen,
+  invoke,
+  eventName: 'state-sync:invalidation',
+  commandName: 'get_my_state',
+  applier: { apply: (snap) => store.setState(snap.data) },
+};
+```
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Properties
 
@@ -22,7 +41,14 @@ Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/48102438d6
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: [sync.ts:36](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L36)
+Defined in: [sync.ts:103](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L103)
+
+The applier responsible for integrating a fetched snapshot into your
+application state (e.g., updating a store, patching the UI).
+
+#### See
+
+SnapshotApplier
 
 ***
 
@@ -32,9 +58,11 @@ Defined in: [sync.ts:36](https://github.com/777genius/state-sync/blob/48102438d6
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [sync.ts:34](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L34)
+Defined in: [sync.ts:95](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L95)
 
-Optional invoke args passed to the snapshot command.
+Optional additional arguments forwarded to the snapshot command on every invoke.
+
+Useful for scoping the snapshot to a specific user, workspace, or resource.
 
 ***
 
@@ -44,9 +72,12 @@ Optional invoke args passed to the snapshot command.
 commandName: string;
 ```
 
-Defined in: [sync.ts:29](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L29)
+Defined in: [sync.ts:88](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L88)
 
-Tauri command name used to fetch a snapshot.
+The Tauri command name invoked to fetch the current snapshot.
+
+The Rust command must return a JSON object matching
+`{ revision: string, data: T }` (a SnapshotEnvelope).
 
 ***
 
@@ -56,9 +87,12 @@ Tauri command name used to fetch a snapshot.
 eventName: string;
 ```
 
-Defined in: [sync.ts:24](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L24)
+Defined in: [sync.ts:80](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L80)
 
-Event name used for invalidation events.
+The Tauri event name to listen on for invalidation notifications.
+
+Must match the event name emitted by the Rust backend
+(e.g., `app.emit("state-sync:invalidation", payload)`).
 
 ***
 
@@ -68,7 +102,15 @@ Event name used for invalidation events.
 invoke: TauriInvoke;
 ```
 
-Defined in: [sync.ts:19](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L19)
+Defined in: [sync.ts:72](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L72)
+
+A Tauri-compatible `invoke` function for calling Rust commands.
+
+Typically `invoke` from `@tauri-apps/api/core`.
+
+#### See
+
+[TauriInvoke](../type-aliases/TauriInvoke.md)
 
 ***
 
@@ -78,7 +120,15 @@ Defined in: [sync.ts:19](https://github.com/777genius/state-sync/blob/48102438d6
 listen: TauriListen;
 ```
 
-Defined in: [sync.ts:18](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L18)
+Defined in: [sync.ts:63](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L63)
+
+A Tauri-compatible `listen` function for subscribing to backend events.
+
+Typically `listen` from `@tauri-apps/api/event`.
+
+#### See
+
+[TauriListen](../type-aliases/TauriListen.md)
 
 ***
 
@@ -88,7 +138,12 @@ Defined in: [sync.ts:18](https://github.com/777genius/state-sync/blob/48102438d6
 optional logger: Logger;
 ```
 
-Defined in: [sync.ts:42](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L42)
+Defined in: [sync.ts:119](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L119)
+
+Optional structured logger for debug, warn, and error messages
+produced by the sync engine.
+
+Forwarded directly to the core engine's `logger` option.
 
 ***
 
@@ -98,7 +153,12 @@ Defined in: [sync.ts:42](https://github.com/777genius/state-sync/blob/48102438d6
 optional onError: (ctx) => void;
 ```
 
-Defined in: [sync.ts:43](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L43)
+Defined in: [sync.ts:127](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L127)
+
+Optional error callback invoked whenever the sync engine encounters
+a problem (failed snapshot fetch, apply error, protocol violation, etc.).
+
+Forwarded directly to the core engine's `onError` option.
 
 #### Parameters
 
@@ -118,9 +178,12 @@ Defined in: [sync.ts:43](https://github.com/777genius/state-sync/blob/48102438d6
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: [sync.ts:41](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L41)
+Defined in: [sync.ts:111](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L111)
 
-Optional pass-through options to core.
+Optional predicate evaluated before each refresh. If it returns `false`,
+the invalidation is silently ignored.
+
+Forwarded directly to the core engine's `shouldRefresh` option.
 
 #### Parameters
 
@@ -140,9 +203,14 @@ Optional pass-through options to core.
 optional throttling: InvalidationThrottlingOptions;
 ```
 
-Defined in: [sync.ts:48](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L48)
+Defined in: [sync.ts:135](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L135)
 
-Optional throttling configuration to control refresh rate.
+Optional throttling / debouncing configuration to control how often
+rapid invalidation events trigger a snapshot refresh.
+
+#### See
+
+InvalidationThrottlingOptions
 
 ***
 
@@ -152,4 +220,10 @@ Optional throttling configuration to control refresh rate.
 topic: string;
 ```
 
-Defined in: [sync.ts:16](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/sync.ts#L16)
+Defined in: [sync.ts:54](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/sync.ts#L54)
+
+A stable identifier for the synchronized domain or resource.
+
+Must be a non-empty string. This value is matched against the `topic`
+field in incoming InvalidationEvents so that only relevant
+events trigger a refresh.

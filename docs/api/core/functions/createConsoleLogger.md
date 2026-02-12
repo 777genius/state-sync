@@ -10,19 +10,41 @@
 function createConsoleLogger(options): Logger;
 ```
 
-Defined in: [logger.ts:22](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/logger.ts#L22)
+Defined in: [logger.ts:68](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L68)
 
-Creates a Logger backed by console.* with an optional prefix.
+Creates a [Logger](../interfaces/Logger.md) implementation backed by `console.debug`, `console.warn`,
+and `console.error`.
 
-This is intentionally tiny DX sugar so users can get useful logs without
-wiring a full logging system.
+This is intentionally minimal DX sugar so users can get structured logs without
+wiring a full logging framework. Each log call prepends the configured prefix
+and passes the optional `extra` payload as a second argument to the console method.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`ConsoleLoggerOptions`](../interfaces/ConsoleLoggerOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`ConsoleLoggerOptions`](../interfaces/ConsoleLoggerOptions.md) | Optional configuration for prefix and debug verbosity. Defaults to prefix `"[state-sync]"` and debug disabled. |
 
 ## Returns
 
 [`Logger`](../interfaces/Logger.md)
+
+A [Logger](../interfaces/Logger.md) instance that delegates to the global `console` object.
+
+## Example
+
+```ts
+import { createConsoleLogger } from '@statesync/core';
+
+// Basic usage with defaults
+const logger = createConsoleLogger();
+
+// Custom prefix and debug enabled
+const verboseLogger = createConsoleLogger({
+  prefix: '[my-app/sync]',
+  debug: true,
+});
+
+verboseLogger.debug('snapshot fetched', { revision: '42' });
+// Console output: [my-app/sync] snapshot fetched { revision: '42' }
+```

@@ -1,3 +1,7 @@
+---
+title: Troubleshooting
+---
+
 # Troubleshooting
 
 ::: tip Enable debug logging first
@@ -127,6 +131,67 @@ The `phase` field in `SyncErrorContext` helps you quickly identify the source of
 ## onError throws
 
 If the `onError` callback throws, the engine catches and logs it. The engine keeps running — a user callback cannot bring down the sync loop.
+
+## Persistence: localStorage quota exceeded
+
+**Error**: `localStorage quota exceeded for key "..."`
+
+**Cause**: localStorage has a ~5MB limit. Your state is too large.
+
+**Fix**: Switch to IndexedDB backend:
+
+```typescript
+import { createIndexedDBBackend } from '@statesync/persistence';
+
+const storage = createIndexedDBBackend({
+  dbName: 'my-app',
+  storeName: 'state-cache',
+  recordKey: 'my-data',
+});
+```
+
+Or enable compression to reduce size:
+
+```typescript
+import {
+  createPersistenceApplier,
+  createLZCompressionAdapter,
+} from '@statesync/persistence';
+
+const applier = createPersistenceApplier({
+  storage,
+  applier: innerApplier,
+  compression: createLZCompressionAdapter(),
+});
+```
+
+## Persistence: cached data not loading
+
+**Symptom**: `loadPersistedSnapshot` returns `null` even though data was saved.
+
+**Checklist**:
+
+| Check | How to verify |
+|-------|---------------|
+| TTL expired | Check if `ttlMs` is set and data is older than the TTL |
+| Schema version mismatch | Pass `migration` option to handle version upgrades |
+| Hash mismatch | If `verifyHash: true`, data may have been modified externally |
+| Invalid revision | Cached revision must be canonical (no leading zeros) |
+
+## Zustand actions in omitKeys
+
+**Symptom**: `toState` or snapshot apply throws because action functions are not plain objects.
+
+**Cause**: Zustand stores include action functions in `getState()`. If your snapshot data matches the full state shape, the applier may try to write functions.
+
+**Fix**: Use `pickKeys` to whitelist only data fields, or `omitKeys` to exclude actions:
+
+```typescript
+const applier = createZustandSnapshotApplier(useMyStore, {
+  mode: 'patch',
+  pickKeys: ['name', 'count', 'items'],
+});
+```
 
 ## See also
 

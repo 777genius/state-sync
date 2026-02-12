@@ -49,11 +49,24 @@ But two problems are hiding in this code, and they only surface under real-world
 
 When multiple events arrive in rapid succession, each triggers an `invoke()` call. These are async IPC round-trips — and they don't resolve in order:
 
-```
-Event rev=1 → fetch() ─────────────────── resolve (stale!)
-Event rev=2 → fetch() ────── resolve (latest)
-                                    ↓
-                              store.$patch(stale data)  ← rev=1 overwrites rev=2
+```mermaid
+sequenceDiagram
+    participant Store
+    participant IPC as IPC Bridge
+    participant Backend
+
+    Note over Store: Event rev=1 arrives
+    Store->>IPC: fetch() for rev=1
+    Note over Store: Event rev=2 arrives
+    Store->>IPC: fetch() for rev=2
+    IPC->>Backend: get_settings (rev=2)
+    IPC->>Backend: get_settings (rev=1)
+    Backend-->>IPC: snapshot rev=2
+    IPC-->>Store: resolve rev=2 (latest)
+    Store->>Store: $patch(rev=2 data) ✓
+    Backend-->>IPC: snapshot rev=1
+    IPC-->>Store: resolve rev=1 (stale!)
+    Store->>Store: $patch(rev=1 data) ✗ overwrites rev=2
 ```
 
 The fetch for revision 1 takes longer than revision 2. By the time it resolves, the store already has newer data — but `$patch` overwrites it with the stale snapshot. There's no guard against this because `localRevision` was checked *before* the fetch, not *after*.
@@ -86,20 +99,24 @@ Think of it like push notifications on your phone. The notification says "You ha
 
 The same principle applies here:
 
-```
-Window A changes settings
-       ↓
-Rust backend updates state, increments revision to "42"
-       ↓
-Backend broadcasts: { topic: "settings", revision: "42" }
-       ↓                                    ↓
-Window B receives event               Window C receives event
-       ↓                                    ↓
-"42" > my local "41"? Yes → fetch     "42" > my local "42"? No → skip
-       ↓
-invoke('get_settings') → { revision: "42", data: {...} }
-       ↓
-Apply to local store
+```mermaid
+sequenceDiagram
+    participant A as Window A
+    participant R as Rust Backend
+    participant B as Window B
+    participant C as Window C
+
+    A->>R: update_settings(new values)
+    R->>R: state updated, revision → "42"
+    R-->>B: { topic: "settings", revision: "42" }
+    R-->>C: { topic: "settings", revision: "42" }
+
+    Note over B: "42" > local "41"? → Yes
+    B->>R: invoke('get_settings')
+    R-->>B: { revision: "42", data: {...} }
+    B->>B: Apply to local store ✓
+
+    Note over C: "42" > local "42"? → No, skip
 ```
 
 This makes the system naturally tolerant to real-world IPC problems:
@@ -175,22 +192,57 @@ When a user drags a slider or types rapidly, the backend might broadcast dozens 
 
 state-sync's engine uses two booleans — `refreshInFlight` and `refreshQueued` — to solve this:
 
+**Without coalescing** — every event triggers a separate IPC round-trip:
+
+```mermaid
+sequenceDiagram
+    participant Events
+    participant Engine
+    participant Backend
+
+    Note over Events: t=0ms
+    Events->>Engine: rev=1
+    Engine->>Backend: fetch()
+    Note over Events: t=5ms
+    Events->>Engine: rev=2
+    Engine->>Backend: fetch()
+    Note over Events: t=10ms
+    Events->>Engine: rev=3
+    Engine->>Backend: fetch()
+    Note over Events: t=15ms
+    Events->>Engine: rev=4
+    Engine->>Backend: fetch()
+    Note over Events: t=20ms
+    Events->>Engine: rev=5
+    Engine->>Backend: fetch()
+    Note over Events: t=25ms
+    Events->>Engine: rev=6
+    Engine->>Backend: fetch()
+    Backend-->>Engine: 6 round-trips total
 ```
-Events arrive at t=0, t=5, t=10, t=15, t=20, t=25ms
 
-Without coalescing:
-  t=0   fetch() ──────────────────── apply(rev=1)
-  t=5   fetch() ─────────────── apply(rev=2)
-  t=10  fetch() ────────── apply(rev=3)        ← 6 IPC round-trips
-  t=15  fetch() ─────── apply(rev=4)
-  t=20  fetch() ──── apply(rev=5)
-  t=25  fetch() ── apply(rev=6)
+**With state-sync** — coalescing collapses rapid events into minimal fetches:
 
-With state-sync:
-  t=0   fetch() ──────────────────── apply(rev=3)
-        ↑ events at t=5,10 coalesced (refreshInFlight=true)
-  t=25  fetch() ────── apply(rev=6)            ← 2 IPC round-trips
-        ↑ one queued refresh picks up the latest
+```mermaid
+sequenceDiagram
+    participant Events
+    participant Engine
+    participant Backend
+
+    Note over Events: t=0ms
+    Events->>Engine: rev=1
+    Engine->>Backend: fetch() [refreshInFlight=true]
+    Note over Events: t=5ms
+    Events->>Engine: rev=2 → coalesced (refreshQueued=true)
+    Note over Events: t=10ms
+    Events->>Engine: rev=3 → coalesced
+    Backend-->>Engine: snapshot → apply(rev=3)
+    Note over Engine: refreshQueued=true → one more cycle
+    Note over Events: t=15, 20, 25ms
+    Events->>Engine: rev=4,5,6 → coalesced
+    Engine->>Backend: fetch() [queued refresh]
+    Backend-->>Engine: snapshot → apply(rev=6)
+    Note over Engine: 2 IPC round-trips total
 ```
 
 While a fetch is in-flight, all incoming events collapse into a single `refreshQueued = true` flag. When the in-flight fetch completes, the engine runs exactly one more cycle — which always gets the *latest* snapshot. The result: at most one queued fetch behind the in-flight one, regardless of how many events arrive.
@@ -328,7 +380,7 @@ const applier = createPiniaSnapshotApplier(piniaStore);
 const applier = createZustandSnapshotApplier(zustandStore);
 ```
 
-Five framework adapters are available: **Pinia**, **Zustand**, **Valtio**, **Svelte**, and **Vue** (reactive + ref). The Tauri transport adapter handles event subscription and snapshot fetching.
+Eight framework adapters are available: **Redux**, **Zustand**, **Jotai**, **MobX**, **Pinia**, **Valtio**, **Svelte**, and **Vue** (reactive + ref). The Tauri transport adapter handles event subscription and snapshot fetching.
 
 The core engine is **~3 KB gzipped**. Each adapter adds **~0.8 KB**.
 

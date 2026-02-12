@@ -6,7 +6,24 @@
 
 # Interface: InvalidationEvent
 
-Defined in: [types.ts:33](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L33)
+Defined in: [types.ts:60](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L60)
+
+An event signaling that the authoritative state for a given topic has changed.
+
+The engine uses this to decide whether a new snapshot should be fetched.
+Transport layers (WebSocket, SSE, polling, etc.) produce these events and
+deliver them via an [InvalidationSubscriber](InvalidationSubscriber.md).
+
+## Example
+
+```ts
+const event: InvalidationEvent = {
+  topic: 'user-profile',
+  revision: '42' as Revision,
+  sourceId: 'server-1',
+  timestampMs: Date.now(),
+};
+```
 
 ## Properties
 
@@ -16,7 +33,9 @@ Defined in: [types.ts:33](https://github.com/777genius/state-sync/blob/48102438d
 revision: Revision;
 ```
 
-Defined in: [types.ts:35](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L35)
+Defined in: [types.ts:64](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L64)
+
+The revision that the server has moved to. Must be a canonical decimal u64 string.
 
 ***
 
@@ -26,7 +45,10 @@ Defined in: [types.ts:35](https://github.com/777genius/state-sync/blob/48102438d
 optional sourceId: string;
 ```
 
-Defined in: [types.ts:36](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L36)
+Defined in: [types.ts:69](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L69)
+
+Optional identifier of the source that produced this event.
+Useful for deduplication or debugging in multi-source setups.
 
 ***
 
@@ -36,7 +58,10 @@ Defined in: [types.ts:36](https://github.com/777genius/state-sync/blob/48102438d
 optional timestampMs: number;
 ```
 
-Defined in: [types.ts:37](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L37)
+Defined in: [types.ts:74](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L74)
+
+Optional timestamp (milliseconds since epoch) of when the event was produced.
+The engine does not use this for ordering; it is informational only.
 
 ***
 
@@ -46,4 +71,6 @@ Defined in: [types.ts:37](https://github.com/777genius/state-sync/blob/48102438d
 topic: string;
 ```
 
-Defined in: [types.ts:34](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L34)
+Defined in: [types.ts:62](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L62)
+
+The topic this invalidation belongs to.

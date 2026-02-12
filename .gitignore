@@ -7,6 +7,12 @@ coverage/
 # Rust
 target/
 
+# Tauri codegen
+**/src-tauri/gen/
+
 # VitePress
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+
+# Medium drafts
+*.medium.md

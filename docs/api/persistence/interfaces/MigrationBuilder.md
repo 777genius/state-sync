@@ -6,15 +6,18 @@
 
 # Interface: MigrationBuilder\<TFinal\>
 
-Defined in: [persistence/src/migration.ts:147](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/migration.ts#L147)
+Defined in: [persistence/src/migration.ts:175](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L175)
 
-Migration builder interface.
+Fluent builder interface for constructing a [MigrationHandler](MigrationHandler.md).
+
+Created via [createMigrationBuilder](../functions/createMigrationBuilder.md). Allows chaining migration
+steps and an optional validator before producing the final handler.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `TFinal` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `TFinal` | The shape of the application state in the final (current) schema version. |
 
 ## Methods
 
@@ -24,27 +27,29 @@ Migration builder interface.
 addMigration<TFrom, TTo>(fromVersion, fn): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:151](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/migration.ts#L151)
+Defined in: [persistence/src/migration.ts:185](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L185)
 
-Add a migration from one version to the next.
+Register a migration function for a specific version step.
 
 #### Type Parameters
 
-| Type Parameter |
-| ------ |
-| `TFrom` |
-| `TTo` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `TFrom` | The data shape of the source version. |
+| `TTo` | The data shape of the target version (source version + 1). |
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `fromVersion` | `number` |
-| `fn` | [`MigrationFn`](../type-aliases/MigrationFn.md)\<`TFrom`, `TTo`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fromVersion` | `number` | The version number to migrate **from** (e.g., `1` for the v1 -> v2 step). |
+| `fn` | [`MigrationFn`](../type-aliases/MigrationFn.md)\<`TFrom`, `TTo`\> | The function that transforms data from `TFrom` to `TTo`. |
 
 #### Returns
 
 `MigrationBuilder`\<`TFinal`\>
+
+This builder instance for method chaining.
 
 ***
 
@@ -54,19 +59,21 @@ Add a migration from one version to the next.
 build(currentVersion): MigrationHandler<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:164](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/migration.ts#L164)
+Defined in: [persistence/src/migration.ts:204](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L204)
 
-Build the migration handler.
+Produce the finalized [MigrationHandler](MigrationHandler.md) with all registered migrations.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `currentVersion` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `currentVersion` | `number` | The current schema version number that the application expects. |
 
 #### Returns
 
 [`MigrationHandler`](MigrationHandler.md)\<`TFinal`\>
+
+A migration handler ready to be used with [loadPersistedSnapshot](../functions/loadPersistedSnapshot.md) or [migrateData](../functions/migrateData.md).
 
 ***
 
@@ -76,16 +83,18 @@ Build the migration handler.
 withValidator(fn): MigrationBuilder<TFinal>;
 ```
 
-Defined in: [persistence/src/migration.ts:159](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/migration.ts#L159)
+Defined in: [persistence/src/migration.ts:196](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/migration.ts#L196)
 
-Add a validator for the final data type.
+Attach a type-guard validator that checks the final migrated data.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `fn` | (`data`) => `data is TFinal` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fn` | (`data`) => `data is TFinal` | A function that returns `true` if `data` is a valid `TFinal`. |
 
 #### Returns
 
 `MigrationBuilder`\<`TFinal`\>
+
+This builder instance for method chaining.

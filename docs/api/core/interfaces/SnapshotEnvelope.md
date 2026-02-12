@@ -6,13 +6,28 @@
 
 # Interface: SnapshotEnvelope\<T\>
 
-Defined in: [types.ts:40](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L40)
+Defined in: [types.ts:94](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L94)
+
+A versioned wrapper around a snapshot payload.
+
+Returned by [SnapshotProvider.getSnapshot](SnapshotProvider.md#getsnapshot) and passed to
+[SnapshotApplier.apply](SnapshotApplier.md#apply). The `revision` field lets the engine
+determine whether the snapshot is newer than the locally held state.
+
+## Example
+
+```ts
+const envelope: SnapshotEnvelope<UserProfile> = {
+  revision: '42' as Revision,
+  data: { name: 'Alice', email: 'alice@example.com' },
+};
+```
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Properties
 
@@ -22,7 +37,9 @@ Defined in: [types.ts:40](https://github.com/777genius/state-sync/blob/48102438d
 data: T;
 ```
 
-Defined in: [types.ts:42](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L42)
+Defined in: [types.ts:98](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L98)
+
+The application-specific snapshot payload.
 
 ***
 
@@ -32,4 +49,6 @@ Defined in: [types.ts:42](https://github.com/777genius/state-sync/blob/48102438d
 revision: Revision;
 ```
 
-Defined in: [types.ts:41](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L41)
+Defined in: [types.ts:96](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L96)
+
+The revision this snapshot corresponds to.

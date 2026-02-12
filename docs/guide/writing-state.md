@@ -4,10 +4,10 @@ title: Writing state
 
 # Writing state
 
-state-sync handles the **read** path: backend → all windows. Your app handles the **write** path: UI → backend.
+state-sync handles the **read path**: backend to all windows. Your app handles the **write path**: UI to backend.
 
 ```
-User clicks → your code sends update → backend saves → emits invalidation → state-sync delivers to all windows
+UI action → send update → backend saves + bumps revision → emits invalidation → state-sync delivers to all windows
 ```
 
 ## Which pattern to use?
@@ -15,21 +15,20 @@ User clicks → your code sends update → backend saves → emits invalidation 
 | Pattern | When to use | Backend needed? |
 |---------|-------------|-----------------|
 | [Backend write](#backend-write) | Tauri, Electron, API server | Yes |
-| [Optimistic + broadcast](#optimistic-broadcast) | Browser tabs only, no backend | No |
+| [Optimistic + broadcast](#optimistic-broadcast) | Browser tabs, no backend | No |
 | [Optimistic + confirm](#optimistic-confirm) | API server with fast feedback | Yes |
 
 ## Backend write {#backend-write}
 
-Send change to backend. Backend updates state, increments revision, emits invalidation. state-sync picks it up automatically.
+Send the change to the backend. The backend saves, increments the revision, and emits an invalidation event. state-sync picks it up automatically.
 
 ```typescript
-// Frontend: send update
 await invoke('update_settings', { settings: { theme: 'dark' } });
-// Backend: saves, bumps revision, emits 'settings:invalidated'
-// state-sync: receives event, fetches snapshot, applies to all windows
+// Backend saves, bumps revision, emits 'settings:invalidated'
+// state-sync receives event → fetches snapshot → applies to all windows
 ```
 
-This is the simplest and most reliable pattern. The backend is always the source of truth.
+Simplest and most reliable pattern. The backend is the single source of truth.
 
 ## Optimistic + broadcast {#optimistic-broadcast}
 

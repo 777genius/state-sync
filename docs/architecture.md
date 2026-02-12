@@ -1,10 +1,10 @@
 # Architecture
 
-How state-sync keeps your app state consistent across windows, tabs, and processes.
+How state-sync keeps app state consistent across windows, tabs, and processes.
 
 ## High-level overview
 
-The library implements an **invalidation-pull** protocol: a lightweight event signals that something changed, and the receiver pulls the latest snapshot on demand.
+state-sync implements an **invalidation-pull** protocol: a lightweight event signals that state may have changed, and the receiver pulls the latest snapshot on demand.
 
 ```mermaid
 sequenceDiagram
@@ -33,7 +33,10 @@ graph LR
   Tauri["@statesync/tauri"]
 
   Pinia["@statesync/pinia"]
+  Redux["@statesync/redux"]
   Zustand["@statesync/zustand"]
+  Jotai["@statesync/jotai"]
+  MobX["@statesync/mobx"]
   Valtio["@statesync/valtio"]
   VueAdapter["@statesync/vue"]
   Svelte["@statesync/svelte"]
@@ -41,14 +44,20 @@ graph LR
   Core --> Persistence
   Core --> Tauri
   Core --> Pinia
+  Core --> Redux
   Core --> Zustand
+  Core --> Jotai
+  Core --> MobX
   Core --> Valtio
   Core --> VueAdapter
   Core --> Svelte
 
   subgraph Framework["Framework Adapters"]
     Pinia
+    Redux
     Zustand
+    Jotai
+    MobX
     Valtio
     VueAdapter
     Svelte
@@ -196,7 +205,7 @@ sequenceDiagram
 
 ## Revision comparison
 
-Revisions are canonical `u64` decimal strings (`"0"`, `"42"`, `"1843674407370955161"`). Comparison is simple and fast:
+Revisions are canonical `u64` decimal strings (`"0"`, `"42"`, up to `"18446744073709551615"`). Comparison is length-first, then lexicographic:
 
 ```mermaid
 flowchart TD
@@ -253,9 +262,10 @@ Each error includes `phase`, `topic`, `localRevision`, `error`, and optional `ev
 | Principle | How it's applied |
 |-----------|-----------------|
 | **Transport-agnostic** | Core knows nothing about Tauri, WebSocket, or BroadcastChannel. You provide a subscriber + provider. |
-| **Framework-agnostic** | Core knows nothing about Pinia, Zustand, or Vue. You provide an applier function. |
-| **Source of truth** | One canonical backend. All windows pull from the same provider. No circular sync. |
-| **Revision ordering** | Monotonic `u64` revisions. Stale events are rejected without network calls. |
-| **Coalescing** | Rapid bursts collapse into at most 2 refreshes. No thundering herd. |
+| **Framework-agnostic** | Core knows nothing about Pinia, Zustand, or Vue. You provide an applier. |
+| **Source of truth** | One canonical backend per topic. All windows pull from the same provider. No circular sync. |
+| **Revision ordering** | Monotonic `u64` revisions. Stale events are rejected before any network call. |
+| **Coalescing** | Rapid bursts collapse into at most 2 refreshes (current + 1 queued). No thundering herd. |
+| **Throttling** | Optional debounce/throttle layer controls refresh rate for high-frequency invalidation. |
 | **Graceful degradation** | Missing BroadcastChannel? No-op. Failed apply? Continue syncing. Every error is reported, nothing crashes. |
 | **Tiny footprint** | Core is 3.1 KB gzipped. Each adapter is ~0.8 KB. |

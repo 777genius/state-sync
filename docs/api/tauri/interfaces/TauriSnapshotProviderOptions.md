@@ -6,7 +6,9 @@
 
 # Interface: TauriSnapshotProviderOptions
 
-Defined in: [transport.ts:57](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L57)
+Defined in: [transport.ts:146](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L146)
+
+Configuration for [createTauriSnapshotProvider](../functions/createTauriSnapshotProvider.md).
 
 ## Properties
 
@@ -16,7 +18,18 @@ Defined in: [transport.ts:57](https://github.com/777genius/state-sync/blob/48102
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [transport.ts:60](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L60)
+Defined in: [transport.ts:175](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L175)
+
+Optional additional arguments forwarded to the Tauri command on every call.
+
+Useful for passing identifiers like a user ID or workspace key so the
+backend knows which slice of state to return.
+
+#### Example
+
+```typescript
+{ workspaceId: 'ws_abc123' }
+```
 
 ***
 
@@ -26,7 +39,18 @@ Defined in: [transport.ts:60](https://github.com/777genius/state-sync/blob/48102
 commandName: string;
 ```
 
-Defined in: [transport.ts:59](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L59)
+Defined in: [transport.ts:162](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L162)
+
+The name of the Tauri command that returns the current snapshot.
+
+The Rust command must return a JSON object matching
+`{ revision: string, data: T }` (i.e., a SnapshotEnvelope).
+
+#### Example
+
+```ts
+`'get_app_state'`
+```
 
 ***
 
@@ -36,4 +60,10 @@ Defined in: [transport.ts:59](https://github.com/777genius/state-sync/blob/48102
 invoke: TauriInvoke;
 ```
 
-Defined in: [transport.ts:58](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/tauri/src/transport.ts#L58)
+Defined in: [transport.ts:152](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/tauri/src/transport.ts#L152)
+
+A Tauri-compatible `invoke` function used to call Rust commands.
+
+#### See
+
+[TauriInvoke](../type-aliases/TauriInvoke.md)

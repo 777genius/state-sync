@@ -4,6 +4,13 @@
 
 # @statesync/persistence
 
+@statesync/persistence
+
+Persistence layer for state-sync. Provides automatic snapshot caching to
+localStorage, sessionStorage, IndexedDB, or custom backends with support
+for throttling/debouncing, LZ compression, schema migration, TTL expiration,
+integrity hashing, and cross-tab synchronization via BroadcastChannel.
+
 ## Interfaces
 
 - [CompressionAdapter](interfaces/CompressionAdapter.md)

@@ -28,22 +28,18 @@ graph TD
 
 ## Source of truth
 
-**Rule:** One authoritative source per topic.
+**Rule:** One authoritative source per topic. All windows pull from the backend, never from each other.
 
 ```typescript
-// Backend (Rust/Node) holds the truth
-// All windows fetch from it, never from each other
-
-// Good: All windows sync from backend
+// All windows fetch from the same backend
 const provider = {
   async getSnapshot() {
-    return invoke('get_settings'); // Rust command
+    return invoke('get_settings');
   }
 };
-
-// Bad: Windows syncing from each other
-// This creates circular dependencies and race conditions
 ```
+
+Windows syncing from each other creates circular dependencies and race conditions.
 
 ## Handling self-echo
 
@@ -66,15 +62,14 @@ const sync = createRevisionSync({
 });
 ```
 
-### Option 2: Let revision gate handle it
+### Option 2: Let the revision gate handle it
 
-The engine automatically skips applying snapshots with the same or lower revision:
+The engine skips events whose revision is <= the local revision, so the self-echo never triggers a refresh:
 
 ```typescript
-// Window A: applies revision 5
-// Window A: receives self-echo with revision 5
-// Engine: skips (5 <= 5)
-// No wasted refresh!
+// Window A: applies revision 5 → localRevision = "5"
+// Window A: receives self-echo with revision "5"
+// Engine: "5" <= "5" → skip (no network call)
 ```
 
 ## Topic naming
@@ -136,19 +131,18 @@ import {
   createLocalStorageBackend,
 } from '@statesync/persistence';
 
-const storage = createLocalStorageBackend({ key: 'settings' });
-
 const applier = createPersistenceApplier({
-  storage,
+  storage: createLocalStorageBackend({ key: 'settings' }),
   applier: innerApplier,
   crossTabSync: {
     channelName: 'settings-sync',
-    receiveUpdates: true,
-    broadcastSaves: true,
+    receiveUpdates: true,  // apply snapshots from other tabs
+    broadcastSaves: true,  // broadcast saves to other tabs
   },
 });
 
-// Now tabs automatically sync via BroadcastChannel
+// Tabs automatically sync via BroadcastChannel.
+// Call applier.dispose() on cleanup to close the channel.
 ```
 
 ## Debugging multi-window issues

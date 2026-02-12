@@ -10,9 +10,18 @@
 type Topic = string;
 ```
 
-Defined in: [types.ts:18](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/types.ts#L18)
+Defined in: [types.ts:28](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/types.ts#L28)
 
-A stable identifier for a synchronized domain/resource.
+A stable identifier for a synchronized domain or resource.
+
+Topics are used to scope invalidation events and snapshots so that
+multiple independent sync loops can coexist without interfering.
 
 v0 runtime rule (validated by the engine on input):
-- MUST be a non-empty string after trim()
+- MUST be a non-empty string after `trim()`
+
+## Example
+
+```ts
+const topic: Topic = 'user-profile';
+```

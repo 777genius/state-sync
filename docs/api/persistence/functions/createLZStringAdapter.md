@@ -10,25 +10,28 @@
 function createLZStringAdapter(lzString): CompressionAdapter;
 ```
 
-Defined in: [persistence/src/compression.ts:184](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/persistence/src/compression.ts#L184)
+Defined in: [persistence/src/compression.ts:214](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/persistence/src/compression.ts#L214)
 
-Creates a compression adapter using external lz-string library.
+Creates a [CompressionAdapter](../interfaces/CompressionAdapter.md) backed by the external `lz-string` library.
 
-Better compression ratio than built-in, but requires external dependency.
+Offers better compression ratios than the built-in adapter but requires
+`lz-string` as a peer dependency. Uses UTF-16 encoding for localStorage safety.
 
 Install: `pnpm add lz-string`
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `lzString` | \{ `compressToUTF16`: (`input`) => `string`; `decompressFromUTF16`: (`input`) => `string` \| `null`; \} |
-| `lzString.compressToUTF16` | (`input`) => `string` |
-| `lzString.decompressFromUTF16` | (`input`) => `string` \| `null` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `lzString` | \{ `compressToUTF16`: (`input`) => `string`; `decompressFromUTF16`: (`input`) => `string` \| `null`; \} | The `lz-string` module or an object with compatible `compressToUTF16` and `decompressFromUTF16` methods. |
+| `lzString.compressToUTF16` | (`input`) => `string` | - |
+| `lzString.decompressFromUTF16` | (`input`) => `string` \| `null` | - |
 
 ## Returns
 
 [`CompressionAdapter`](../interfaces/CompressionAdapter.md)
+
+A compression adapter with algorithm name `'lz-string'`.
 
 ## Example
 

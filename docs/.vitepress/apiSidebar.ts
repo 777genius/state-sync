@@ -12,11 +12,15 @@ const PACKAGE_ORDER = [
   'core',
   'persistence',
   'pinia',
+  'redux',
   'zustand',
+  'jotai',
+  'mobx',
   'valtio',
   'svelte',
   'vue',
   'tauri',
+  'electron',
 ];
 
 const SUBCATEGORY_LABELS: Record<string, string> = {

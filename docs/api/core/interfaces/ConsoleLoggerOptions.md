@@ -6,7 +6,10 @@
 
 # Interface: ConsoleLoggerOptions
 
-Defined in: [logger.ts:3](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/logger.ts#L3)
+Defined in: [logger.ts:18](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L18)
+
+Configuration options for the console-based logger created by
+[createConsoleLogger](../functions/createConsoleLogger.md).
 
 ## Properties
 
@@ -16,10 +19,16 @@ Defined in: [logger.ts:3](https://github.com/777genius/state-sync/blob/48102438d
 optional debug: boolean;
 ```
 
-Defined in: [logger.ts:13](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/logger.ts#L13)
+Defined in: [logger.ts:36](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L36)
 
-If true, debug() logs are emitted. Otherwise debug() is a no-op.
-Default: false
+Whether `debug()`-level messages are emitted.
+
+When `false`, calls to `debug()` are silently dropped (no-op).
+Set to `true` during development or troubleshooting to see verbose sync output.
+
+#### Default Value
+
+`false`
 
 ***
 
@@ -29,7 +38,12 @@ Default: false
 optional prefix: string;
 ```
 
-Defined in: [logger.ts:8](https://github.com/777genius/state-sync/blob/48102438d6533c027adaec4c679c6d12555df57e/packages/core/src/logger.ts#L8)
+Defined in: [logger.ts:26](https://github.com/777genius/state-sync/blob/434e90dae1bbdcb8d24f484b34449c31d0e7a883/packages/core/src/logger.ts#L26)
 
-Prefix added to each log line.
-Default: "[state-sync]"
+A string prefix prepended to every log message.
+
+Useful for distinguishing state-sync logs from other console output.
+
+#### Default Value
+
+`"[state-sync]"`

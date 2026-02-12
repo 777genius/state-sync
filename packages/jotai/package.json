@@ -1,0 +1,52 @@
+{
+  "name": "@statesync/jotai",
+  "version": "1.0.0",
+  "description": "Jotai adapter for state-sync — automatic atom synchronization",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "author": "777genius <iliyazelenkog@gmail.com>",
+  "keywords": [
+    "state-sync",
+    "jotai",
+    "react",
+    "atoms",
+    "state",
+    "synchronization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/777genius/state-sync.git",
+    "directory": "packages/jotai"
+  },
+  "bugs": "https://github.com/777genius/state-sync/issues",
+  "homepage": "https://github.com/777genius/state-sync#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@statesync/core": "^1.1.0"
+  },
+  "devDependencies": {
+    "@statesync/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}
