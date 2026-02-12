@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress';
 
-const frameworks = [
+const stateAdapters = [
   { name: 'Redux', link: '/packages/redux', color: '#764abc' },
   { name: 'Zustand', link: '/packages/zustand', color: '#433e38' },
   { name: 'Jotai', link: '/packages/jotai', color: '#000000' },
@@ -10,6 +10,9 @@ const frameworks = [
   { name: 'Valtio', link: '/packages/valtio', color: '#764abc' },
   { name: 'Svelte', link: '/packages/svelte', color: '#ff3e00' },
   { name: 'Vue', link: '/packages/vue', color: '#42b883' },
+];
+
+const runtimeAdapters = [
   { name: 'Tauri', link: '/packages/tauri', color: '#ffc131' },
   { name: 'Electron', link: '/packages/electron', color: '#47848f' },
 ];
@@ -18,7 +21,7 @@ const frameworks = [
 <template>
   <div class="framework-grid">
     <a
-      v-for="fw in frameworks"
+      v-for="fw in stateAdapters"
       :key="fw.name"
       :href="withBase(fw.link)"
       class="framework-card"
@@ -82,8 +85,23 @@ const frameworks = [
           <path d="M2 3h4l6 10.1L18 3h4L12 21.5z" :fill="fw.color"/>
           <path d="M6.8 3h4.4L12 4.8 12.8 3h4.4L12 13.2z" fill="#35495e"/>
         </svg>
+      </span>
+      <span class="framework-name">{{ fw.name }}</span>
+    </a>
+
+    <div class="section-divider">
+      <span class="section-label">Desktop Runtimes</span>
+    </div>
+
+    <a
+      v-for="fw in runtimeAdapters"
+      :key="fw.name"
+      :href="withBase(fw.link)"
+      class="framework-card runtime-card"
+    >
+      <span class="framework-logo">
         <!-- Tauri -->
-        <svg v-else-if="fw.name === 'Tauri'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg v-if="fw.name === 'Tauri'" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <circle cx="15" cy="7.5" r="5.5" fill="none" :stroke="fw.color" stroke-width="2" class="icon-stroke"/>
           <circle cx="9" cy="16.5" r="5.5" fill="none" :stroke="fw.color" stroke-width="2" class="icon-stroke"/>
           <circle cx="15" cy="7.5" r="2" :fill="fw.color" class="icon-fill"/>
@@ -154,5 +172,34 @@ const frameworks = [
 
 .framework-name {
   line-height: 1;
+}
+
+.section-divider {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--vp-c-divider);
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vp-c-text-3);
+  white-space: nowrap;
+}
+
+.runtime-card {
+  border-style: dashed;
 }
 </style>
