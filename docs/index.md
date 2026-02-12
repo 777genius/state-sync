@@ -122,15 +122,15 @@ npm install @statesync/tauri    # Tauri v2
 
 | Scenario | Problem state-sync solves |
 |----------|---------------------------|
-| Multi-window app (Tauri, Electron) | State diverges between windows |
-| Multiple browser tabs | User edits in tab A, tab B shows stale data |
+| Multi-window desktop app (Tauri, Electron) | State diverges between windows/processes |
+| Multi-process architecture | Main ↔ renderer processes lose sync |
 | Backend pushes state updates | Events arrive out of order, UI flickers |
-| State must survive reload | Need persistence with proper invalidation |
+| State must survive restart | Need persistence with proper invalidation |
 
 **No, if you have:**
 
-- Single-window app with no persistence needs
-- Simple localStorage that never syncs with backend
+- Single-window app with no cross-process communication
+- Simple in-memory state that never leaves the process
 - Already using a solution like TanStack Query for server state
 
 ## How it works
