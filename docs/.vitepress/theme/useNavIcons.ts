@@ -2,19 +2,21 @@ import { useData } from 'vitepress';
 import { onMounted, onUnmounted, watchEffect } from 'vue';
 import { packageIcons } from './package-icons';
 
+const SLUG = '{slug}';
+
 const targets = [
-  '.VPMenu a[href$="/packages/$"]::before',
-  '.VPNavScreenMenuGroupLink a[href$="/packages/$"]::before',
-  '.VPSidebarItem a.link[href$="/packages/$"]::before',
+  `.VPMenu a[href$="/packages/${SLUG}"]::before`,
+  `.VPNavScreenMenuGroupLink a[href$="/packages/${SLUG}"]::before`,
+  `.VPSidebarItem a.link[href$="/packages/${SLUG}"]::before`,
 ];
 
 function sel(slug: string) {
-  return targets.map((t) => t.replace('$', slug)).join(',\n');
+  return targets.map((t) => t.replaceAll(SLUG, slug)).join(',\n');
 }
 
 function baseSelectors() {
   return Object.keys(packageIcons)
-    .flatMap((slug) => targets.map((t) => t.replace('$', slug)))
+    .flatMap((slug) => targets.map((t) => t.replaceAll(SLUG, slug)))
     .join(',\n');
 }
 
