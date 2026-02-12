@@ -70,8 +70,9 @@ export function generateApiSidebar(): SidebarItem[] {
 
     return {
       text: `@statesync/${pkg}`,
+      link: `${basePath}/`,
       collapsed: true,
-      items: [{ text: 'Overview', link: `${basePath}/` }, ...subcategories],
+      items: subcategories,
     };
   });
 
