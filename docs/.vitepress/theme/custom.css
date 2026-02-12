@@ -159,3 +159,100 @@
 .dark::view-transition-old(root) {
   z-index: 9999;
 }
+
+/* Nav dropdown package icons — desktop & mobile */
+.VPMenu a[href*="/packages/"]::before,
+.VPNavScreenMenuGroupLink a[href*="/packages/"]::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+/* core — gear/engine */
+.VPMenu a[href$="/packages/core"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/core"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233178c6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E");
+}
+
+/* persistence — database/storage */
+.VPMenu a[href$="/packages/persistence"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/persistence"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='12' cy='5' rx='9' ry='3'/%3E%3Cpath d='M21 12c0 1.66-4 3-9 3s-9-1.34-9-3'/%3E%3Cpath d='M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5'/%3E%3C/svg%3E");
+}
+
+/* pinia — pineapple style */
+.VPMenu a[href$="/packages/pinia"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/pinia"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C9 2 7 5 7 9c0 5 2 8 5 12 3-4 5-7 5-12 0-4-2-7-5-7z' fill='%23ffd859'/%3E%3Cpath d='M10 2.5C9 1 10 0 11.5 0.5' stroke='%2342b883' stroke-width='1.5' fill='none'/%3E%3Cpath d='M14 2.5C15 1 14 0 12.5 0.5' stroke='%2342b883' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+}
+
+/* redux — purple atom */
+.VPMenu a[href$="/packages/redux"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/redux"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23764abc' stroke-width='1.5' transform='rotate(0)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23764abc' stroke-width='1.5' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23764abc' stroke-width='1.5' transform='rotate(120 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%23764abc'/%3E%3C/svg%3E");
+}
+
+/* zustand — bear face */
+.VPMenu a[href$="/packages/zustand"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/zustand"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='13' r='9' fill='%23433e38'/%3E%3Ccircle cx='5' cy='7' r='3.5' fill='%23433e38'/%3E%3Ccircle cx='19' cy='7' r='3.5' fill='%23433e38'/%3E%3Ccircle cx='5' cy='7' r='2' fill='%23c4a882'/%3E%3Ccircle cx='19' cy='7' r='2' fill='%23c4a882'/%3E%3Ccircle cx='9' cy='11' r='1.2' fill='%23111'/%3E%3Ccircle cx='15' cy='11' r='1.2' fill='%23111'/%3E%3Cellipse cx='12' cy='14' rx='2' ry='1.5' fill='%23c4a882'/%3E%3Ccircle cx='12' cy='13.5' r='1' fill='%23111'/%3E%3C/svg%3E");
+}
+
+.dark .VPMenu a[href$="/packages/zustand"]::before,
+.dark .VPNavScreenMenuGroupLink a[href$="/packages/zustand"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='13' r='9' fill='%23a08b6e'/%3E%3Ccircle cx='5' cy='7' r='3.5' fill='%23a08b6e'/%3E%3Ccircle cx='19' cy='7' r='3.5' fill='%23a08b6e'/%3E%3Ccircle cx='5' cy='7' r='2' fill='%23d4c4a2'/%3E%3Ccircle cx='19' cy='7' r='2' fill='%23d4c4a2'/%3E%3Ccircle cx='9' cy='11' r='1.2' fill='%23333'/%3E%3Ccircle cx='15' cy='11' r='1.2' fill='%23333'/%3E%3Cellipse cx='12' cy='14' rx='2' ry='1.5' fill='%23d4c4a2'/%3E%3Ccircle cx='12' cy='13.5' r='1' fill='%23333'/%3E%3C/svg%3E");
+}
+
+/* jotai — atom orbits */
+.VPMenu a[href$="/packages/jotai"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/jotai"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23333' stroke-width='1.2'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23333' stroke-width='1.2' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23333' stroke-width='1.2' transform='rotate(-60 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2.5' fill='%23333'/%3E%3C/svg%3E");
+}
+
+.dark .VPMenu a[href$="/packages/jotai"]::before,
+.dark .VPNavScreenMenuGroupLink a[href$="/packages/jotai"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23e5e5e5' stroke-width='1.2'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23e5e5e5' stroke-width='1.2' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%23e5e5e5' stroke-width='1.2' transform='rotate(-60 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2.5' fill='%23e5e5e5'/%3E%3C/svg%3E");
+}
+
+/* mobx — orange tree/graph */
+.VPMenu a[href$="/packages/mobx"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/mobx"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='5' r='3' fill='%23e05415'/%3E%3Ccircle cx='5' cy='17' r='3' fill='%23e05415'/%3E%3Ccircle cx='19' cy='17' r='3' fill='%23e05415'/%3E%3Cline x1='12' y1='8' x2='5' y2='14' stroke='%23e05415' stroke-width='1.5'/%3E%3Cline x1='12' y1='8' x2='19' y2='14' stroke='%23e05415' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+/* valtio — concentric circles / proxy */
+.VPMenu a[href$="/packages/valtio"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/valtio"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23764abc' stroke-width='1.5'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Ccircle cx='12' cy='12' r='6.5'/%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E");
+}
+
+/* svelte — orange S */
+.VPMenu a[href$="/packages/svelte"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/svelte"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M18.5 4.2c-2.3-2.6-6.2-3-9-1.1L5.6 5.8C4.4 6.7 3.6 8 3.3 9.5c-.2 1.1-.1 2.2.3 3.2-.5.8-.8 1.7-.9 2.6-.3 1.6.1 3.3 1.1 4.6 2.3 2.6 6.2 3 9 1.1l3.9-2.7c1.2-.9 2-2.2 2.3-3.7.2-1.1.1-2.2-.3-3.2.5-.8.8-1.7.9-2.6.3-1.6-.1-3.3-1.1-4.6z' fill='%23ff3e00'/%3E%3Cpath d='M9.2 18.7c-1.7.4-3.4-.3-4.2-1.7-.5-.7-.6-1.6-.5-2.4l.1-.5.2-.5.4.3c.6.5 1.3.8 2 1l.2.1v.2c0 .3.1.6.3.8.3.4.8.5 1.3.4.1 0 .3-.1.4-.2l3.9-2.7c.3-.2.4-.4.5-.7 0-.3 0-.6-.2-.9-.3-.4-.8-.5-1.3-.4-.1 0-.3.1-.4.2l-1.5 1c-.4.3-.9.5-1.4.6-1.7.4-3.4-.3-4.2-1.7-.5-.7-.6-1.6-.5-2.4.1-.8.6-1.5 1.2-2l3.9-2.7c.4-.3.9-.5 1.4-.6 1.7-.4 3.4.3 4.2 1.7.5.7.6 1.6.5 2.4l-.1.5-.2.5-.4-.3c-.6-.5-1.3-.8-2-1l-.2-.1V7c0-.3-.1-.6-.3-.8-.3-.4-.8-.5-1.3-.4-.1 0-.3.1-.4.2L8.6 8.7c-.3.2-.4.4-.5.7 0 .3 0 .6.2.9.3.4.8.5 1.3.4.1 0 .3-.1.4-.2l1.5-1c.4-.3.9-.5 1.4-.6 1.7-.4 3.4.3 4.2 1.7.5.7.6 1.6.5 2.4-.1.8-.6 1.5-1.2 2l-3.9 2.7c-.4.3-.9.4-1.3.5z' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+/* vue — green V */
+.VPMenu a[href$="/packages/vue"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/vue"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 3h4l6 10.5L18 3h4L12 22 2 3z' fill='%2342b883'/%3E%3Cpath d='M7 3l5 8.5L17 3h-3.5L12 6.5 10.5 3H7z' fill='%2335495e'/%3E%3C/svg%3E");
+}
+
+/* tauri — yellow rings */
+.VPMenu a[href$="/packages/tauri"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/tauri"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='9' cy='9' r='5.5' fill='none' stroke='%23ffc131' stroke-width='2'/%3E%3Ccircle cx='9' cy='9' r='2' fill='%23ffc131'/%3E%3Ccircle cx='15' cy='15' r='5.5' fill='none' stroke='%23ffc131' stroke-width='2'/%3E%3Ccircle cx='15' cy='15' r='2' fill='%23ffc131'/%3E%3C/svg%3E");
+}
+
+/* electron — blue atom */
+.VPMenu a[href$="/packages/electron"]::before,
+.VPNavScreenMenuGroupLink a[href$="/packages/electron"]::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%2347848f' stroke-width='1.3'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%2347848f' stroke-width='1.3' transform='rotate(60 12 12)'/%3E%3Cellipse cx='12' cy='12' rx='10' ry='4' fill='none' stroke='%2347848f' stroke-width='1.3' transform='rotate(120 12 12)'/%3E%3Ccircle cx='12' cy='12' r='2' fill='%2347848f'/%3E%3C/svg%3E");
+}
