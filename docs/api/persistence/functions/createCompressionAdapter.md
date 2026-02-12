@@ -10,19 +10,25 @@
 function createCompressionAdapter(options): CompressionAdapter;
 ```
 
-Defined in: [persistence/src/compression.ts:212](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/compression.ts#L212)
+Defined in: [persistence/src/compression.ts:249](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/compression.ts#L249)
 
-Creates a compression adapter using any compatible library.
+Creates a [CompressionAdapter](../interfaces/CompressionAdapter.md) from a user-supplied implementation.
+
+This is a convenience factory for wrapping any compression library that
+operates on strings. The returned adapter is the same object passed in --
+no wrapping or copying is performed.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`CompressionAdapter`](../interfaces/CompressionAdapter.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`CompressionAdapter`](../interfaces/CompressionAdapter.md) | An object implementing the [CompressionAdapter](../interfaces/CompressionAdapter.md) interface. |
 
 ## Returns
 
 [`CompressionAdapter`](../interfaces/CompressionAdapter.md)
+
+The same adapter object, typed as [CompressionAdapter](../interfaces/CompressionAdapter.md).
 
 ## Example
 

@@ -6,10 +6,22 @@
 
 # Interface: ElectronWebContentsLike
 
-Defined in: [types.ts:45](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/types.ts#L45)
+Defined in: [types.ts:147](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L147)
 
-Structural type for webContents-like object.
-Used by main-process broadcaster.
+Structural type matching a subset of Electron's `WebContents` API
+used by the main-process broadcaster to send invalidation events to renderers.
+
+Consumers can pass real `webContents` instances from `BrowserWindow.webContents`
+or any compatible mock/stub for testing.
+
+**Process context:** main process only.
+
+## Example
+
+```ts
+const targets: ElectronWebContentsLike[] = BrowserWindow.getAllWindows()
+  .map(w => w.webContents);
+```
 
 ## Methods
 
@@ -19,11 +31,16 @@ Used by main-process broadcaster.
 isDestroyed(): boolean;
 ```
 
-Defined in: [types.ts:46](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/types.ts#L46)
+Defined in: [types.ts:154](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L154)
+
+Returns `true` if the underlying native web contents has been destroyed.
+Used as a guard before calling [send](#send) to avoid runtime errors.
 
 #### Returns
 
 `boolean`
+
+Whether the web contents instance has been destroyed.
 
 ***
 
@@ -33,14 +50,17 @@ Defined in: [types.ts:46](https://github.com/777genius/state-sync/blob/ff3d517ba
 send(channel, ...args): void;
 ```
 
-Defined in: [types.ts:47](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/types.ts#L47)
+Defined in: [types.ts:163](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/types.ts#L163)
+
+Sends an asynchronous IPC message to the renderer process associated
+with this web contents instance.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `channel` | `string` |
-| ...`args` | `unknown`[] |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `channel` | `string` | The IPC channel name. |
+| ...`args` | `unknown`[] | Payload arguments to send along with the message. |
 
 #### Returns
 

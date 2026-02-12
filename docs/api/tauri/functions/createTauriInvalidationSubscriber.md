@@ -10,20 +10,46 @@
 function createTauriInvalidationSubscriber(options): InvalidationSubscriber;
 ```
 
-Defined in: [transport.ts:42](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/transport.ts#L42)
+Defined in: [transport.ts:128](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L128)
 
-Creates an InvalidationSubscriber using Tauri's event system.
+Creates an InvalidationSubscriber backed by Tauri's event system.
 
-IMPORTANT:
-- The engine validates `topic` and `revision` at runtime.
-- This transport is intentionally thin: it just forwards payloads.
+The returned subscriber listens for events on the specified channel and
+forwards each payload to the core engine as an InvalidationEvent.
+No validation or transformation is performed here; the core engine validates
+`topic` and `revision` at runtime.
+
+**Rust backend requirement:** The backend must emit events whose JSON payload
+has at least `{ topic: string, revision: string }`. Additional fields
+(`sourceId`, `timestampMs`) are optional but recommended.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`TauriInvalidationSubscriberOptions`](../interfaces/TauriInvalidationSubscriberOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`TauriInvalidationSubscriberOptions`](../interfaces/TauriInvalidationSubscriberOptions.md) | Configuration specifying the `listen` function and event name. |
 
 ## Returns
 
 `InvalidationSubscriber`
+
+An InvalidationSubscriber that can be passed to `createRevisionSync`.
+
+## Example
+
+```typescript
+import { listen } from '@tauri-apps/api/event';
+
+const subscriber = createTauriInvalidationSubscriber({
+  listen,
+  eventName: 'state-sync:invalidation',
+});
+
+// Use with the core engine:
+const sync = createRevisionSync({
+  topic: 'my-topic',
+  subscriber,
+  provider,
+  applier,
+});
+```

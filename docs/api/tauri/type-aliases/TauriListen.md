@@ -10,19 +10,23 @@
 type TauriListen = <T>(eventName, handler) => Promise<Unsubscribe>;
 ```
 
-Defined in: [transport.ts:16](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/transport.ts#L16)
+Defined in: [transport.ts:43](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L43)
 
-Minimal structural type for Tauri `listen`.
+Minimal structural type matching the Tauri `listen` function signature.
+
+Accepts any function that:
+1. Takes an event name and a handler callback.
+2. Returns a promise that resolves to an Unsubscribe teardown function.
 
 Consumers can pass:
-- `listen` from `@tauri-apps/api/event`
-- or any compatible function (for testing/mocking).
+- `listen` from `@tauri-apps/api/event` (production)
+- A custom stub with the same shape (testing / mocking)
 
 ## Type Parameters
 
-| Type Parameter | Default type |
-| ------ | ------ |
-| `T` | `unknown` |
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `T` | `unknown` | The payload type carried by the Tauri event. Defaults to `unknown`. |
 
 ## Parameters
 
@@ -34,3 +38,12 @@ Consumers can pass:
 ## Returns
 
 `Promise`\<`Unsubscribe`\>
+
+## Example
+
+```typescript
+import { listen } from '@tauri-apps/api/event';
+
+// `listen` satisfies TauriListen out of the box:
+const tauriListen: TauriListen = listen;
+```

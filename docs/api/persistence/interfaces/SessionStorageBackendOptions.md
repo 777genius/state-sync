@@ -6,9 +6,12 @@
 
 # Interface: SessionStorageBackendOptions
 
-Defined in: [persistence/src/storage/session-storage.ts:7](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/session-storage.ts#L7)
+Defined in: [persistence/src/storage/session-storage.ts:10](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/session-storage.ts#L10)
 
-Options for sessionStorage backend.
+Configuration options for the sessionStorage storage backend.
+
+Allows customization of the storage key and serialization behavior
+used when persisting snapshot data to the browser's `sessionStorage` API.
 
 ## Properties
 
@@ -18,19 +21,28 @@ Options for sessionStorage backend.
 optional deserialize: (data) => SnapshotEnvelope<unknown>;
 ```
 
-Defined in: [persistence/src/storage/session-storage.ts:21](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/session-storage.ts#L21)
+Defined in: [persistence/src/storage/session-storage.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/session-storage.ts#L37)
 
-Optional custom deserializer. Defaults to JSON.parse.
+Custom deserialization function for converting a stored string back into
+a snapshot envelope.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `string` | The raw string retrieved from `sessionStorage`. |
 
 #### Returns
 
 `SnapshotEnvelope`\<`unknown`\>
+
+The deserialized snapshot envelope.
+
+#### Default
+
+```ts
+JSON.parse
+```
 
 ***
 
@@ -40,9 +52,12 @@ Optional custom deserializer. Defaults to JSON.parse.
 key: string;
 ```
 
-Defined in: [persistence/src/storage/session-storage.ts:11](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/session-storage.ts#L11)
+Defined in: [persistence/src/storage/session-storage.ts:17](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/session-storage.ts#L17)
 
-The key to use in sessionStorage.
+The key under which snapshot data is stored in `sessionStorage`.
+
+Must be unique per application or state instance to avoid collisions
+with other data stored in the same origin's `sessionStorage`.
 
 ***
 
@@ -52,16 +67,25 @@ The key to use in sessionStorage.
 optional serialize: (snapshot) => string;
 ```
 
-Defined in: [persistence/src/storage/session-storage.ts:16](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/session-storage.ts#L16)
+Defined in: [persistence/src/storage/session-storage.ts:27](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/session-storage.ts#L27)
 
-Optional custom serializer. Defaults to JSON.stringify.
+Custom serialization function for converting a snapshot envelope into a string
+suitable for `sessionStorage` storage.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`unknown`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`unknown`\> | The snapshot envelope to serialize. |
 
 #### Returns
 
 `string`
+
+A string representation of the snapshot.
+
+#### Default
+
+```ts
+JSON.stringify
+```

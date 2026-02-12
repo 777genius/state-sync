@@ -10,22 +10,50 @@
 function createTauriSnapshotProvider<T>(options): SnapshotProvider<T>;
 ```
 
-Defined in: [transport.ts:66](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/transport.ts#L66)
+Defined in: [transport.ts:210](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/transport.ts#L210)
 
-Creates a SnapshotProvider that fetches snapshots via Tauri `invoke`.
+Creates a SnapshotProvider that fetches snapshots by invoking a Tauri command.
+
+Each call to `getSnapshot()` invokes the specified Rust command and expects
+a SnapshotEnvelope in return. The command receives any extra `args`
+provided in the options.
+
+**Rust backend requirement:** The command must return a JSON-serializable
+struct with `{ revision: String, data: T }`.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`TauriSnapshotProviderOptions`](../interfaces/TauriSnapshotProviderOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`TauriSnapshotProviderOptions`](../interfaces/TauriSnapshotProviderOptions.md) | Configuration specifying the `invoke` function, command name, and optional args. |
 
 ## Returns
 
 `SnapshotProvider`\<`T`\>
+
+A SnapshotProvider that can be passed to `createRevisionSync`.
+
+## Example
+
+```typescript
+import { invoke } from '@tauri-apps/api/core';
+
+interface AppState {
+  counters: Record<string, number>;
+}
+
+const provider = createTauriSnapshotProvider<AppState>({
+  invoke,
+  commandName: 'get_app_state',
+  args: { workspaceId: 'ws_abc123' },
+});
+
+const envelope = await provider.getSnapshot();
+console.log(envelope.revision, envelope.data.counters);
+```

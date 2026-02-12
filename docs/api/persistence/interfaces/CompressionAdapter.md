@@ -6,9 +6,26 @@
 
 # Interface: CompressionAdapter
 
-Defined in: [persistence/src/types.ts:155](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L155)
+Defined in: [persistence/src/types.ts:280](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L280)
 
-Compression adapter for reducing storage size.
+Adapter for compressing and decompressing serialized snapshot data.
+
+Compression is applied **after** JSON serialization and **before** writing to storage,
+reducing the size of persisted data. The same adapter must be used for both
+compression and decompression; mismatched adapters will produce corrupt data.
+
+Built-in adapters: [createLZCompressionAdapter](../functions/createLZCompressionAdapter.md), [createLZStringAdapter](../functions/createLZStringAdapter.md),
+[createNoCompressionAdapter](../functions/createNoCompressionAdapter.md), [createBase64Adapter](../functions/createBase64Adapter.md).
+
+## Example
+
+```typescript
+const adapter: CompressionAdapter = {
+  algorithm: 'custom-lz',
+  compress: (data) => myCompress(data),
+  decompress: (data) => myDecompress(data),
+};
+```
 
 ## Properties
 
@@ -18,9 +35,11 @@ Compression adapter for reducing storage size.
 readonly algorithm: string;
 ```
 
-Defined in: [persistence/src/types.ts:169](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L169)
+Defined in: [persistence/src/types.ts:302](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L302)
 
-Name of compression algorithm.
+Human-readable name of the compression algorithm (e.g., `'lz'`, `'lz-string'`, `'none'`).
+
+Used for logging and diagnostics.
 
 ## Methods
 
@@ -30,19 +49,21 @@ Name of compression algorithm.
 compress(data): string;
 ```
 
-Defined in: [persistence/src/types.ts:159](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L159)
+Defined in: [persistence/src/types.ts:287](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L287)
 
-Compress a string.
+Compress a serialized JSON string into a shorter representation.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `string` | The raw JSON string to compress. |
 
 #### Returns
 
 `string`
+
+The compressed string, safe for storage in the target backend.
 
 ***
 
@@ -52,16 +73,18 @@ Compress a string.
 decompress(data): string;
 ```
 
-Defined in: [persistence/src/types.ts:164](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L164)
+Defined in: [persistence/src/types.ts:295](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L295)
 
-Decompress a string.
+Decompress a string previously produced by [compress](#compress).
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `string` | The compressed string to decompress. |
 
 #### Returns
 
 `string`
+
+The original JSON string.

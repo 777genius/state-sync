@@ -10,25 +10,33 @@
 function createPersistenceApplierWithDefaults<T>(options): DisposablePersistenceApplier<T>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:615](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/persistence-applier.ts#L615)
+Defined in: [persistence/src/persistence-applier.ts:657](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/persistence-applier.ts#L657)
 
-Creates a persistence applier with common defaults.
+Creates a [DisposablePersistenceApplier](../interfaces/DisposablePersistenceApplier.md) with sensible defaults
+pre-configured.
+
+Defaults applied:
+- **Throttling:** `debounceMs: 100`, `maxWaitMs: 2000` (if not provided)
+- **Cross-tab sync:** Enabled when `enableCrossTab` is `true` and a `topic`
+  is provided; the channel name defaults to `state-sync:<topic>`
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state being persisted. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`PersistenceApplierOptions`](../interfaces/PersistenceApplierOptions.md)\<`T`\> & `object` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`PersistenceApplierOptions`](../interfaces/PersistenceApplierOptions.md)\<`T`\> & `object` | All standard [PersistenceApplierOptions](../interfaces/PersistenceApplierOptions.md) plus: - `topic` -- optional topic string used to derive the BroadcastChannel name - `enableCrossTab` -- if `true` and `topic` is set, cross-tab sync is enabled |
 
 ## Returns
 
 [`DisposablePersistenceApplier`](../interfaces/DisposablePersistenceApplier.md)\<`T`\>
+
+A disposable persistence applier configured with defaults.
 
 ## Example
 

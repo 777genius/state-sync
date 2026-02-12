@@ -6,18 +6,28 @@
 
 # Interface: VueRefLike\<State\>
 
-Defined in: [vue.ts:9](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/vue/src/vue.ts#L9)
+Defined in: [vue.ts:20](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/vue/src/vue.ts#L20)
 
 Minimal structural interface for a Vue ref-like container.
 
 Compatible with `Ref<T>`, `ShallowRef<T>`, or any object with a `.value`
-property of type `State`.
+property of type `State`. We intentionally avoid importing Vue types so
+this adapter stays dependency-free and can be used in any environment.
+
+## Example
+
+```ts
+import { ref } from 'vue';
+
+interface AppState { count: number; name: string }
+const myRef: VueRefLike<AppState> = ref({ count: 0, name: '' });
+```
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `State` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `State` | The shape of the ref's inner value. |
 
 ## Properties
 
@@ -27,4 +37,10 @@ property of type `State`.
 value: State;
 ```
 
-Defined in: [vue.ts:10](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/vue/src/vue.ts#L10)
+Defined in: [vue.ts:28](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/vue/src/vue.ts#L28)
+
+The unwrapped value held by the ref.
+
+Assigning to this property triggers Vue's reactivity tracking so that
+any watchers, computed properties, or template bindings that depend on
+this ref are re-evaluated.

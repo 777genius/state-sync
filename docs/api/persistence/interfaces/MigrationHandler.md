@@ -6,15 +6,33 @@
 
 # Interface: MigrationHandler\<T\>
 
-Defined in: [persistence/src/types.ts:184](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L184)
+Defined in: [persistence/src/types.ts:345](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L345)
 
-Migration handler for schema versioning.
+Configuration for schema-versioned data migration.
+
+Defines the current schema version, a map of migration functions, and an
+optional type-guard validator. During load, the persistence applier compares
+the stored schema version against [currentVersion](#currentversion) and applies the
+necessary migration functions in sequence.
+
+## Example
+
+```typescript
+const handler: MigrationHandler<AppStateV3> = {
+  currentVersion: 3,
+  migrations: {
+    1: (v1) => ({ ...v1, newField: 'default' }),
+    2: (v2) => ({ ...v2, renamedField: v2.oldField }),
+  },
+  validate: (data): data is AppStateV3 => 'renamedField' in (data as object),
+};
+```
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state in the **current** schema version. |
 
 ## Properties
 
@@ -24,9 +42,12 @@ Migration handler for schema versioning.
 currentVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:188](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L188)
+Defined in: [persistence/src/types.ts:352](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L352)
 
-Current schema version.
+The schema version that the current application code expects.
+
+Must be a positive integer. All persisted data with a lower version will
+be migrated up to this version during load.
 
 ***
 
@@ -36,10 +57,21 @@ Current schema version.
 migrations: Record<number, MigrationFn<any, unknown>>;
 ```
 
-Defined in: [persistence/src/types.ts:195](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L195)
+Defined in: [persistence/src/types.ts:369](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L369)
 
-Migration functions keyed by source version.
-Example: { 1: (v1Data) => v2Data, 2: (v2Data) => v3Data }
+A record of migration functions keyed by **source** version number.
+
+Each entry transforms data from version `N` to version `N + 1`.
+For example, `{ 1: fn }` migrates v1 data to v2.
+
+#### Example
+
+```typescript
+migrations: {
+  1: (v1Data) => ({ ...v1Data, newField: 'default' }),  // v1 -> v2
+  2: (v2Data) => ({ ...v2Data, renamed: v2Data.old }),   // v2 -> v3
+}
+```
 
 ***
 
@@ -49,16 +81,21 @@ Example: { 1: (v1Data) => v2Data, 2: (v2Data) => v3Data }
 optional validate: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:200](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L200)
+Defined in: [persistence/src/types.ts:380](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L380)
 
-Optional validator for migrated data.
+Optional type-guard function to validate the fully migrated data.
+
+Called after all migration steps complete. If it returns `false`,
+the migration is considered failed and the persisted data is discarded.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `unknown` | The data after all migrations have been applied. |
 
 #### Returns
 
 `data is T`
+
+`true` if the data matches the expected shape `T`.

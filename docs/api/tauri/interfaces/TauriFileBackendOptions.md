@@ -6,9 +6,9 @@
 
 # Interface: TauriFileBackendOptions
 
-Defined in: [persistence.ts:17](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L17)
+Defined in: [persistence.ts:52](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L52)
 
-Options for Tauri file-based storage backend.
+Configuration for [createTauriFileBackend](../functions/createTauriFileBackend.md).
 
 ## Properties
 
@@ -18,9 +18,17 @@ Options for Tauri file-based storage backend.
 optional args: Record<string, unknown>;
 ```
 
-Defined in: [persistence.ts:43](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L43)
+Defined in: [persistence.ts:104](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L104)
 
-Optional additional arguments to pass to all commands.
+Optional additional arguments forwarded to every Tauri command invocation.
+
+Useful for scoping storage to a specific user, profile, or namespace.
+
+#### Example
+
+```typescript
+{ profileId: 'default' }
+```
 
 ***
 
@@ -30,9 +38,19 @@ Optional additional arguments to pass to all commands.
 optional clearCommand: string;
 ```
 
-Defined in: [persistence.ts:38](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L38)
+Defined in: [persistence.ts:92](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L92)
 
-Optional command name for clearing state.
+Optional Tauri command name for clearing persisted state.
+
+If omitted, calling `clear()` on the returned backend is a no-op.
+When provided, the Rust command receives `{ ...args }` and should
+delete the stored data.
+
+#### Example
+
+```ts
+`'clear_settings'`
+```
 
 ***
 
@@ -42,9 +60,15 @@ Optional command name for clearing state.
 invoke: TauriInvoke;
 ```
 
-Defined in: [persistence.ts:21](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L21)
+Defined in: [persistence.ts:60](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L60)
 
-Tauri invoke function.
+A Tauri-compatible `invoke` function used to call Rust commands.
+
+Typically `invoke` from `@tauri-apps/api/core`.
+
+#### See
+
+[TauriInvoke](../type-aliases/TauriInvoke.md)
 
 ***
 
@@ -54,10 +78,18 @@ Tauri invoke function.
 loadCommand: string;
 ```
 
-Defined in: [persistence.ts:33](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L33)
+Defined in: [persistence.ts:81](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L81)
 
-Command name for loading state.
-The command should return `SnapshotEnvelope<T> | null`.
+The Tauri command name for loading a previously persisted snapshot.
+
+The Rust command receives `{ ...args }` (or nothing if `args` is empty)
+and should return `SnapshotEnvelope<T> | null`.
+
+#### Example
+
+```ts
+`'load_settings'`
+```
 
 ***
 
@@ -67,7 +99,16 @@ The command should return `SnapshotEnvelope<T> | null`.
 saveCommand: string;
 ```
 
-Defined in: [persistence.ts:27](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/tauri/src/persistence.ts#L27)
+Defined in: [persistence.ts:71](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/tauri/src/persistence.ts#L71)
 
-Command name for saving state.
-The command receives `{ snapshot: SnapshotEnvelope<T> }` + args.
+The Tauri command name for persisting a snapshot.
+
+The Rust command receives `{ snapshot: SnapshotEnvelope<T>, ...args }` as
+its argument payload. It should write the envelope to disk (or other
+durable storage) and return `Ok(())`.
+
+#### Example
+
+```ts
+`'save_settings'`
+```

@@ -10,4 +10,16 @@
 const ZERO_REVISION: Revision;
 ```
 
-Defined in: [revision.ts:7](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/core/src/revision.ts#L7)
+Defined in: [revision.ts:31](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/core/src/revision.ts#L31)
+
+The zero revision constant, representing the initial (empty) revision state.
+
+Use this as the starting revision before any snapshots have been applied.
+
+## Example
+
+```ts
+import { ZERO_REVISION } from '@statesync/core';
+
+let localRevision = ZERO_REVISION; // "0"
+```

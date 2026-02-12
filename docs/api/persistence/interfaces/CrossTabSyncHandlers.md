@@ -6,9 +6,12 @@
 
 # Interface: CrossTabSyncHandlers\<T\>
 
-Defined in: [persistence/src/cross-tab.ts:66](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/cross-tab.ts#L66)
+Defined in: [persistence/src/cross-tab.ts:116](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L116)
 
-Options for creating cross-tab sync.
+Configuration and event handlers for [createCrossTabSync](../functions/createCrossTabSync.md).
+
+Extends [CrossTabSyncOptions](CrossTabSyncOptions.md) with callback handlers for each
+type of cross-tab message.
 
 ## Extends
 
@@ -16,9 +19,9 @@ Options for creating cross-tab sync.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state. |
 
 ## Properties
 
@@ -28,10 +31,13 @@ Options for creating cross-tab sync.
 optional broadcastSaves: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:426](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L426)
+Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L747)
 
-If true, broadcast saves to other tabs.
-Default: true
+Whether this tab should broadcast its saves to other tabs.
+
+#### Default Value
+
+`true`
 
 #### Inherited from
 
@@ -45,9 +51,12 @@ Default: true
 channelName: string;
 ```
 
-Defined in: [persistence/src/types.ts:414](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L414)
+Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L733)
 
-Channel name for BroadcastChannel.
+The name of the BroadcastChannel used for inter-tab communication.
+
+All tabs that should synchronize state must use the same channel name.
+Convention: `'state-sync:<topic>'`.
 
 #### Inherited from
 
@@ -61,15 +70,15 @@ Channel name for BroadcastChannel.
 optional onClear: (fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:80](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/cross-tab.ts#L80)
+Defined in: [persistence/src/cross-tab.ts:138](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L138)
 
-Called when another tab clears storage.
+Called when another tab notifies that it has cleared its storage.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `fromTabId` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fromTabId` | `string` | The unique identifier of the tab that cleared storage. |
 
 #### Returns
 
@@ -83,16 +92,16 @@ Called when another tab clears storage.
 optional onSnapshot: (snapshot, fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:70](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/cross-tab.ts#L70)
+Defined in: [persistence/src/cross-tab.ts:123](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L123)
 
 Called when a snapshot is received from another tab.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `snapshot` | `SnapshotEnvelope`\<`T`\> |
-| `fromTabId` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `snapshot` | `SnapshotEnvelope`\<`T`\> | The snapshot envelope broadcast by the other tab. |
+| `fromTabId` | `string` | The unique identifier of the sending tab. |
 
 #### Returns
 
@@ -106,15 +115,16 @@ Called when a snapshot is received from another tab.
 optional onSyncRequest: (fromTabId) => void;
 ```
 
-Defined in: [persistence/src/cross-tab.ts:75](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/cross-tab.ts#L75)
+Defined in: [persistence/src/cross-tab.ts:131](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/cross-tab.ts#L131)
 
-Called when another tab requests sync.
+Called when another tab sends a sync request, asking this tab to
+broadcast its latest state.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `fromTabId` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fromTabId` | `string` | The unique identifier of the requesting tab. |
 
 #### Returns
 
@@ -128,10 +138,13 @@ Called when another tab requests sync.
 optional receiveUpdates: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:420](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L420)
+Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L740)
 
-If true, apply updates from other tabs.
-Default: true
+Whether this tab should apply snapshots received from other tabs.
+
+#### Default Value
+
+`true`
 
 #### Inherited from
 

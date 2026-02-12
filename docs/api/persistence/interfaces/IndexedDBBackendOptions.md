@@ -6,9 +6,13 @@
 
 # Interface: IndexedDBBackendOptions
 
-Defined in: [persistence/src/storage/indexed-db.ts:7](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L7)
+Defined in: [persistence/src/storage/indexed-db.ts:11](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L11)
 
-Options for IndexedDB backend.
+Configuration options for the IndexedDB storage backend.
+
+Allows customization of the database name, object store, versioning,
+retry behavior, and lifecycle callbacks used when persisting snapshot data
+to the browser's IndexedDB API.
 
 ## Properties
 
@@ -18,9 +22,12 @@ Options for IndexedDB backend.
 dbName: string;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:11](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L11)
+Defined in: [persistence/src/storage/indexed-db.ts:18](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L18)
 
-Database name.
+The name of the IndexedDB database to open or create.
+
+This name is scoped to the current origin and should be unique
+per application to avoid conflicts.
 
 ***
 
@@ -30,9 +37,13 @@ Database name.
 optional onBlocked: () => void;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:41](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L41)
+Defined in: [persistence/src/storage/indexed-db.ts:75](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L75)
 
-Called when database is blocked by another connection.
+Callback invoked when the database open request is blocked by another connection.
+
+This typically happens when another tab has an open connection to an older
+version of the database. The blocked state is handled automatically via the
+retry mechanism, but this callback can be used for user notification or logging.
 
 #### Returns
 
@@ -46,17 +57,20 @@ Called when database is blocked by another connection.
 optional onUpgrade: (db, oldVersion, newVersion) => void;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:46](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L46)
+Defined in: [persistence/src/storage/indexed-db.ts:87](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L87)
 
-Called when database upgrade is needed.
+Callback invoked when the database requires a schema upgrade.
+
+Called after the default upgrade logic (object store creation) has executed.
+Use this to perform custom schema migrations such as creating indexes.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `db` | `IDBDatabase` |
-| `oldVersion` | `number` |
-| `newVersion` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `db` | `IDBDatabase` | The `IDBDatabase` instance being upgraded. |
+| `oldVersion` | `number` | The previous schema version number (0 for newly created databases). |
+| `newVersion` | `number` | The new schema version number being upgraded to. |
 
 #### Returns
 
@@ -70,9 +84,17 @@ Called when database upgrade is needed.
 optional recordKey: string;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:21](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L21)
+Defined in: [persistence/src/storage/indexed-db.ts:35](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L35)
 
-Optional key for the snapshot record. Defaults to 'snapshot'.
+The key used to store and retrieve the snapshot record within the object store.
+
+A separate metadata record is stored under `${recordKey}:metadata`.
+
+#### Default
+
+```ts
+'snapshot'
+```
 
 ***
 
@@ -82,9 +104,19 @@ Optional key for the snapshot record. Defaults to 'snapshot'.
 optional retryAttempts: number;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:31](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L31)
+Defined in: [persistence/src/storage/indexed-db.ts:57](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L57)
 
-Number of retry attempts for blocked database. Defaults to 3.
+The maximum number of retry attempts when the database connection is blocked
+or encounters a version-related error.
+
+A blocked database typically occurs when another tab holds an open connection
+to an older version of the database.
+
+#### Default
+
+```ts
+3
+```
 
 ***
 
@@ -94,9 +126,17 @@ Number of retry attempts for blocked database. Defaults to 3.
 optional retryDelayMs: number;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:36](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L36)
+Defined in: [persistence/src/storage/indexed-db.ts:66](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L66)
 
-Delay between retries in ms. Defaults to 100.
+The base delay in milliseconds between retry attempts.
+
+The actual delay uses linear backoff: `retryDelayMs * (attemptNumber + 1)`.
+
+#### Default
+
+```ts
+100
+```
 
 ***
 
@@ -106,9 +146,12 @@ Delay between retries in ms. Defaults to 100.
 storeName: string;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:16](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L16)
+Defined in: [persistence/src/storage/indexed-db.ts:26](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L26)
 
-Object store name.
+The name of the object store within the database where snapshots are persisted.
+
+The object store is automatically created during the database upgrade
+if it does not already exist.
 
 ***
 
@@ -118,6 +161,16 @@ Object store name.
 optional version: number;
 ```
 
-Defined in: [persistence/src/storage/indexed-db.ts:26](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/storage/indexed-db.ts#L26)
+Defined in: [persistence/src/storage/indexed-db.ts:46](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/storage/indexed-db.ts#L46)
 
-Optional database version. Defaults to 1.
+The version number of the IndexedDB database schema.
+
+Incrementing this value triggers the `onupgradeneeded` event, allowing
+schema migrations. The object store specified by [storeName](#storename) is
+automatically created if it does not exist during an upgrade.
+
+#### Default
+
+```ts
+1
+```

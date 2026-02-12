@@ -6,15 +6,18 @@
 
 # Interface: MigrationResult\<T\>
 
-Defined in: [persistence/src/types.ts:206](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L206)
+Defined in: [persistence/src/types.ts:391](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L391)
 
-Result of migration attempt.
+The outcome of a data migration attempt.
+
+Contains the migrated data on success, or an Error describing what
+went wrong on failure. Always includes the version range that was attempted.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state in the target schema version. |
 
 ## Properties
 
@@ -24,7 +27,11 @@ Result of migration attempt.
 optional data: T;
 ```
 
-Defined in: [persistence/src/types.ts:208](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L208)
+Defined in: [persistence/src/types.ts:400](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L400)
+
+The migrated data in the target schema format.
+
+Only present when [success](#success) is `true`.
 
 ***
 
@@ -34,7 +41,11 @@ Defined in: [persistence/src/types.ts:208](https://github.com/777genius/state-sy
 optional error: Error;
 ```
 
-Defined in: [persistence/src/types.ts:211](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L211)
+Defined in: [persistence/src/types.ts:413](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L413)
+
+The error that caused the migration to fail.
+
+Only present when [success](#success) is `false`.
 
 ***
 
@@ -44,7 +55,9 @@ Defined in: [persistence/src/types.ts:211](https://github.com/777genius/state-sy
 fromVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:209](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L209)
+Defined in: [persistence/src/types.ts:403](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L403)
+
+The schema version of the data **before** migration was attempted.
 
 ***
 
@@ -54,7 +67,9 @@ Defined in: [persistence/src/types.ts:209](https://github.com/777genius/state-sy
 success: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:207](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L207)
+Defined in: [persistence/src/types.ts:393](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L393)
+
+Whether the migration completed successfully.
 
 ***
 
@@ -64,4 +79,6 @@ Defined in: [persistence/src/types.ts:207](https://github.com/777genius/state-sy
 toVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:210](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L210)
+Defined in: [persistence/src/types.ts:406](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L406)
+
+The target schema version the migration aimed to reach.

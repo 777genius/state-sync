@@ -6,7 +6,12 @@
 
 # Interface: ElectronBroadcasterHandle
 
-Defined in: [main.ts:25](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L25)
+Defined in: [main.ts:54](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L54)
+
+Handle returned by [createElectronBroadcaster](../functions/createElectronBroadcaster.md) for sending
+invalidation events to renderer processes.
+
+**Process context:** main process only.
 
 ## Properties
 
@@ -16,7 +21,9 @@ Defined in: [main.ts:25](https://github.com/777genius/state-sync/blob/ff3d517bab
 readonly topic: string;
 ```
 
-Defined in: [main.ts:26](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L26)
+Defined in: [main.ts:56](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L56)
+
+The sync topic this broadcaster is bound to.
 
 ## Methods
 
@@ -26,15 +33,21 @@ Defined in: [main.ts:26](https://github.com/777genius/state-sync/blob/ff3d517bab
 invalidate(revision, extra?): void;
 ```
 
-Defined in: [main.ts:27](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L27)
+Defined in: [main.ts:69](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L69)
+
+Broadcasts an invalidation event to all target renderer windows.
+
+Each target is guarded with `isDestroyed()` and a `try/catch` to handle
+the TOCTOU race inherent in Electron multi-window apps (a `webContents`
+can be destroyed between the check and the `send()` call).
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `revision` | `string` |
-| `extra?` | \{ `sourceId?`: `string`; \} |
-| `extra.sourceId?` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `revision` | `string` | The new revision string to broadcast. |
+| `extra?` | \{ `sourceId?`: `string`; \} | Optional additional fields for the InvalidationEvent. |
+| `extra.sourceId?` | `string` | Identifier of the source that produced this revision change. |
 
 #### Returns
 

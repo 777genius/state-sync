@@ -6,18 +6,24 @@
  *
  * Architecture overview:
  *
- * ```
- * ┌─────────────────────┐    IPC send()     ┌──────────────────────────┐
- * │   Main Process       │ ───────────────→  │   Renderer Process       │
- * │                      │                   │                          │
- * │  Broadcaster         │                   │  InvalidationSubscriber  │
- * │  SnapshotHandler     │  ← invoke() ───── │  SnapshotProvider        │
- * └─────────────────────┘                    └──────────────────────────┘
- *          ▲                                            ▲
- *          │                   Preload                  │
- *          │              ┌────────────┐                │
- *          └──────────────│   Bridge   │────────────────┘
- *                         └────────────┘
+ * ```mermaid
+ * graph LR
+ *     subgraph Main Process
+ *         B[Broadcaster]
+ *         SH[SnapshotHandler]
+ *     end
+ *     subgraph Preload
+ *         BR[Bridge]
+ *     end
+ *     subgraph Renderer Process
+ *         IS[InvalidationSubscriber]
+ *         SP[SnapshotProvider]
+ *     end
+ *
+ *     B -- "IPC send()" --> IS
+ *     SP -- "invoke()" --> SH
+ *     BR -.- B
+ *     BR -.- IS
  * ```
  *
  * **Main process** (`main.ts`):

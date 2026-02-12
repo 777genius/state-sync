@@ -6,9 +6,11 @@
 
 # Interface: CrossTabSyncOptions
 
-Defined in: [persistence/src/types.ts:410](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L410)
+Defined in: [persistence/src/types.ts:726](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L726)
 
-Options for cross-tab synchronization.
+Options for cross-tab state synchronization via the BroadcastChannel API.
+
+Controls the channel name and whether this tab sends and/or receives updates.
 
 ## Extended by
 
@@ -22,10 +24,13 @@ Options for cross-tab synchronization.
 optional broadcastSaves: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:426](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L426)
+Defined in: [persistence/src/types.ts:747](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L747)
 
-If true, broadcast saves to other tabs.
-Default: true
+Whether this tab should broadcast its saves to other tabs.
+
+#### Default Value
+
+`true`
 
 ***
 
@@ -35,9 +40,12 @@ Default: true
 channelName: string;
 ```
 
-Defined in: [persistence/src/types.ts:414](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L414)
+Defined in: [persistence/src/types.ts:733](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L733)
 
-Channel name for BroadcastChannel.
+The name of the BroadcastChannel used for inter-tab communication.
+
+All tabs that should synchronize state must use the same channel name.
+Convention: `'state-sync:<topic>'`.
 
 ***
 
@@ -47,7 +55,10 @@ Channel name for BroadcastChannel.
 optional receiveUpdates: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:420](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L420)
+Defined in: [persistence/src/types.ts:740](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L740)
 
-If true, apply updates from other tabs.
-Default: true
+Whether this tab should apply snapshots received from other tabs.
+
+#### Default Value
+
+`true`

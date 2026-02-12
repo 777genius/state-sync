@@ -6,13 +6,15 @@
 
 # Interface: CreateElectronRevisionSyncOptions\<T\>
 
-Defined in: [sync.ts:12](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L12)
+Defined in: [sync.ts:28](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L28)
+
+Configuration options for [createElectronRevisionSync](../functions/createElectronRevisionSync.md).
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Properties
 
@@ -22,7 +24,13 @@ Defined in: [sync.ts:12](https://github.com/777genius/state-sync/blob/ff3d517bab
 applier: SnapshotApplier<T>;
 ```
 
-Defined in: [sync.ts:16](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L16)
+Defined in: [sync.ts:45](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L45)
+
+Callback invoked to apply a new snapshot to the application state.
+
+#### See
+
+SnapshotApplier from `@statesync/core`.
 
 ***
 
@@ -32,9 +40,12 @@ Defined in: [sync.ts:16](https://github.com/777genius/state-sync/blob/ff3d517bab
 bridge: ElectronStateSyncBridge;
 ```
 
-Defined in: [sync.ts:15](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L15)
+Defined in: [sync.ts:38](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L38)
 
-The bridge object from window.statesync
+The bridge object exposed via `contextBridge.exposeInMainWorld()` in the preload script.
+
+Typically accessed as `(window as any).statesync` in the renderer.
+Created by [createElectronBridge](../functions/createElectronBridge.md).
 
 ***
 
@@ -44,9 +55,11 @@ The bridge object from window.statesync
 optional invalidationChannel: string;
 ```
 
-Defined in: [sync.ts:19](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L19)
+Defined in: [sync.ts:52](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L52)
 
-Override default channel: statesync:${topic}:invalidated
+Override the default IPC channel for invalidation events.
+
+Defaults to `statesync:<topic>:invalidated`.
 
 ***
 
@@ -56,7 +69,13 @@ Override default channel: statesync:${topic}:invalidated
 optional logger: Logger;
 ```
 
-Defined in: [sync.ts:24](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L24)
+Defined in: [sync.ts:75](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L75)
+
+Optional logger for debug, warn, and error messages.
+
+#### See
+
+RevisionSyncOptions.logger
 
 ***
 
@@ -66,7 +85,9 @@ Defined in: [sync.ts:24](https://github.com/777genius/state-sync/blob/ff3d517bab
 optional onError: (ctx) => void;
 ```
 
-Defined in: [sync.ts:25](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L25)
+Defined in: [sync.ts:82](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L82)
+
+Optional error callback invoked when any phase of the sync loop fails.
 
 #### Parameters
 
@@ -78,6 +99,10 @@ Defined in: [sync.ts:25](https://github.com/777genius/state-sync/blob/ff3d517bab
 
 `void`
 
+#### See
+
+RevisionSyncOptions.onError
+
 ***
 
 ### shouldRefresh()?
@@ -86,7 +111,11 @@ Defined in: [sync.ts:25](https://github.com/777genius/state-sync/blob/ff3d517bab
 optional shouldRefresh: (event) => boolean;
 ```
 
-Defined in: [sync.ts:23](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L23)
+Defined in: [sync.ts:68](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L68)
+
+Optional predicate to filter invalidation events before triggering a refresh.
+
+If provided, only events for which this returns `true` will cause a snapshot fetch.
 
 #### Parameters
 
@@ -98,6 +127,10 @@ Defined in: [sync.ts:23](https://github.com/777genius/state-sync/blob/ff3d517bab
 
 `boolean`
 
+#### See
+
+RevisionSyncOptions.shouldRefresh
+
 ***
 
 ### snapshotChannel?
@@ -106,9 +139,11 @@ Defined in: [sync.ts:23](https://github.com/777genius/state-sync/blob/ff3d517bab
 optional snapshotChannel: string;
 ```
 
-Defined in: [sync.ts:21](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L21)
+Defined in: [sync.ts:59](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L59)
 
-Override default channel: statesync:${topic}:snapshot
+Override the default IPC channel for snapshot requests.
+
+Defaults to `statesync:<topic>:snapshot`.
 
 ***
 
@@ -118,7 +153,14 @@ Override default channel: statesync:${topic}:snapshot
 optional throttling: InvalidationThrottlingOptions;
 ```
 
-Defined in: [sync.ts:26](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L26)
+Defined in: [sync.ts:90](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L90)
+
+Optional throttling/debouncing configuration to control how frequently
+invalidation events trigger snapshot refreshes.
+
+#### See
+
+InvalidationThrottlingOptions from `@statesync/core`.
 
 ***
 
@@ -128,4 +170,6 @@ Defined in: [sync.ts:26](https://github.com/777genius/state-sync/blob/ff3d517bab
 topic: string;
 ```
 
-Defined in: [sync.ts:13](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/sync.ts#L13)
+Defined in: [sync.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/sync.ts#L30)
+
+The sync topic identifier (e.g. `"user-profile"`). Must be a non-empty string.

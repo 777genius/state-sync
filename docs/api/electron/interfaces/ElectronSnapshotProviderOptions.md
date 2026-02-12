@@ -6,7 +6,9 @@
 
 # Interface: ElectronSnapshotProviderOptions
 
-Defined in: [transport.ts:36](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L36)
+Defined in: [transport.ts:80](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L80)
+
+Configuration options for [createElectronSnapshotProvider](../functions/createElectronSnapshotProvider.md).
 
 ## Properties
 
@@ -16,9 +18,13 @@ Defined in: [transport.ts:36](https://github.com/777genius/state-sync/blob/ff3d5
 channel: string;
 ```
 
-Defined in: [transport.ts:40](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L40)
+Defined in: [transport.ts:94](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L94)
 
-IPC channel for snapshot requests
+The IPC channel name for snapshot requests.
+
+Must match the channel registered by [createElectronSnapshotHandler](../functions/createElectronSnapshotHandler.md)
+in the main process. Typically produced by [snapshotChannel](../functions/snapshotChannel.md)
+(e.g. `"statesync:todos:snapshot"`).
 
 ***
 
@@ -28,6 +34,7 @@ IPC channel for snapshot requests
 invoke: ElectronInvoke;
 ```
 
-Defined in: [transport.ts:38](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L38)
+Defined in: [transport.ts:85](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L85)
 
-bridge.invoke or any ElectronInvoke-compatible function
+The invoke function from the bridge (`bridge.invoke`) or any
+[ElectronInvoke](../type-aliases/ElectronInvoke.md)-compatible function.

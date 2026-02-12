@@ -10,17 +10,29 @@
 function needsMigration(fromVersion, currentVersion): boolean;
 ```
 
-Defined in: [persistence/src/migration.ts:191](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/migration.ts#L191)
+Defined in: [persistence/src/migration.ts:254](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/migration.ts#L254)
 
-Check if data needs migration.
+Checks whether persisted data requires migration.
+
+Returns `true` if the stored schema version is older than the current version.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `fromVersion` | `number` |
-| `currentVersion` | `number` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `fromVersion` | `number` | The schema version of the stored data. |
+| `currentVersion` | `number` | The schema version the application currently expects. |
 
 ## Returns
 
 `boolean`
+
+`true` if `fromVersion < currentVersion`, indicating migration is needed.
+
+## Example
+
+```typescript
+if (needsMigration(storedVersion, 3)) {
+  const result = migrateData(data, storedVersion, migrationHandler);
+}
+```

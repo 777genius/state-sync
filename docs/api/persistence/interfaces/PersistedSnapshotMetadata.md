@@ -6,9 +6,14 @@
 
 # Interface: PersistedSnapshotMetadata
 
-Defined in: [persistence/src/types.ts:44](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L44)
+Defined in: [persistence/src/types.ts:82](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L82)
 
-Metadata stored alongside the snapshot for integrity and management.
+Metadata stored alongside a persisted snapshot for integrity checking,
+expiration management, and schema migration.
+
+This metadata is written to storage by backends that implement
+[StorageBackendWithMetadata](StorageBackendWithMetadata.md) and is used during load to decide
+whether the snapshot is still valid.
 
 ## Properties
 
@@ -18,9 +23,12 @@ Metadata stored alongside the snapshot for integrity and management.
 compressed: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:63](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L63)
+Defined in: [persistence/src/types.ts:111](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L111)
 
-Whether data is compressed.
+Whether the snapshot data was compressed before storage.
+
+When `true`, the data must be decompressed using the same
+[CompressionAdapter](CompressionAdapter.md) that was used during save.
 
 ***
 
@@ -30,9 +38,12 @@ Whether data is compressed.
 optional hash: string;
 ```
 
-Defined in: [persistence/src/types.ts:68](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L68)
+Defined in: [persistence/src/types.ts:119](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L119)
 
-Optional integrity hash (SHA-256 hex).
+Optional integrity hash of the serialized (and possibly compressed) data.
+
+Computed using a non-cryptographic hash function. Verified during load
+when the `verifyHash` option is enabled in [LoadOptions](LoadOptions.md).
 
 ***
 
@@ -42,9 +53,11 @@ Optional integrity hash (SHA-256 hex).
 savedAt: number;
 ```
 
-Defined in: [persistence/src/types.ts:48](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L48)
+Defined in: [persistence/src/types.ts:88](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L88)
 
-Timestamp when snapshot was saved (ms since epoch).
+Timestamp when the snapshot was saved, in milliseconds since the Unix epoch.
+
+Used together with [ttlMs](#ttlms) to determine cache expiration.
 
 ***
 
@@ -54,9 +67,12 @@ Timestamp when snapshot was saved (ms since epoch).
 schemaVersion: number;
 ```
 
-Defined in: [persistence/src/types.ts:53](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L53)
+Defined in: [persistence/src/types.ts:96](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L96)
 
-Schema version for migration support.
+Schema version number at the time the snapshot was saved.
+
+Compared against the current version during load to determine whether
+data migration is needed. Versions are sequential positive integers.
 
 ***
 
@@ -66,9 +82,11 @@ Schema version for migration support.
 sizeBytes: number;
 ```
 
-Defined in: [persistence/src/types.ts:58](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L58)
+Defined in: [persistence/src/types.ts:103](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L103)
 
-Size of serialized data in bytes (before compression).
+Size of the serialized JSON data in bytes, measured **before** compression.
+
+Useful for observability and storage quota estimation.
 
 ***
 
@@ -78,6 +96,10 @@ Size of serialized data in bytes (before compression).
 optional ttlMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:73](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L73)
+Defined in: [persistence/src/types.ts:128](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L128)
 
-Time-to-live in milliseconds. If set, cache expires after savedAt + ttlMs.
+Time-to-live in milliseconds. When set, the cached snapshot is considered
+expired if `Date.now() - savedAt > ttlMs`.
+
+Expired snapshots are discarded during load unless `ignoreTTL` is set
+in [LoadOptions](LoadOptions.md).

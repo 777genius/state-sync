@@ -10,24 +10,46 @@
 function createElectronSnapshotProvider<T>(options): SnapshotProvider<T>;
 ```
 
-Defined in: [transport.ts:48](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L48)
+Defined in: [transport.ts:125](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L125)
 
-Creates a SnapshotProvider that fetches snapshots via Electron IPC invoke.
+Creates a SnapshotProvider that fetches snapshots from the main process
+via Electron IPC `invoke`.
 
-Mirrors createTauriSnapshotProvider.
+When SnapshotProvider.getSnapshot is called, it sends an
+`ipcRenderer.invoke()` request to the main process on the configured channel
+and returns the resulting SnapshotEnvelope.
+
+Mirrors `createTauriSnapshotProvider` in the `@statesync/tauri` package.
+
+**Process context:** renderer process.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`ElectronSnapshotProviderOptions`](../interfaces/ElectronSnapshotProviderOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`ElectronSnapshotProviderOptions`](../interfaces/ElectronSnapshotProviderOptions.md) | Configuration specifying the invoke function and IPC channel. |
 
 ## Returns
 
 `SnapshotProvider`\<`T`\>
+
+A SnapshotProvider compatible with the core engine's
+  RevisionSyncOptions.provider option.
+
+## Example
+
+```ts
+const provider = createElectronSnapshotProvider<TodoList>({
+  invoke: bridge.invoke,
+  channel: 'statesync:todos:snapshot',
+});
+
+const envelope = await provider.getSnapshot();
+console.log(envelope.revision, envelope.data);
+```

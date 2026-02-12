@@ -10,4 +10,9 @@
 type VueTargetKind = "ref" | "reactive";
 ```
 
-Defined in: [vue.ts:13](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/vue/src/vue.ts#L13)
+Defined in: [vue.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/vue/src/vue.ts#L37)
+
+Discriminator for the Vue applier target.
+
+- `'reactive'` -- targets a Vue `reactive()` proxy via in-place property mutation.
+- `'ref'` -- targets a Vue `ref()` or `shallowRef()` container via `.value` replacement.

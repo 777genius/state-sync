@@ -6,13 +6,15 @@
 
 # Interface: ElectronSnapshotHandlerOptions\<T\>
 
-Defined in: [main.ts:73](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L73)
+Defined in: [main.ts:145](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L145)
+
+Configuration options for [createElectronSnapshotHandler](../functions/createElectronSnapshotHandler.md).
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Properties
 
@@ -22,9 +24,11 @@ Defined in: [main.ts:73](https://github.com/777genius/state-sync/blob/ff3d517bab
 optional channel: string;
 ```
 
-Defined in: [main.ts:83](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L83)
+Defined in: [main.ts:183](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L183)
 
-Override default channel
+Override the default IPC channel name for snapshot requests.
+
+Defaults to `statesync:<topic>:snapshot` (produced by [snapshotChannel](../functions/snapshotChannel.md)).
 
 ***
 
@@ -34,14 +38,19 @@ Override default channel
 getSnapshot: () => SnapshotEnvelope<T> | Promise<SnapshotEnvelope<T>>;
 ```
 
-Defined in: [main.ts:79](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L79)
+Defined in: [main.ts:158](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L158)
 
-Returns the current snapshot. May be called concurrently from multiple renderers.
-Must be safe for concurrent invocations — avoid side effects.
+Returns the current snapshot envelope for the given topic.
+
+This callback may be invoked concurrently from multiple renderer windows
+(each renderer calls `ipcRenderer.invoke()` independently). Implementations
+must be safe for concurrent invocations and should avoid side effects.
 
 #### Returns
 
 `SnapshotEnvelope`\<`T`\> \| `Promise`\<`SnapshotEnvelope`\<`T`\>\>
+
+The current snapshot, synchronously or as a promise.
 
 ***
 
@@ -51,7 +60,15 @@ Must be safe for concurrent invocations — avoid side effects.
 handle: ElectronIpcMainHandle;
 ```
 
-Defined in: [main.ts:80](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L80)
+Defined in: [main.ts:167](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L167)
+
+The `ipcMain.handle` function (or a compatible mock).
+
+Used to register the snapshot request handler on the IPC channel.
+
+#### See
+
+[ElectronIpcMainHandle](../type-aliases/ElectronIpcMainHandle.md)
 
 ***
 
@@ -61,7 +78,15 @@ Defined in: [main.ts:80](https://github.com/777genius/state-sync/blob/ff3d517bab
 removeHandler: ElectronIpcMainRemoveHandler;
 ```
 
-Defined in: [main.ts:81](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L81)
+Defined in: [main.ts:176](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L176)
+
+The `ipcMain.removeHandler` function (or a compatible mock).
+
+Used by [ElectronSnapshotHandlerHandle.dispose](ElectronSnapshotHandlerHandle.md#dispose) to unregister the handler.
+
+#### See
+
+[ElectronIpcMainRemoveHandler](../type-aliases/ElectronIpcMainRemoveHandler.md)
 
 ***
 
@@ -71,4 +96,6 @@ Defined in: [main.ts:81](https://github.com/777genius/state-sync/blob/ff3d517bab
 topic: string;
 ```
 
-Defined in: [main.ts:74](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L74)
+Defined in: [main.ts:147](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L147)
+
+The sync topic identifier (e.g. `"user-profile"`).

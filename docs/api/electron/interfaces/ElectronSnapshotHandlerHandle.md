@@ -6,7 +6,12 @@
 
 # Interface: ElectronSnapshotHandlerHandle
 
-Defined in: [main.ts:86](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L86)
+Defined in: [main.ts:192](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L192)
+
+Handle returned by [createElectronSnapshotHandler](../functions/createElectronSnapshotHandler.md) for managing the
+lifecycle of a snapshot IPC handler.
+
+**Process context:** main process only.
 
 ## Properties
 
@@ -16,7 +21,9 @@ Defined in: [main.ts:86](https://github.com/777genius/state-sync/blob/ff3d517bab
 readonly topic: string;
 ```
 
-Defined in: [main.ts:87](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L87)
+Defined in: [main.ts:194](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L194)
+
+The sync topic this handler is bound to.
 
 ## Methods
 
@@ -26,9 +33,12 @@ Defined in: [main.ts:87](https://github.com/777genius/state-sync/blob/ff3d517bab
 dispose(): void;
 ```
 
-Defined in: [main.ts:89](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L89)
+Defined in: [main.ts:202](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L202)
 
-Remove ipcMain.handle — call on app quit or HMR reload
+Removes the `ipcMain.handle()` registration for this topic's snapshot channel.
+
+Call this on app quit or during HMR reload to prevent stale handler errors.
+Safe to call multiple times — subsequent calls are no-ops.
 
 #### Returns
 

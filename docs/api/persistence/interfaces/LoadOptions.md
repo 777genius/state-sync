@@ -6,15 +6,16 @@
 
 # Interface: LoadOptions\<T\>
 
-Defined in: [persistence/src/types.ts:432](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L432)
+Defined in: [persistence/src/types.ts:756](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L756)
 
-Options for loading persisted snapshots.
+Options for [loadPersistedSnapshot](../functions/loadPersistedSnapshot.md) controlling migration, validation,
+TTL enforcement, and integrity checking.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state after any migrations. |
 
 ## Properties
 
@@ -24,10 +25,15 @@ Options for loading persisted snapshots.
 optional ignoreTTL: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:453](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L453)
+Defined in: [persistence/src/types.ts:790](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L790)
 
-If true, ignore TTL expiration.
-Default: false
+If `true`, load the snapshot even if its TTL has expired.
+
+Useful for "best-effort" hydration where stale data is better than no data.
+
+#### Default Value
+
+`false`
 
 ***
 
@@ -37,9 +43,13 @@ Default: false
 optional migration: MigrationHandler<T>;
 ```
 
-Defined in: [persistence/src/types.ts:436](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L436)
+Defined in: [persistence/src/types.ts:764](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L764)
 
-Migration handler for schema versioning.
+Migration handler for upgrading persisted data to the current schema version.
+
+If the stored schema version differs from the handler's
+[MigrationHandler.currentVersion](MigrationHandler.md#currentversion), the appropriate migration
+functions are applied in sequence.
 
 ***
 
@@ -49,10 +59,13 @@ Migration handler for schema versioning.
 optional validate: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:442](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L442)
+Defined in: [persistence/src/types.ts:771](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L771)
 
-If true, validate data against schema.
-Default: false
+Whether to run the migration handler's built-in validator on the loaded data.
+
+#### Default Value
+
+`false`
 
 ***
 
@@ -62,19 +75,23 @@ Default: false
 optional validator: (data) => data is T;
 ```
 
-Defined in: [persistence/src/types.ts:447](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L447)
+Defined in: [persistence/src/types.ts:781](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L781)
 
-Custom validator function.
+A custom type-guard function to validate the loaded (and possibly migrated) data.
+
+If provided and the function returns `false`, the snapshot is discarded.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `unknown` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `unknown` | The deserialized snapshot data to validate. |
 
 #### Returns
 
 `data is T`
+
+`true` if the data matches the expected shape `T`.
 
 ***
 
@@ -84,7 +101,13 @@ Custom validator function.
 optional verifyHash: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:459](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L459)
+Defined in: [persistence/src/types.ts:800](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L800)
 
-If true, verify integrity hash.
-Default: false
+If `true`, verify the stored integrity hash against the loaded data.
+
+When the hash does not match, the snapshot is discarded and an error
+is emitted via the `onPersistenceError` callback.
+
+#### Default Value
+
+`false`

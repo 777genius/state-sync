@@ -10,4 +10,12 @@
 type ZustandApplyMode = "patch" | "replace";
 ```
 
-Defined in: [zustand.ts:22](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/zustand/src/zustand.ts#L22)
+Defined in: [zustand.ts:56](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/zustand/src/zustand.ts#L56)
+
+The strategy used to apply incoming snapshot data to the Zustand store.
+
+- `'patch'` — Non-destructive shallow merge via `store.setState(partial)`.
+  Existing keys not present in the snapshot are left untouched.
+- `'replace'` — Atomic state swap via `store.setState(nextState, true)`.
+  The entire state is replaced; keys excluded by `omitKeys` are preserved
+  by being merged back into the rebuilt object before the swap.

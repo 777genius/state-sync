@@ -10,22 +10,55 @@
 function createElectronSnapshotHandler<T>(options): ElectronSnapshotHandlerHandle;
 ```
 
-Defined in: [main.ts:95](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L95)
+Defined in: [main.ts:242](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L242)
 
-Registers ipcMain.handle() for snapshot requests.
+Registers an `ipcMain.handle()` listener that serves SnapshotEnvelope
+responses to renderer processes requesting the current snapshot.
+
+When a renderer calls `ipcRenderer.invoke(channel)`, the registered
+[ElectronSnapshotHandlerOptions.getSnapshot](../interfaces/ElectronSnapshotHandlerOptions.md#getsnapshot) callback is invoked,
+and its result is returned as the IPC response.
+
+**Process context:** main process only.
+
+Errors thrown by `getSnapshot` are logged to `console.error` and re-thrown
+so they propagate as IPC rejection to the renderer.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The application-specific snapshot data type. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`ElectronSnapshotHandlerOptions`](../interfaces/ElectronSnapshotHandlerOptions.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`ElectronSnapshotHandlerOptions`](../interfaces/ElectronSnapshotHandlerOptions.md)\<`T`\> | Configuration for the snapshot handler. |
 
 ## Returns
 
 [`ElectronSnapshotHandlerHandle`](../interfaces/ElectronSnapshotHandlerHandle.md)
+
+A disposable handle. Call [ElectronSnapshotHandlerHandle.dispose](../interfaces/ElectronSnapshotHandlerHandle.md#dispose)
+  to unregister the IPC handler.
+
+## Example
+
+```ts
+import { ipcMain } from 'electron';
+import { createElectronSnapshotHandler } from '@statesync/electron';
+
+const handler = createElectronSnapshotHandler({
+  topic: 'todos',
+  getSnapshot: async () => ({
+    revision: '42' as Revision,
+    data: await db.getAllTodos(),
+  }),
+  handle: ipcMain.handle.bind(ipcMain),
+  removeHandler: ipcMain.removeHandler.bind(ipcMain),
+});
+
+// On app quit:
+handler.dispose();
+```

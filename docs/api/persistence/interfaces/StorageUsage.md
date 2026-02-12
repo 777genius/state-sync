@@ -6,9 +6,12 @@
 
 # Interface: StorageUsage
 
-Defined in: [persistence/src/types.ts:131](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L131)
+Defined in: [persistence/src/types.ts:236](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L236)
 
-Storage usage information.
+Storage usage information reported by a backend.
+
+Provides insight into how much storage is consumed and what the browser quota is,
+useful for monitoring and alerting before quota is exceeded.
 
 ## Properties
 
@@ -18,9 +21,11 @@ Storage usage information.
 optional percentage: number;
 ```
 
-Defined in: [persistence/src/types.ts:145](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L145)
+Defined in: [persistence/src/types.ts:254](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L254)
 
-Usage percentage (0-100).
+Usage as a percentage (0--100), calculated as `(used / quota) * 100`.
+
+Only present when [quota](#quota) is known.
 
 ***
 
@@ -30,9 +35,11 @@ Usage percentage (0-100).
 optional quota: number;
 ```
 
-Defined in: [persistence/src/types.ts:140](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L140)
+Defined in: [persistence/src/types.ts:247](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L247)
 
-Available quota in bytes (if known).
+Total storage quota in bytes, if the browser reports it.
+
+May be `undefined` if the backend or environment does not expose quota information.
 
 ***
 
@@ -42,6 +49,6 @@ Available quota in bytes (if known).
 used: number;
 ```
 
-Defined in: [persistence/src/types.ts:135](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L135)
+Defined in: [persistence/src/types.ts:240](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L240)
 
-Used space in bytes.
+Number of bytes currently used by this backend's stored data.

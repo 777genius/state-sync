@@ -6,9 +6,22 @@
 
 # Interface: SaveThrottlingOptions
 
-Defined in: [persistence/src/types.ts:314](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L314)
+Defined in: [persistence/src/types.ts:575](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L575)
 
-Options for controlling save frequency.
+Options for controlling how frequently snapshots are saved to storage.
+
+Supports debouncing, throttling, leading-edge saves, and a maximum wait cap.
+These options help balance write frequency against data freshness, especially
+during rapid or continuous state updates.
+
+## Example
+
+```typescript
+const throttling: SaveThrottlingOptions = {
+  debounceMs: 300,    // Wait 300ms of silence before saving
+  maxWaitMs: 2000,    // But never wait more than 2s total
+};
+```
 
 ## Properties
 
@@ -18,10 +31,13 @@ Options for controlling save frequency.
 optional debounceMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:319](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L319)
+Defined in: [persistence/src/types.ts:583](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L583)
 
-Debounce delay in ms. Waits for "silence" before saving.
-Use for high-frequency updates where only final state matters.
+Debounce delay in milliseconds. The save is postponed until no new
+snapshots arrive for this duration ("wait for silence").
+
+Best for high-frequency updates where only the final state matters
+(e.g., text input, slider dragging).
 
 ***
 
@@ -31,10 +47,14 @@ Use for high-frequency updates where only final state matters.
 optional leading: boolean;
 ```
 
-Defined in: [persistence/src/types.ts:331](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L331)
+Defined in: [persistence/src/types.ts:600](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L600)
 
-If true, save immediately on first update (before debounce/throttle).
-Default: false (for persistence, we want to wait for debounce)
+If `true`, the very first update triggers an immediate save before
+the debounce/throttle timer starts.
+
+#### Default Value
+
+`false`
 
 ***
 
@@ -44,10 +64,13 @@ Default: false (for persistence, we want to wait for debounce)
 optional maxWaitMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:337](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L337)
+Defined in: [persistence/src/types.ts:609](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L609)
 
-Maximum time to wait before forcing a save (ms).
-Prevents indefinite delay during continuous updates.
+Maximum time in milliseconds to wait before forcing a save, even if
+debounce keeps resetting. Prevents indefinite delay during continuous
+updates.
+
+Only meaningful when [debounceMs](#debouncems) is also set.
 
 ***
 
@@ -57,7 +80,10 @@ Prevents indefinite delay during continuous updates.
 optional throttleMs: number;
 ```
 
-Defined in: [persistence/src/types.ts:325](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/types.ts#L325)
+Defined in: [persistence/src/types.ts:592](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/types.ts#L592)
 
-Throttle interval in ms. Maximum one save per interval.
-Use when you want periodic saves during continuous updates.
+Throttle interval in milliseconds. At most one save will occur per
+interval, regardless of how many snapshots arrive.
+
+Best when you want periodic saves during continuous updates
+(e.g., real-time collaboration).

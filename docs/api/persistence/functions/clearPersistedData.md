@@ -10,23 +10,35 @@
 function clearPersistedData<T>(storage, crossTabOptions?): Promise<void>;
 ```
 
-Defined in: [persistence/src/persistence-applier.ts:635](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/persistence-applier.ts#L635)
+Defined in: [persistence/src/persistence-applier.ts:699](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/persistence-applier.ts#L699)
 
-Clear persisted data from storage.
+Clears all persisted data from the given storage backend and optionally
+notifies other tabs via BroadcastChannel.
+
+If the storage backend does not implement `clear()`, this is a no-op for
+the storage part. Cross-tab notification is still sent if options are provided.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `storage` | [`StorageBackend`](../interfaces/StorageBackend.md)\<`T`\> |
-| `crossTabOptions?` | [`CrossTabSyncOptions`](../interfaces/CrossTabSyncOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `storage` | [`StorageBackend`](../interfaces/StorageBackend.md)\<`T`\> | The storage backend to clear. |
+| `crossTabOptions?` | [`CrossTabSyncOptions`](../interfaces/CrossTabSyncOptions.md) | If provided, a temporary BroadcastChannel is opened to notify other tabs that storage was cleared, then immediately disposed. |
 
 ## Returns
 
 `Promise`\<`void`\>
+
+A promise that resolves when the storage has been cleared.
+
+## Example
+
+```typescript
+await clearPersistedData(storage, { channelName: 'state-sync:settings' });
+```

@@ -10,20 +10,45 @@
 function createElectronBroadcaster(options): ElectronBroadcasterHandle;
 ```
 
-Defined in: [main.ts:37](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/main.ts#L37)
+Defined in: [main.ts:104](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/main.ts#L104)
 
-Creates a broadcaster for invalidation events.
+Creates a broadcaster that pushes InvalidationEvent payloads to
+renderer windows over Electron IPC.
 
-Safety: iterates targets with try/catch + isDestroyed() guard.
-Destroyed webContents between check and send() is a real
-TOCTOU race in Electron multi-window apps — the try/catch handles it.
+Call [ElectronBroadcasterHandle.invalidate](../interfaces/ElectronBroadcasterHandle.md#invalidate) whenever the authoritative
+state changes (e.g. after a database write) to notify all connected renderers
+that their cached data is stale.
+
+**Process context:** main process only.
+
+**Safety:** Iterates targets with `try/catch` + `isDestroyed()` guard.
+The TOCTOU race (webContents destroyed between check and `send()`) is a real
+scenario in Electron multi-window apps — the `try/catch` handles it gracefully.
+Non-TOCTOU errors are logged to `console.warn` so they are not silently lost.
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `options` | [`ElectronBroadcasterOptions`](../interfaces/ElectronBroadcasterOptions.md) |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`ElectronBroadcasterOptions`](../interfaces/ElectronBroadcasterOptions.md) | Configuration for the broadcaster. |
 
 ## Returns
 
 [`ElectronBroadcasterHandle`](../interfaces/ElectronBroadcasterHandle.md)
+
+A handle with an [ElectronBroadcasterHandle.invalidate](../interfaces/ElectronBroadcasterHandle.md#invalidate) method.
+
+## Example
+
+```ts
+import { BrowserWindow } from 'electron';
+import { createElectronBroadcaster } from '@statesync/electron';
+
+const broadcaster = createElectronBroadcaster({
+  topic: 'todos',
+  getTargets: () => BrowserWindow.getAllWindows().map(w => w.webContents),
+});
+
+// After a database write:
+broadcaster.invalidate('42', { sourceId: 'api-handler' });
+```

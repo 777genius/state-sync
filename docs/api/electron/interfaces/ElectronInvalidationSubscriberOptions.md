@@ -6,7 +6,9 @@
 
 # Interface: ElectronInvalidationSubscriberOptions
 
-Defined in: [transport.ts:10](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L10)
+Defined in: [transport.ts:25](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L25)
+
+Configuration options for [createElectronInvalidationSubscriber](../functions/createElectronInvalidationSubscriber.md).
 
 ## Properties
 
@@ -16,9 +18,11 @@ Defined in: [transport.ts:10](https://github.com/777genius/state-sync/blob/ff3d5
 channel: string;
 ```
 
-Defined in: [transport.ts:14](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L14)
+Defined in: [transport.ts:37](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L37)
 
-IPC channel for invalidation events
+The IPC channel name to subscribe to for invalidation events.
+
+Typically produced by [invalidationChannel](../functions/invalidationChannel.md) (e.g. `"statesync:todos:invalidated"`).
 
 ***
 
@@ -28,6 +32,7 @@ IPC channel for invalidation events
 listen: ElectronListen;
 ```
 
-Defined in: [transport.ts:12](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/electron/src/transport.ts#L12)
+Defined in: [transport.ts:30](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/electron/src/transport.ts#L30)
 
-bridge.on or any ElectronListen-compatible function
+The listen function from the bridge (`bridge.on`) or any
+[ElectronListen](../type-aliases/ElectronListen.md)-compatible function.

@@ -13,29 +13,39 @@ function migrateData<T>(
 handler): MigrationResult<T>;
 ```
 
-Defined in: [persistence/src/migration.ts:24](https://github.com/777genius/state-sync/blob/ff3d517babcdb0d1d56ebc13662dd57a37825036/packages/persistence/src/migration.ts#L24)
+Defined in: [persistence/src/migration.ts:40](https://github.com/777genius/state-sync/blob/60c6b1086208eaa00c3e8cf44dc6622824c902a9/packages/persistence/src/migration.ts#L40)
 
-Migrate data from one schema version to another.
+Migrate data from one schema version to another by applying migration
+functions sequentially.
 
-Applies migrations sequentially from fromVersion to currentVersion.
+Migrations are applied in order from `fromVersion` up to (but not including)
+`handler.currentVersion`. For example, migrating from v1 to v3 applies
+`migrations[1]` then `migrations[2]`.
+
+If `fromVersion` equals `currentVersion`, no migrations are applied and
+the data is optionally validated. If `fromVersion` is greater than
+`currentVersion`, the migration fails (data from a future version).
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The shape of the application state in the target (current) schema version. |
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `data` | `unknown` |
-| `fromVersion` | `number` |
-| `handler` | [`MigrationHandler`](../interfaces/MigrationHandler.md)\<`T`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `data` | `unknown` | The raw persisted data to migrate. Type is `unknown` because the source schema may differ from the current one. |
+| `fromVersion` | `number` | The schema version of the stored data. |
+| `handler` | [`MigrationHandler`](../interfaces/MigrationHandler.md)\<`T`\> | The migration handler containing the target version, migration functions, and optional validator. |
 
 ## Returns
 
 [`MigrationResult`](../interfaces/MigrationResult.md)\<`T`\>
+
+A [MigrationResult](../interfaces/MigrationResult.md) indicating success or failure, with the
+  migrated data on success or an error on failure.
 
 ## Example
 
