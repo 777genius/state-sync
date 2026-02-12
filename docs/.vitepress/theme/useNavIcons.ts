@@ -2,6 +2,22 @@ import { useData } from 'vitepress';
 import { onMounted, onUnmounted, watchEffect } from 'vue';
 import { packageIcons } from './package-icons';
 
+const targets = [
+  '.VPMenu a[href$="/packages/$"]::before',
+  '.VPNavScreenMenuGroupLink a[href$="/packages/$"]::before',
+  '.VPSidebarItem a.link[href$="/packages/$"]::before',
+];
+
+function sel(slug: string) {
+  return targets.map((t) => t.replace('$', slug)).join(',\n');
+}
+
+function baseSelectors() {
+  return Object.keys(packageIcons)
+    .flatMap((slug) => targets.map((t) => t.replace('$', slug)))
+    .join(',\n');
+}
+
 export function useNavIcons() {
   const { isDark } = useData();
   let styleEl: HTMLStyleElement | null = null;
@@ -13,13 +29,8 @@ export function useNavIcons() {
 
     watchEffect(() => {
       const dark = isDark.value;
-      const sel = (slug: string) =>
-        `.VPMenu a[href$="/packages/${slug}"]::before,` +
-        `.VPNavScreenMenuGroupLink a[href$="/packages/${slug}"]::before`;
 
-      let css = `
-.VPMenu a[href*="/packages/"]::before,
-.VPNavScreenMenuGroupLink a[href*="/packages/"]::before {
+      let css = `${baseSelectors()} {
   content: '';
   display: inline-block;
   width: 16px;
