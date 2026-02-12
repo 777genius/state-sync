@@ -35,6 +35,8 @@ graph LR
   Pinia["@statesync/pinia"]
   Redux["@statesync/redux"]
   Zustand["@statesync/zustand"]
+  Jotai["@statesync/jotai"]
+  MobX["@statesync/mobx"]
   Valtio["@statesync/valtio"]
   VueAdapter["@statesync/vue"]
   Svelte["@statesync/svelte"]
@@ -44,6 +46,8 @@ graph LR
   Core --> Pinia
   Core --> Redux
   Core --> Zustand
+  Core --> Jotai
+  Core --> MobX
   Core --> Valtio
   Core --> VueAdapter
   Core --> Svelte
@@ -52,6 +56,8 @@ graph LR
     Pinia
     Redux
     Zustand
+    Jotai
+    MobX
     Valtio
     VueAdapter
     Svelte
