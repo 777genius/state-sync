@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData, withBase } from 'vitepress';
-import { stateAdapters, runtimeAdapters } from './package-icons';
+import { runtimeAdapters, stateAdapters } from './package-icons';
 
 const { isDark } = useData();
 

@@ -15,10 +15,7 @@ export interface PackageEntry {
   icon: PackageIcon;
 }
 
-const defs: Record<
-  string,
-  { name: string; color: string; svg: string; darkSvg?: string }
-> = {
+const defs: Record<string, { name: string; color: string; svg: string; darkSvg?: string }> = {
   core: {
     name: 'Core',
     color: '#3178c6',
@@ -115,7 +112,4 @@ export const stateAdapters: PackageEntry[] = [
   'vue',
 ].map(toEntry);
 
-export const runtimeAdapters: PackageEntry[] = [
-  'tauri',
-  'electron',
-].map(toEntry);
+export const runtimeAdapters: PackageEntry[] = ['tauri', 'electron'].map(toEntry);
