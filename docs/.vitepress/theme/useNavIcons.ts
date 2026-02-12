@@ -8,6 +8,7 @@ const targets = [
   `.VPMenu a[href$="/packages/${SLUG}"]::before`,
   `.VPNavScreenMenuGroupLink a[href$="/packages/${SLUG}"]::before`,
   `.VPSidebarItem a.link[href$="/packages/${SLUG}"]::before`,
+  `.VPSidebarItem a.link[href$="/api/${SLUG}/"]::before`,
 ];
 
 function sel(slug: string) {
