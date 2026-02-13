@@ -51,7 +51,9 @@ export function useNavIcons() {
         css += `\n${sel(slug)} { background-image: url("${url}"); }`;
       }
 
-      styleEl!.textContent = css;
+      if (styleEl) {
+        styleEl.textContent = css;
+      }
     });
   });
 

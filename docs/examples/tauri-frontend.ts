@@ -10,8 +10,8 @@
 
 import { createTauriRevisionSync } from '@statesync/tauri';
 import { createZustandSnapshotApplier } from '@statesync/zustand';
-import { listen } from '@tauri-apps/api/event';
 import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
 import { create } from 'zustand';
 
 // ─── Types ──────────────────────────────────────────

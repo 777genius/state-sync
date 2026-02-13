@@ -11,7 +11,7 @@ import './custom.css';
 export default {
   extends: DefaultTheme,
   Layout,
-  enhanceApp({ app, router }) {
+  enhanceApp({ app }) {
     app.component('ApiPackageList', ApiPackageList);
     app.component('CopyOrDownloadAsMarkdownButtons', CopyOrDownloadAsMarkdownButtons);
     app.component('ExploreGrid', ExploreGrid);
