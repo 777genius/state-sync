@@ -186,6 +186,7 @@ export default withMermaid(
               { text: 'Overview', link: '/examples/' },
               { text: 'React + Zustand', link: '/examples/react-zustand' },
               { text: 'Vue + Pinia + Tauri', link: '/examples/vue-pinia-tauri' },
+              { text: 'Tauri + Any Store', link: '/examples/tauri-any-store' },
               { text: 'Electron + Any Store', link: '/examples/electron-any-store' },
             ],
           },
