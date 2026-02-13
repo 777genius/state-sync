@@ -135,6 +135,19 @@ export default withMermaid(
               { text: 'Svelte 5 runes', link: '/guide/svelte5-runes' },
             ],
           },
+          {
+            text: 'Blog',
+            items: [
+              {
+                text: 'Multi-Window Tauri Sync',
+                link: '/blog/multi-window-tauri-sync-engine',
+              },
+              {
+                text: 'Electron Multi-Window Sync',
+                link: '/examples/electron-any-store',
+              },
+            ],
+          },
         ],
         '/packages/': [
           {

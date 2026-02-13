@@ -88,115 +88,7 @@ zustand-sync-tabs and pinia-shared-state use `BroadcastChannel` to sync between 
 
 ---
 
-## Tauri Ecosystem
-
-### @tauri-store/zustand + @tauri-store/pinia
-
-The main alternative for Tauri apps. Clean DX with built-in disk persistence.
-
-```ts
-import { create } from 'zustand';
-import { createTauriStore } from '@tauri-store/zustand';
-
-const useCounterStore = create((set) => ({
-  counter: 0,
-  increment: () => set((s) => ({ counter: s.counter + 1 })),
-}));
-
-const tauriStore = createTauriStore('counter', useCounterStore);
-await tauriStore.start();
-```
-
-**Good:** Clean DX, disk persistence built-in, `SaveStrategy` with debounce/throttle, actively maintained, great for simple cases.
-
-**Limitations:** No revision ordering (debounce ≠ coalescing — see [above](#coalescing-vs-debounce)), Zustand/Pinia/Valtio only, Tauri 2.x only.
-
-**Use @tauri-store when:** Simple Tauri app with Zustand or Pinia, ordering doesn't matter, want persistence with minimal setup.
-
-**Use state-sync instead when:** Ordering matters, you need coalescing for rapid updates, want retry on failure, or need framework flexibility beyond Zustand/Pinia.
-
----
-
-### tauri-plugin-store
-
-Official Tauri key-value storage. Built for preferences, not complex state.
-
-```ts
-const store = await Store.load('settings.json')
-await store.set('theme', 'dark')
-```
-
-**Good:** Official, file persistence, debounce, multi-window sync.
-
-**Limitations:** No ordering guarantees, no migration system, no compression. Designed for preferences, not complex state synchronization.
-
-**Use when:** Simple app settings — theme, language, window positions.
-
----
-
-### zubridge (Tauri mode)
-
-Redux-like actions over Tauri IPC. Also works with Electron (see below).
-
-```ts
-import { initializeBridge } from '@zubridge/tauri';
-import { invoke } from '@tauri-apps/api/core';
-import { listen } from '@tauri-apps/api/event';
-
-initializeBridge({ invoke, listen });
-
-// In components:
-import { useZubridgeStore, useZubridgeDispatch } from '@zubridge/tauri';
-
-const count = useZubridgeStore((state) => state.count);
-const dispatch = useZubridgeDispatch();
-dispatch({ type: 'increment' });
-```
-
-**Good:** Familiar Redux pattern, works with any framework, cross-platform (Tauri + Electron).
-
-**Limitations:** No ordering, no coalescing, no retry, no persistence.
-
-**Use when:** Your team knows Redux and ordering doesn't matter.
-
-::: details How does state-sync compare in code?
-```ts
-import { SyncEngine } from '@statesync/core';
-import { tauriTransport } from '@statesync/tauri';
-
-const engine = new SyncEngine({
-  transport: tauriTransport({ key: 'my-store' }),
-  onSnapshot: (snapshot) => store.setState(snapshot),
-});
-
-engine.start();
-```
-state-sync doesn't wrap your store — it subscribes to invalidation events and applies snapshots with revision checking.
-:::
-
----
-
-### Browser-based libraries in Tauri
-
-**zustand-sync-tabs** and **pinia-shared-state** work in Tauri webviews via `BroadcastChannel`. They sync between webviews, but **not** through Rust IPC — the Rust backend never sees these state changes.
-
-```ts
-// zustand-sync-tabs
-import { syncTabs } from 'zustand-sync-tabs';
-
-create(syncTabs((set) => ({ ... }), { name: 'my-channel' }))
-
-// pinia-shared-state
-pinia.use(PiniaSharedState({ enable: true }))
-```
-
-**Good:** Tiny (~1 KB each), zero config, simple API.
-
-**Limitations:** No ordering, no error handling, browser-only transport, Rust backend is unaware of state.
-
-**Use when:** Lightweight UI sync between Tauri webviews where backend awareness isn't needed.
-
----
+## Tauri Ecosystem {#tauri-ecosystem}
 
 ### Technical Architecture Ranking
 
@@ -323,6 +215,114 @@ sequenceDiagram
 ```
 
 zubridge uses a Redux-style dispatch → process → push cycle through Rust. The `StateManager` trait processes actions in a `Mutex`, then emits **full state** to all windows (no delta, no ordering). BroadcastChannel tools (`zustand-sync-tabs`, `pinia-shared-state`) bypass Rust entirely — fast (~0 overhead) but the backend remains unaware of state changes.
+
+---
+
+### @tauri-store/zustand + @tauri-store/pinia
+
+The main alternative for Tauri apps. Clean DX with built-in disk persistence.
+
+```ts
+import { create } from 'zustand';
+import { createTauriStore } from '@tauri-store/zustand';
+
+const useCounterStore = create((set) => ({
+  counter: 0,
+  increment: () => set((s) => ({ counter: s.counter + 1 })),
+}));
+
+const tauriStore = createTauriStore('counter', useCounterStore);
+await tauriStore.start();
+```
+
+**Good:** Clean DX, disk persistence built-in, `SaveStrategy` with debounce/throttle, actively maintained, great for simple cases.
+
+**Limitations:** No revision ordering (debounce ≠ coalescing — see [above](#coalescing-vs-debounce)), Zustand/Pinia/Valtio only, Tauri 2.x only.
+
+**Use @tauri-store when:** Simple Tauri app with Zustand or Pinia, ordering doesn't matter, want persistence with minimal setup.
+
+**Use state-sync instead when:** Ordering matters, you need coalescing for rapid updates, want retry on failure, or need framework flexibility beyond Zustand/Pinia.
+
+---
+
+### tauri-plugin-store
+
+Official Tauri key-value storage. Built for preferences, not complex state.
+
+```ts
+const store = await Store.load('settings.json')
+await store.set('theme', 'dark')
+```
+
+**Good:** Official, file persistence, debounce, multi-window sync.
+
+**Limitations:** No ordering guarantees, no migration system, no compression. Designed for preferences, not complex state synchronization.
+
+**Use when:** Simple app settings — theme, language, window positions.
+
+---
+
+### zubridge (Tauri mode)
+
+Redux-like actions over Tauri IPC. Also works with Electron (see below).
+
+```ts
+import { initializeBridge } from '@zubridge/tauri';
+import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
+
+initializeBridge({ invoke, listen });
+
+// In components:
+import { useZubridgeStore, useZubridgeDispatch } from '@zubridge/tauri';
+
+const count = useZubridgeStore((state) => state.count);
+const dispatch = useZubridgeDispatch();
+dispatch({ type: 'increment' });
+```
+
+**Good:** Familiar Redux pattern, works with any framework, cross-platform (Tauri + Electron).
+
+**Limitations:** No ordering, no coalescing, no retry, no persistence.
+
+**Use when:** Your team knows Redux and ordering doesn't matter.
+
+::: details How does state-sync compare in code?
+```ts
+import { SyncEngine } from '@statesync/core';
+import { tauriTransport } from '@statesync/tauri';
+
+const engine = new SyncEngine({
+  transport: tauriTransport({ key: 'my-store' }),
+  onSnapshot: (snapshot) => store.setState(snapshot),
+});
+
+engine.start();
+```
+state-sync doesn't wrap your store — it subscribes to invalidation events and applies snapshots with revision checking.
+:::
+
+---
+
+### Browser-based libraries in Tauri
+
+**zustand-sync-tabs** and **pinia-shared-state** work in Tauri webviews via `BroadcastChannel`. They sync between webviews, but **not** through Rust IPC — the Rust backend never sees these state changes.
+
+```ts
+// zustand-sync-tabs
+import { syncTabs } from 'zustand-sync-tabs';
+
+create(syncTabs((set) => ({ ... }), { name: 'my-channel' }))
+
+// pinia-shared-state
+pinia.use(PiniaSharedState({ enable: true }))
+```
+
+**Good:** Tiny (~1 KB each), zero config, simple API.
+
+**Limitations:** No ordering, no error handling, browser-only transport, Rust backend is unaware of state.
+
+**Use when:** Lightweight UI sync between Tauri webviews where backend awareness isn't needed.
 
 ---
 

@@ -11,7 +11,7 @@ You open a settings panel in a separate Electron window. Toggle dark mode. Close
 
 The core issue: Electron windows are isolated renderer processes. They don't share memory. Every piece of shared state — theme, language, user preferences — needs to cross the IPC bridge. Most teams end up with a tangle of `ipcMain.handle` / `webContents.send` calls that grow with every new piece of state.
 
-This guide shows a structured approach: the main process is the single source of truth, renderers pull snapshots on demand, and a revision gate prevents stale updates. 3 runtime files, any state manager, all windows in sync.
+This guide shows a structured approach: the main process is the single source of truth, renderers pull snapshots on demand, and a revision gate prevents stale updates. 3 runtime files, any state manager, all windows in sync. (For a side-by-side comparison with other Electron sync libraries, see the [Electron Feature Matrix](/comparison#electron-feature-matrix).)
 
 ::: tip
 [View full source on GitHub](https://github.com/777genius/state-sync/tree/main/docs/examples) — `electron-main.ts`, `electron-preload.ts`, `electron-renderer.ts`
@@ -410,3 +410,4 @@ All three libraries use a centralized main process as source of truth — which 
 - [@statesync/svelte](/packages/svelte) — Svelte adapter
 - [@statesync/vue](/packages/vue) — Vue adapter
 - [Multi-window patterns](/guide/multi-window) — cross-window architecture
+- [Electron Ecosystem Comparison](/comparison#electron-feature-matrix) — feature matrix and architecture ranking

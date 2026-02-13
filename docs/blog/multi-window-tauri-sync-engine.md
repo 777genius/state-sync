@@ -16,7 +16,7 @@ I hit this exact problem while building a multi-window Tauri app. After the thir
 
 In Tauri, every window runs its own isolated JavaScript context. There's no shared memory, no global store, no magic bridge. When window A changes state, window B has no idea.
 
-Most developers discover this the hard way. I certainly did. The single-window prototype works perfectly. Then you add a second window — and you need a sync mechanism.
+Many Tauri developers discover this the hard way. I certainly did. The single-window prototype works perfectly. Then you add a second window — and you need a sync mechanism.
 
 Here's a reasonable first attempt at multi-window state sync:
 
@@ -77,7 +77,7 @@ When a user drags a slider or types rapidly, the backend might broadcast dozens 
 
 This isn't a bug in the traditional sense — the code is correct. But it creates unnecessary load on the IPC bridge and can make the UI feel sluggish.
 
-These two problems are fundamentally connected: both stem from the fact that every invalidation event triggers its own fetch. Solving them properly — with coalescing, revision ordering after fetch, and lifecycle management — takes ~150–200 lines of careful concurrency code per store. (For a detailed comparison with existing alternatives, see the [comparison page](/comparison).)
+These two problems are fundamentally connected: both stem from the fact that every invalidation event triggers its own fetch. Solving them properly — with coalescing, revision ordering after fetch, and lifecycle management — takes ~150–200 lines of careful concurrency code per store. (For a detailed comparison with existing alternatives, see the [Technical Architecture Ranking](/comparison#technical-architecture-ranking).)
 
 I looked for an existing library that handled this cleanly for Tauri. I didn't find one. So I built one.
 
@@ -155,13 +155,13 @@ await handle.start();
 // Coalescing, revision ordering, lifecycle — all handled.
 ```
 
-~15 lines. Zero race conditions. Built-in coalescing, throttling, and structured error reporting.
+~15 lines. Zero race conditions. Built-in coalescing, throttling, and structured error reporting. Full IPC roundtrip: [p50 2 ms, p99 5 ms](/benchmarks). With coalescing, 100 rapid events collapse to 2 IPC calls.
 
 | Aspect | Manual approach | state-sync |
 |--------|----------------|------------|
 | Boilerplate | ~150–200 lines per store | ~15 lines |
 | Race conditions | On you | Revision ordering + coalescing |
-| Thundering herd | On you | Coalesced — at most one queued fetch behind an in-flight one |
+| IPC flooding (many events → many fetches) | On you | Coalesced — at most one queued fetch behind an in-flight one |
 | Late joiner | On you | Automatic initial refresh on `start()` |
 | Error handling | `try/catch` | 8 structured phases: `subscribe`, `invalidation`, `refresh`, `getSnapshot`, `apply`, `protocol`, `throttle`, `start` |
 | Test coverage | On you | 370+ tests including IPC jitter, event drops, mutex contention |
@@ -172,7 +172,7 @@ Let's break down the key claims from that table.
 
 ### Revisions: 21 Lines That Solve Ordering
 
-state-sync doesn't use vector clocks, Lamport timestamps, or CRDTs. Revisions are monotonic `u64` counters encoded as strings — and comparison is just a few lines:
+state-sync doesn't use complex distributed ordering primitives (vector clocks, Lamport timestamps, CRDTs). Revisions are monotonic `u64` counters encoded as strings — and comparison is just a few lines:
 
 ```typescript
 export function compareRevisions(a: Revision, b: Revision): -1 | 0 | 1 {
@@ -188,9 +188,7 @@ The length-first comparison trick works because canonical decimal representation
 
 ### Coalescing: 100 Events, 2 Fetches
 
-When a user drags a slider or types rapidly, the backend might broadcast dozens of invalidation events per second. Without protection, each event triggers an IPC round-trip — serialize, cross the Rust-JS bridge, deserialize, serialize the response, cross back, deserialize. At 100 events, that's 100 round-trips.
-
-state-sync's engine uses two booleans — `refreshInFlight` and `refreshQueued` — to solve this:
+As described above, rapid events without protection mean 100 round-trips for 100 events. state-sync's engine uses two booleans — `refreshInFlight` and `refreshQueued` — to solve this:
 
 **Without coalescing** — every event triggers a separate IPC round-trip:
 
@@ -264,7 +262,7 @@ state-sync only handles the *read* direction: backend → all windows. There's n
 
 This is intentional. The Rust backend is the single source of truth. Windows write state by calling Tauri commands (`invoke`), which update the backend and trigger invalidation. state-sync then distributes the result.
 
-This eliminates an entire class of problems: no write conflicts, no merge logic, no split-brain scenarios. One source of truth, many consumers.
+This eliminates an entire class of problems: no write conflicts, no merge logic, no divergent state between windows. One source of truth, many consumers.
 
 ## Full Example: Tauri + Pinia
 
@@ -370,7 +368,7 @@ export interface PiniaStoreLike<State extends Record<string, unknown>> {
 }
 ```
 
-This means zero runtime dependency on Pinia, Zustand, or any other library. It also means adapters are trivially testable with plain objects. And the applier swap is a one-line change — the rest of the sync config stays the same:
+This means zero runtime dependency on Pinia, Zustand, or any other library. It also means you can test adapters with plain objects — no mocks required. And the applier swap is a one-line change — the rest of the sync config stays the same:
 
 ```typescript
 // Pinia
@@ -426,9 +424,11 @@ For offline persistence, the `@statesync/persistence` package adds localStorage/
 - **Single-window apps** — no sync needed
 - **High-frequency realtime data** (games, trading tickers) — state-sync is designed for UI state, not 60fps data streams
 
-For most desktop apps with multiple windows, the invalidation-pull model hits the sweet spot: simple enough to reason about, resilient enough for production.
+For desktop apps with multiple windows, the invalidation-pull model strikes a practical balance: simple enough to reason about, resilient enough for production.
 
 ---
+
+Remember that settings panel? You switch the theme to "dark," close the window, and the main window updates instantly. No stale state, no race conditions, no manual event wiring. Just a revision bump on the Rust side and a single `getSnapshot` pull on the JS side.
 
 The best state synchronization is the kind that doesn't send data in events. It sends a signal — and lets the consumer pull what it needs, when it needs it.
 
@@ -438,3 +438,4 @@ state-sync is MIT-licensed, has 370+ tests, and the core is ~3 KB gzipped. If yo
 - [GitHub](https://github.com/777genius/state-sync)
 - [npm: @statesync/core](https://www.npmjs.com/package/@statesync/core)
 - [Documentation](/)
+- [Tauri Ecosystem Comparison](/comparison#technical-architecture-ranking)
