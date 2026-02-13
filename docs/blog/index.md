@@ -11,3 +11,4 @@ Articles and deep dives about state synchronization in multi-window apps.
 
 - [Multi-Window Tauri Apps: State Sync Made Simple](./multi-window-tauri-sync-engine) — How state-sync solves multi-window state synchronization in Tauri.
 - [How to Sync State Across Electron Windows](/examples/electron-any-store) — Step-by-step guide with Redux, Zustand, Jotai, MobX, Pinia, Valtio, Svelte, and Vue examples.
+- [How to Sync State Across Tauri Windows](/examples/tauri-any-store) — Rust backend as source of truth, revision-gated invalidation, any state manager.

@@ -146,6 +146,10 @@ export default withMermaid(
                 text: 'Electron Multi-Window Sync',
                 link: '/examples/electron-any-store',
               },
+              {
+                text: 'Tauri Multi-Window Sync',
+                link: '/examples/tauri-any-store',
+              },
             ],
           },
         ],
@@ -215,6 +219,10 @@ export default withMermaid(
               {
                 text: 'Electron Multi-Window Sync',
                 link: '/examples/electron-any-store',
+              },
+              {
+                text: 'Tauri Multi-Window Sync',
+                link: '/examples/tauri-any-store',
               },
             ],
           },
